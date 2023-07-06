@@ -44,6 +44,7 @@
                                     <th>ငွေပေးချေမှု ပုံစံ</th>
                                     <th>ကျသင့်ငွေ</th>
                                     <th>ပေးငွေ</th>
+                                    <th>ကျန်ငွေ</th>
                                     <th>ပြန်အမ်းငွေ</th>
                                     <th>Action</th>
                                 </tr>
@@ -60,6 +61,7 @@
                                         <td>{{ $item->payment_type }}</td>
                                         <td>{{ $item->sub_total }}</td>
                                         <td>{{ $item->accepted_ammount }}</td>
+                                        <td>{{ $item->due }}</td>
                                         <td>{{ $item->return_change }}</td>
                                         <td>
                                             <a href="{{ route('detail#sale', $item->id) }}" class="btn btn-info sm"

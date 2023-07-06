@@ -211,6 +211,10 @@ Route::controller(SaleController::class)->group(function () {
     Route::get('sales/export/weekly', 'exportWeeklySales')->name('sales.export.weekly');
     Route::get('sales/export/monthly', 'exportMonthlySales')->name('sales.export.monthly');
 
+    Route::get('/due', 'PendingDue')->name('pending.due'); // Pending Due
+    Route::get('/sale/due/{id}', 'SaleDueAjax'); // Pending Due
+    Route::post('/update/sale/due', 'UpdateSaleDue')->name('update.sale.due'); // Update Sale Due
+
 });
 
 // Permission All Route

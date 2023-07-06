@@ -208,7 +208,7 @@
                         </div>
                     </li>
                 @endif
-                {{-- @if (Auth::user()->can('order.menu'))
+                @if (Auth::user()->can('order.menu'))
                     <li>
                         <a href="#orders" data-bs-toggle="collapse">
                             <i class="fas fa-clipboard"></i>
@@ -230,7 +230,7 @@
                             </ul>
                         </div>
                     </li>
-                @endif --}}
+                @endif
                 <li class="my-1">
                     <a href="#sales" data-bs-toggle="collapse">
                         <i class=" fas fa-hand-holding-usd"></i>
@@ -241,6 +241,9 @@
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{ route('all#sale') }}">အရောင်းစာရင်းများ</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('pending.due') }}">ကြွေးကျန်စာရင်းများ</a>
                             </li>
                         </ul>
                     </div>

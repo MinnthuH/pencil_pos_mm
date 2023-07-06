@@ -137,7 +137,7 @@
                                             src="{{ asset('backend/assets/icons/pie-chart.png') }}"
                                             alt="Card image cap">
                                         <a href="{{ route('admin.manage') }}" style="text-decoration: none">
-                                            <h5 class="card-title mt-2">Owner Management</h5>
+                                            <h5 class="card-title mt-2">စီမံခံခွဲမှု ဆိုင်ရာများ</h5>
                                         </a>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                                         src="{{ asset('backend/assets/icons/cash-machine.png') }}"
                                         alt="Card image cap">
                                     <a href="{{ route('pos') }}" style="text-decoration: none">
-                                        <h5 class="card-title mt-2">Cashier</h5>
+                                        <h5 class="card-title mt-2">အရောင်း</h5>
                                     </a>
                                 </div>
                             </div>
@@ -162,7 +162,7 @@
                                     <img class="card-img-top img-fluid mx-auto" style="width: 10rem"
                                         src="{{ asset('backend/assets/icons/monitor.png') }}" alt="Card image cap">
                                     <a href="{{ route('all#sale') }}" style="text-decoration: none">
-                                        <h5 class="card-title mt-2">Reports</h5>
+                                        <h5 class="card-title mt-2">အရောင်းစာရင်းများ</h5>
                                     </a>
                                 </div>
                             </div>
@@ -175,7 +175,7 @@
                                         src="{{ asset('backend/assets/icons/dairy-products.png') }}"
                                         alt="Card image cap">
                                     <a href="{{ route('all#product') }}" style="text-decoration: none">
-                                        <h5 class="card-title mt-2">Products</h5>
+                                        <h5 class="card-title mt-2">ကုန်ပစ္စည်းအချက်အလက်များ</h5>
                                     </a>
                                 </div>
                             </div>
@@ -187,7 +187,7 @@
                                     <img class="card-img-top img-fluid mx-auto" style="width: 10rem"
                                         src="{{ asset('backend/assets/icons/budget.png') }}" alt="Card image cap">
                                     <a href="{{ route('today#expense') }}" style="text-decoration: none">
-                                        <h5 class="card-title mt-2">Expense</h5>
+                                        <h5 class="card-title mt-2">ထွက်ငွေများ</h5>
                                     </a>
                                 </div>
                             </div>
@@ -199,7 +199,7 @@
                                     <img class="card-img-top img-fluid mx-auto" style="width: 10rem"
                                         src="{{ asset('backend/assets/icons/warehouse.png') }}" alt="Card image cap">
                                     <a href="{{ route('manage#stock') }}" style="text-decoration: none">
-                                        <h5 class="card-title mt-2">Product Stock</h5>
+                                        <h5 class="card-title mt-2">ကုန်ပစ္စည်းလက်ကျန်စာရင်း</h5>
                                     </a>
                                 </div>
                             </div>
