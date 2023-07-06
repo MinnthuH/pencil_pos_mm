@@ -14,7 +14,7 @@
                 <li>
                     <a href="{{ route('dashboard') }}">
                         <i class="mdi mdi-view-dashboard-outline"></i>
-                        <span> Dashboards </span>
+                        <span> Home </span>
                     </a>
                 </li>
 
@@ -208,7 +208,7 @@
                         </div>
                     </li>
                 @endif
-                @if (Auth::user()->can('order.menu'))
+                {{-- @if (Auth::user()->can('order.menu'))
                     <li>
                         <a href="#orders" data-bs-toggle="collapse">
                             <i class="fas fa-clipboard"></i>
@@ -230,7 +230,7 @@
                             </ul>
                         </div>
                     </li>
-                @endif
+                @endif --}}
                 <li class="my-1">
                     <a href="#sales" data-bs-toggle="collapse">
                         <i class=" fas fa-hand-holding-usd"></i>
@@ -248,16 +248,19 @@
                         </ul>
                     </div>
                 </li>
-                <li>
+                <li class="my-1">
                     <a href="#stock" data-bs-toggle="collapse">
-                        <i class="fas fa-chart-line"></i>
+                        <i class=" fas fa-hand-holding-usd"></i>
                         <span> ကုန်ပစ္စည်းစာရင်း </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="stock">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{ route('manage#stock') }}">ကုန်ပစ္စည်းစာရင်းများ</a>
+                                <a href="{{ route('manage#stock') }}">ကုန်ပစ္စည်းလက်ကျန်စာရင်း</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('noti.expire') }}">Expired သတိပေး</a>
                             </li>
                         </ul>
                     </div>

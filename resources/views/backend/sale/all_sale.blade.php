@@ -16,11 +16,14 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <a href="{{ route('sales.export.daily') }}" class="btn btn-blue rounded-pill waves-effect waves-light">Export Daily Sales</a>
+                            <a href="{{ route('sales.export.daily') }}"
+                                class="btn btn-blue rounded-pill waves-effect waves-light">Export Daily Sales</a>
                             &nbsp;
-                            <a href="{{ route('sales.export.weekly') }}" class="btn btn-blue rounded-pill waves-effect waves-light">Export Weekly Sales</a>
+                            <a href="{{ route('sales.export.weekly') }}"
+                                class="btn btn-blue rounded-pill waves-effect waves-light">Export Weekly Sales</a>
                             &nbsp;
-                            <a href="{{ route('sales.export.monthly') }}" class="btn btn-blue rounded-pill waves-effect waves-light">Export Monthly Sales</a>
+                            <a href="{{ route('sales.export.monthly') }}"
+                                class="btn btn-blue rounded-pill waves-effect waves-light">Export Monthly Sales</a>
                         </ol>
                     </div>
                     <h4 class="page-title">အရောင်းစာရင်း</h4>
@@ -58,7 +61,9 @@
                                         <td>{{ $item['user']['name'] }}</td>
                                         <td>{{ $item->invoice_date }}</td>
                                         <td>{{ $item->invoice_no }}</td>
-                                        <td>{{ $item->payment_type }}</td>
+                                        <td> <span style="color: {{ $item->payment_type === 'အကြွေး' ? 'red' : ($item->payment_type === 'Moblie Payment' ? 'green' : '') }}">
+                                            {{ $item->payment_type }}
+                                        </span></td>
                                         <td>{{ $item->sub_total }}</td>
                                         <td>{{ $item->accepted_ammount }}</td>
                                         <td>{{ $item->due }}</td>

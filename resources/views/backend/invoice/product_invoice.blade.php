@@ -253,10 +253,16 @@
                 payNow: {
                     required : true,
                 },
+                paymetnStatus: {
+                    required : true,
+                },
             },
             messages :{
                 payNow: {
                     required : 'ပေးငွေဖြည့်ပါ',
+                },
+                paymetnStatus: {
+                    required : 'ငွေပေးချေမှု ပုံစံရွေးချယ်ပါ',
                 },
 
             },

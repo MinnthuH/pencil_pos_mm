@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ProductImport;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
@@ -10,8 +12,6 @@ use Carbon\Carbon;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
 use Image;
-use App\Exports\ProductExport;
-use App\Imports\ProductImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 
@@ -39,7 +39,7 @@ class ProductController extends Controller
     public function StoreProduct(Request $request)
     {
 
-        $pcode = IdGenerator::generate(['table' => 'products', 'field' => 'porduct_code', 'length' =>6, 'prefix' => 'SC']);
+        $pcode = IdGenerator::generate(['table' => 'products', 'field' => 'porduct_code', 'length' => 8, 'prefix' => 'PC']);
 
         $image = $request->file('productImage');
         $nameGen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension(); // set photo name (1326491.jpg/png..)
@@ -163,19 +163,22 @@ class ProductController extends Controller
     } //End Method
 
     // Import Product
-    public function ImportProduct(){
+    public function ImportProduct()
+    {
 
         return view('backend.product.import_product');
-    }// End Method
+    } // End Method
 
     // Export Product
-    public function ExportProduct(){
-        return Excel::download(new ProductExport,'producs.xlsx');
-    }// End Method
+    public function ExportProduct()
+    {
+        return Excel::download(new ProductExport, 'producs.xlsx');
+    } // End Method
 
     // Import Product
-    public function Import(Request $request){
-        Excel::import(new ProductImport,$request->file('importfile'));
+    public function Import(Request $request)
+    {
+        Excel::import(new ProductImport, $request->file('importfile'));
 
         $noti = [
             'message' => 'ကုန်ပစ္စည်းအသစ်များ ဖိုင်ဖြင့်ထည့်သွင်းခြင်း အောင်မြင်ပါသည်',
@@ -185,10 +188,8 @@ class ProductController extends Controller
 
     } // End Method
 
-
     //Refill Stock Method
     public function refillStock(Request $request)
-
     {
 
         $id = $request->productId;
@@ -217,6 +218,56 @@ class ProductController extends Controller
 
             return redirect()->back()->with($noti);
         }
-    }
+    } // End Method
+
+    // Noti Expire Product Method
+    public function NotiExpireProduct()
+    {
+
+        // Calculate the date 10 days from now
+        $expirationDate = Carbon::now()->addDays(10)->toDateString();
+
+        // Retrieve products with expiration date within the next 10 days
+
+        $products = Product::where('expire_date', '<=', $expirationDate)->get();
+
+        // Return the list of products to your view
+        return view('backend.stock.noti_expire')->with('products', $products);
+
+    } // End Method
+
+
+    // Reduce Stock Method
+    public function ReduceStock(Request $request)
+
+    {
+
+        $id = $request->productId;
+        $quantity = $request->reduceStock;
+
+        try {
+            $product = Product::findOrFail($id);
+
+            // Update the stock quantity
+            $product->product_store -= $quantity;
+
+            $product->save();
+
+            $noti = [
+                'message' => 'သက်တမ်းကုန်ပစ္စည်း အရေအတွက် ပယ်ဖျက်ခြင်း အောင်မြင်ပါသည်',
+                'alert-type' => 'success',
+            ];
+
+            return redirect()->route('noti.expire')->with($noti);
+        } catch (\Exception $e) {
+            // Handle the exception or display an error message
+            $noti = [
+                'message' => 'Error: သက်တမ်းကုန်ပစ္စည်း အရေအတွက် ပယ်ဖျက်ခြင်း အောင်မြင်ပါသည်',
+                'alert-type' => 'error',
+            ];
+
+            return redirect()->route('noti.expire')->with($noti);
+        }
+    } // End Method
 
 }

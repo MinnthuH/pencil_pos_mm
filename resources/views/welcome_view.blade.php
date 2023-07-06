@@ -54,8 +54,9 @@
 <!-- body start -->
 
 <body data-layout-mode="default" data-theme="dark" data-topbar-color="dark" data-menu-position="fixed"
-    data-leftbar-color="dark" data-leftbar-size='default' data-sidebar-user='false'>
+   >
 
+    {{-- data-leftbar-color="dark" data-leftbar-size='default' data-sidebar-user='false' --}}
     <!-- Begin page -->
     <div id="wrapper">
 
@@ -65,57 +66,7 @@
         <!-- end Topbar -->
 
         <!-- ========== Left Sidebar Start ========== -->
-        <div class="left-side-menu">
 
-            <div class="h-100" data-simplebar>
-
-                <!-- User box -->
-
-                <!--- Sidemenu -->
-                <div id="sidebar-menu">
-
-                    <ul id="side-menu">
-
-
-                            <li class="my-1">
-                                <a href="#customer" data-bs-toggle="collapse">
-                                    <i class="fas fa-bell"></i>
-                                    <span> Notifications</span><span
-                                        class="badge bg-danger rounded-circle noti-icon-badge ms-2">1</span>
-                                    <span class="menu-arrow"></span>
-                                </a>
-                                <div class="collapse" id="customer">
-                                    <ul class="nav-second-level">
-                                        {{-- @if (Auth::user()->can('customer.all'))
-                                            <li>
-                                                <a href="{{ route('all#customer') }}">ဖေါက်သည် စာရင်းများ</a>
-                                            </li>
-                                        @endif
-                                        @if (Auth::user()->can('customer.add'))
-                                            <li>
-                                                <a href="{{ route('add#customer') }}">ဖေါက်သည် အသစ်ထည့်ရန်</a>
-                                            </li>
-                                        @endif --}}
-                                    </ul>
-                                </div>
-                            </li>
-
-
-
-
-
-
-                    </ul>
-
-                </div>
-                <!-- End Sidebar -->
-
-                <div class="clearfix"></div>
-
-            </div>
-            <!-- Sidebar -left -->
-
-        </div>
 
 
         <!-- Left Sidebar End -->
@@ -127,7 +78,7 @@
         <div class="content-page">
 
             <div class="row justify-content-center mt-5">
-                <div class="col-8">
+                <div class="col-12">
                     <div class="row row-cols-1 row-cols-md-3 g-3 mb-2">
                         @if (Auth::user()->can('admin.manage'))
                             <div class="col">
@@ -168,6 +119,19 @@
                             </div>
                         </div>
                         @endif
+                        @if (Auth::user()->can('admin.manage'))
+                        <div class="col">
+                            <div class="custom-card mx-2 mb-1">
+                                <div class="card-body text-center">
+                                    <img class="card-img-top img-fluid mx-auto" style="width: 10rem"
+                                        src="{{ asset('backend/assets/icons/payment-method.png') }}" alt="Card image cap">
+                                    <a href="{{ route('pending.due') }}" style="text-decoration: none">
+                                        <h5 class="card-title mt-2">အကြွေးစာရင်း</h5>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                         <div class="col">
                             <div class="custom-card mx-2 mb-1">
                                 <div class="card-body text-center">
@@ -200,6 +164,17 @@
                                         src="{{ asset('backend/assets/icons/warehouse.png') }}" alt="Card image cap">
                                     <a href="{{ route('manage#stock') }}" style="text-decoration: none">
                                         <h5 class="card-title mt-2">ကုန်ပစ္စည်းလက်ကျန်စာရင်း</h5>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="custom-card mx-2 mb-1">
+                                <div class="card-body text-center">
+                                    <img class="card-img-top img-fluid mx-auto" style="width: 10rem"
+                                        src="{{ asset('backend/assets/icons/calendar.png') }}" alt="Card image cap">
+                                    <a href="{{ route('noti.expire') }}" style="text-decoration: none">
+                                        <h5 class="card-title mt-2">Expire သတိပေးစာရင်း</h5>
                                     </a>
                                 </div>
                             </div>

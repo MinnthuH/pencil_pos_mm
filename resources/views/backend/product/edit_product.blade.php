@@ -76,13 +76,13 @@
                                         </div>
                                     </div>
                                     <!-- end col -->
-                                    {{-- <div class="col-md-6">
+                                    <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="firstname" class="form-label">Product Code</label>
                                             <input type="text" name="productCode" class="form-control"
                                                 value="{{ $product->porduct_code }}">
                                         </div>
-                                    </div> --}}
+                                    </div>
                                     <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">

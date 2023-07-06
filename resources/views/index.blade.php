@@ -78,7 +78,7 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1"><span
-                                            data-plugin="counterup">{{ $todayPaid }}</span>&nbsp;Ks</h3>
+                                            data-plugin="counterup">{{ number_format($todayPaid) }}</span>&nbsp;Ks</h3>
                                     <p class="text-muted mb-1 text-truncate">Today Sales</p>
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1"><span
-                                            data-plugin="counterup">{{ $weeklyPaid }}</span>&nbsp;Ks</h3>
+                                            data-plugin="counterup">{{ number_format($weeklyPaid) }}</span>&nbsp;Ks</h3>
                                     <p class="text-muted mb-1 text-truncate">Weekly Sales</p>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1"><span
-                                            data-plugin="counterup">{{ $monthlyPaid }}</span>&nbsp;Ks</h3>
+                                            data-plugin="counterup">{{ number_format($monthlyPaid) }}</span>&nbsp;Ks</h3>
                                     <p class="text-muted mb-1 text-truncate">Monthly Sale</p>
                                 </div>
                             </div>
@@ -152,32 +152,57 @@
         </div>
         <!-- end row-->
 
-        {{-- <div class="row">
-
-
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body pb-2">
-                        <div class="float-end d-none d-md-inline-block">
-                            <div class="btn-group mb-2">
-                                <button type="button" class="btn btn-xs btn-light">Today</button>
-                                <button type="button" class="btn btn-xs btn-light">Weekly</button>
-                                <button type="button" class="btn btn-xs btn-secondary">Monthly</button>
+                    <div class="card-body">
+                        <div class="dropdown float-end">
+                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="mdi mdi-dots-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">Profit</a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item">Action</a>
                             </div>
                         </div>
 
-                        <h4 class="header-title mb-3">Sales Analytics</h4>
+                        <h4 class="header-title mb-0">Total Revenue</h4>
 
-                        <div dir="ltr">
-                            <div id="sales-analytics" class="mt-4" data-colors="#1abc9c,#4a81d4"></div>
+                        <div class="widget-chart text-center" dir="ltr">
+
+                            {{-- <div id="total-revenue" class="mt-0"  data-colors="#f1556c"></div> --}}
+
+                            <h5 class="text-muted mt-0">Total sales made today</h5>
+                            <h2>{{ number_format($todayPaid) }}&nbsp;Ks</h2>
+
+                            <p class="text-muted w-75 mx-auto sp-line-2"></p>
+
+                            <div class="row mt-3">
+                                <div class="col-4">
+                                    <p class="text-muted font-15 mb-1 text-truncate">Target</p>
+                                    <h4>1,000,000 ks</h4>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-muted font-15 mb-1 text-truncate">Last week</p>
+                                    <h4>{{ number_format($weeklyPaid) }} Ks</h4>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-muted font-15 mb-1 text-truncate">Last Month</p>
+                                    <h4>{{ number_format($monthlyPaid) }} ks</h4>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div> <!-- end card -->
             </div> <!-- end col-->
-        </div> --}}
-        <!-- end row -->
-
-        <div class="row">
 
 
             <div class="col-xl-12">
@@ -225,13 +250,16 @@
                                             <td>{{ $item['user']['name'] }}</td>
                                             <td>{{ $item->invoice_date }}</td>
                                             <td>{{ $item->invoice_no }}</td>
-                                            <td>{{ $item->payment_type }}</td>
+                                            <td> <span
+                                                    style="color: {{ $item->payment_type === 'အကြွေး' ? 'red' : ($item->payment_type === 'Moblie Payment' ? 'green' : '') }}">
+                                                    {{ $item->payment_type }}
                                             <td>{{ $item->sub_total }}</td>
                                             <td>{{ $item->accepted_ammount }}</td>
                                             <td>{{ $item->return_change }}</td>
                                             <td>
-                                                <a href="{{ route('detail#sale', $item->id) }}" class="btn btn-info sm"
-                                                    title="Detail Data"><i class="far fa-eye"></i></a>
+                                                <a href="{{ route('detail#sale', $item->id) }}"
+                                                    class="btn btn-info sm" title="Detail Data"><i
+                                                        class="far fa-eye"></i></a>
 
                                             </td>
                                         </tr>

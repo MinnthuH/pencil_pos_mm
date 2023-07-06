@@ -153,6 +153,9 @@ Route::controller(ProductController::class)->group(function () {
 
     ////// Add Stock ////
     Route::post('refill/stock', 'refillStock')->name('refill.stock'); // refill stock
+    Route::get('noti/expire','NotiExpireProduct')->name('noti.expire'); // Noti Expire route
+    Route::post('reduce/stock', 'ReduceStock')->name('reduce.stock'); // Reduce Stock
+
 
 });
 
