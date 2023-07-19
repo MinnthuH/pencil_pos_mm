@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('sub_total')->nullable();
             $table->string('discount')->nullable();
             $table->string('accepted_ammount')->nullable();
-            $table->string('due')->default(0);
-            $table->string('return_change')->default(0);
+            $table->string('due')->nullable();
+            $table->string('return_change')->nullable();
             $table->timestamps();
         });
     }

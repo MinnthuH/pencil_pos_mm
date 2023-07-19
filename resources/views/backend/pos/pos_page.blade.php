@@ -5,36 +5,20 @@
     POS | Pencil POS System
 @endsection
 {{-- jquery link  --}}
-<script src="{{ asset('backend/assets/jquery.js') }}"></script>
+{{-- <script src="{{ asset('backend/assets/jquery.js') }}"></script> --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <div class="content">
 
-    <!-- Start Content-->
-    <div class="container-fluid">
-
-        <!-- start page title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">ကောင်တာ</a></li>
-
-                        </ol>
-                    </div>
-                    <h4 class="page-title">ကောင်တာ</h4>
-                </div>
-            </div>
-        </div>
-        <!-- end page title -->
-
-        <div class="row">
-            <div class="col-lg-4 col-xl-4">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
                 <div class="card text-center">
                     <div class="card-body">
 
-                        <table class="table table-bordered border-primary mb-0">
+                        <table class="table table-bordered border-dark mb-0">
                             <thead>
-
                                 <tr>
                                     <th>Name</th>
                                     <th>QTY</th>
@@ -70,7 +54,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="bg-blue">
+                        <div class="bg-dark">
                             <br>
                             <p style="font-size:18px; color:#fff ">Quantity : {{ Cart::count() }} Pcs</p>
                             <p style="font-size:18px; color:#fff ">SubTotal : {{ Cart::subtotal() }} Ks</p>
@@ -102,36 +86,39 @@
                         </div>
 
                         <!-- end col -->
-                        <button class="btn btn-blue waves-effect waves-light mb-3">အော်ဒါ အတည်ပြုရန်</button>
+                        <button class="btn btn-dark waves-effect waves-light mb-3">အော်ဒါ အတည်ပြုရန်</button>
                     </form>
 
                 </div> <!-- end card -->
+            </div> <!-- end card -->
+        </div> <!-- end col-->
 
-
-
-            </div> <!-- end col-->
-
-            <div class="col-lg-8 col-xl-8">
-                <div class="card">
-                    <div class="row">
-                        <div class="dropdown">
-                            <div class="col-sm-6">
-                                <div class="dropdown mx-2 my-2">
-                                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
-                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        All Products <i class="mdi mdi-chevron-down"></i>
-                                    </button>
-
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        @foreach ($categories as $cat)
-                                        <a class="dropdown-item" href="{{ url('/category/search/' . $cat->id) }}">{{ $cat->category_name }}</a>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body pb-2">
+                    <div class="dropdown float-end">
+                        <a href="" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="mdi mdi-dots-vertical"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <!-- item-->
+                            <a href="{{ route('pos') }}" class="dropdown-item category-link">All Products</a>
+                            @foreach ($categories as $cat)
+                                <a href="#" class="dropdown-item category-link"
+                                    data-category-id="{{ $cat->id }}">{{ $cat->category_name }}</a>
+                            @endforeach
                         </div>
-                        <div class="row row-cols-1 row-cols-md-6 g-1">
-                            @foreach ($products as $key => $item)
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="searchInput"
+                            placeholder="Search products by name or code" autofocus>
+                    </div>
+                    <h4 class="header-title mb-0">ကုန်ပစ္စည်းများ</h4>
+
+                    <div class="row" id="product-list-container">
+                        @foreach ($products as $key => $item)
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
                                 <form action="{{ url('/add-cart') }}" method="post">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $item->id }}">
@@ -139,34 +126,30 @@
                                     <input type="hidden" name="qty" value="1">
                                     <input type="hidden" name="price" value="{{ $item->selling_price }}">
 
-                                    <button type="submit">
-                                        <div class="card my-2 bg-white" style="width:9em; height:12em;">
-                                            <img class="card-img-top" src="{{ asset($item->product_image) }}">
-
-                                            <div class="card-text text-danger mb-1">
-                                                <p>{{ $item->product_name }}</p>
-                                                <p>{{ $item->selling_price }} Ks</p>
-
+                                    <button type="submit" class="btn btn-link">
+                                        <div class="card" style="width: 8.5rem;">
+                                            <img src="{{ asset($item->product_image) }}" id="em_photo"
+                                                class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ $item->product_name }}</h5>
                                             </div>
+                                            <span class="badge bg-dark">{{ $item->selling_price }}&nbsp;ks</span>
 
                                         </div>
                                     </button>
                                 </form>
-                            @endforeach
-                        </div>
+                            </div>
+                        @endforeach
                     </div>
 
-                    {{-- </div> --}}
-                    <!-- end settings content-->
+                </div>
+            </div> <!-- end card -->
+        </div> <!-- end col-->
 
-                    {{-- </div> --}}
-                </div> <!-- end card-->
+    </div>
+    <!-- end row -->
 
-            </div> <!-- end col -->
-        </div>
-        <!-- end row-->
 
-    </div> <!-- container -->
 
 </div> <!-- content -->
 
@@ -199,5 +182,142 @@
         });
     });
 </script>
+
+<!-- At the end of your Blade template -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.category-link').on('click', function(event) {
+            event.preventDefault();
+
+            var categoryId = $(this).data('category-id');
+
+            $.ajax({
+                url: '/get-products-by-category/' + categoryId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Update the product list in the DOM with the new data
+                    displayProducts(data);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        // Function to display products in the DOM
+        function displayProducts(products) {
+            var productListHtml = '';
+            $.each(products, function(index, product) {
+                productListHtml += `
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
+                        <form action="{{ url('/add-cart') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="id" value="${product.id}">
+                            <input type="hidden" name="porductName" value="${product.product_name}">
+                            <input type="hidden" name="qty" value="1">
+                            <input type="hidden" name="price" value="${product.selling_price}">
+                            <button type="submit" class="btn btn-link">
+                                <div class="card" style="width: 8.5rem;">
+                                    <img src="${product.product_image}" id="em_photo" class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${product.product_name}</h5>
+                                    </div>
+                                    <span class="badge bg-dark">${product.selling_price}&nbsp;ks</span>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                `;
+            });
+
+            // Update the product list container with the new HTML
+            $('#product-list-container').html(productListHtml);
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var products = @json($products); // Convert the PHP $products array to a JavaScript array
+
+        // Display all products on initial page load
+        displayProducts(products);
+
+        // Event listener for the search input field
+        $('#searchInput').on('input', function() {
+            var searchTerm = $(this).val().trim().toLowerCase();
+
+            // Filter products based on the search term
+            var filteredProducts = products.filter(function(product) {
+                return (
+                    product.product_name.toLowerCase().includes(searchTerm) ||
+                    product.porduct_code.toLowerCase().includes(searchTerm)
+                );
+            });
+
+            // Update the product list in the DOM with the filtered products
+            displayProducts(filteredProducts);
+        });
+
+        // Function to display products in the DOM
+        function displayProducts(products) {
+            var productListHtml = '';
+            $.each(products, function(index, product) {
+                productListHtml += `
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
+                        <form action="{{ url('/add-cart') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="id" value="${product.id}">
+                            <input type="hidden" name="porductName" value="${product.product_name}">
+                            <input type="hidden" name="qty" value="1">
+                            <input type="hidden" name="price" value="${product.selling_price}">
+                            <button type="submit" class="btn btn-link">
+                                <div class="card" style="width: 8.5rem;">
+                                    <img src="${product.product_image}" id="em_photo" class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${product.product_name}</h5>
+                                    </div>
+                                    <span class="badge bg-dark">${product.selling_price}&nbsp;ks</span>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                `;
+            });
+
+            // Update the product list container with the new HTML
+            $('#product-list-container').html(productListHtml);
+        }
+    });
+</script>
+
+
+<style type="text/css">
+    /* CSS for the search input field */
+    #searchInput {
+        width: 100%;
+        max-width: 400px;
+        /* Adjust the maximum width as per your design */
+        margin: 0 auto;
+        /* To center the input field horizontally */
+    }
+
+    /* CSS for the product cards */
+    .col-lg-3.col-md-3.col-sm-6.col-6.mt-3 {
+        /* Adjust the card styling as per your design */
+    }
+</style>
+
+<style type="text/css">
+    #em_photo {
+        height: 70px;
+        width: 50px;
+    }
+
+    .image-card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
 
 @endsection

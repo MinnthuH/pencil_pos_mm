@@ -19,28 +19,40 @@ class PosController extends Controller
         $products = Product::where('expire_date', '>', $todayDate)->latest()->get();
         $customers = Customer::latest()->get();
         $categories = Category::latest()->get();
-        return view('backend.pos.pos_page', compact('products', 'customers','categories'));
+        return view('backend.pos.pos_page', compact('products', 'customers', 'categories'));
     } // End Method
 
     // Product Search with category
-    public function categorySearch($id){
-        $product = Product::where('category_id', $id)->get();
-        $todayDate = Carbon::now();
-        $products = Product::where('expire_date', '>', $todayDate)->latest()->get();
-        $customers = Customer::latest()->get();
-        $categories = Category::latest()->get();
-        return view('backend.pos.pos_category_page', compact('products', 'customers','categories','product'));
-    } // End Method
+    // public function categorySearch($id)
+    // {
+    //     $product = Product::where('category_id', $id)->get();
+    //     $todayDate = Carbon::now();
+    //     $products = Product::where('expire_date', '>', $todayDate)->latest()->get();
+    //     $customers = Customer::latest()->get();
+    //     $categories = Category::latest()->get();
+    //     return view('backend.pos.pos_category_page2', compact('products', 'customers', 'categories', 'product'));
+    // } // End Method
+
+
+
+    public function GetProductsByCategory($categoryId)
+    {
+        $products = Product::where('category_id', $categoryId)->get();
+        return response()->json($products);
+    }
+
 
     // Add Cart Method
     public function AddCart(Request $request)
     {
         Cart::add([
-            ['id' => $request->id,
+            [
+                'id' => $request->id,
                 'name' => $request->porductName,
                 'qty' => $request->qty,
                 'price' => $request->price,
-                'options' => ['size' => 'large']],
+                'options' => ['size' => 'large']
+            ],
         ]);
         $noti = [
             'message' => 'ကုန်ပစ္စည်း ဈေးခြင်းထဲထည့်ခြင်း အောင်မြင်ပါသည်',

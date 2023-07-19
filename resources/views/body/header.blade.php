@@ -156,7 +156,7 @@
         </ul>
 
         <!-- LOGO -->
-        {{-- <div class="logo-box">
+        <div class="logo-box">
             <a href="index.html" class="logo logo-dark text-center">
                 <span class="logo-sm">
                     <img src="{{asset('backend/assets/images/PencilLogo.png')}}" alt="" height="22">
@@ -176,9 +176,9 @@
                     <img src="{{asset('backend/assets/images/pecnil_textwithlogo.png')}}" alt="" height="20">
                 </span>
             </a>
-        </div> --}}
+        </div>
 
-        {{-- <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+        <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
             <li>
                 <button class="button-menu-mobile waves-effect waves-light">
                     <i class="fe-menu"></i>
@@ -197,6 +197,6 @@
                 <!-- End mobile menu toggle-->
             </li>
         </ul>
-        <div class="clearfix"></div> --}}
+        <div class="clearfix"></div>
     </div>
 </div>
