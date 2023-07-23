@@ -18,7 +18,7 @@ class ProductImport implements ToModel
            'product_name' => $row[0],
            'category_id' => $row[1],
            'supplier_id' => $row[2],
-           'porduct_code' => $row[3],
+           'product_code' => $row[3],
            'product_garage' => $row[4],
            'product_store' => $row[5],
            'buying_date' => $row[6],

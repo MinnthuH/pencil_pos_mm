@@ -40,7 +40,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="firstname" class="form-label">Product Barcode</label>
-                                        <h3>{{ $product->porduct_code }}</h3>
+                                        <h3>{{ $product->product_code }}</h3>
                                     </div>
                                 </div> --}}
                                 <!-- end col -->
@@ -53,9 +53,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="firstname" class="form-label">{{$product->product_name}}| {{$product->selling_price}} Ks</label>
-                                        {{-- <h3>{!! $generator->getBarcode($product->porduct_code,$generator::TYPE_CODE_128) !!}</h3> --}}
+                                        {{-- <h3>{!! $generator->getBarcode($product->product_code,$generator::TYPE_CODE_128) !!}</h3> --}}
                                        <h3> <img src="data:image/png;base64,{{ $barcodeImage }}" alt="Barcode"></h3>
-                                       <p>{{ $product->porduct_code }}</p>
+                                       <p>{{ $product->product_code }}</p>
                                     </div>
                                 </div>
                                 <!-- end col -->

@@ -6,7 +6,9 @@
     @php
         $currentDate = Carbon\Carbon::now()->format('Y-m-d');
         $todayPaid = App\Models\Sale::whereDate('invoice_date', $currentDate)->sum('sub_total');
+        $todayCapital = App\Models\Sale::whereDate('invoice_date', $currentDate)->sum('capital');
         $todaySale = App\Models\Sale::whereDate('invoice_date', $currentDate)->get();
+        $profit = $todayPaid - $todayCapital;
 
         // Get the start and end dates of the current week
         $startDate = date('Y-m-d', strtotime('last Monday'));
@@ -14,6 +16,8 @@
 
         // Calculate the sum of payments for the current week
         $weeklyPaid = App\Models\Sale::whereBetween('invoice_date', [$startDate, $endDate])->sum('sub_total');
+        $weeklyCapital = App\Models\Sale::whereBetween('invoice_date', [$startDate, $endDate])->sum('capital');
+        $weeklyProfit = $weeklyPaid - $weeklyCapital;
 
         // Get the current month and year
         $currentMonth = Carbon\Carbon::now()->format('m');
@@ -23,6 +27,13 @@
         $monthlyPaid = App\Models\Sale::whereMonth('invoice_date', $currentMonth)
             ->whereYear('invoice_date', $currentYear)
             ->sum('sub_total');
+        $monthlyCapital = App\Models\Sale::whereMonth('invoice_date', $currentMonth)->sum('capital');
+        $monthlyProfit = $monthlyPaid - $monthlyCapital;
+
+        // Calculate the sum of payments for the current year
+        $yearlyPaid = App\Models\Sale::whereYear('invoice_date', $currentYear)->sum('sub_total');
+        $yearlyCapital = App\Models\Sale::whereYear('invoice_date', $currentYear)->sum('capital');
+        $yearlyProfit = $yearlyPaid - $yearlyCapital;
 
         $totalPaid = App\Models\Order::sum('pay');
         $totalDue = App\Models\Order::sum('due');
@@ -43,7 +54,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
-                    <div class="page-title-right">
+                    {{-- <div class="page-title-right">
                         <form class="d-flex align-items-center mb-3">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control border-0" id="dash-daterange">
@@ -58,7 +69,7 @@
                                 <i class="mdi mdi-filter-variant"></i>
                             </a>
                         </form>
-                    </div>
+                    </div> --}}
                     <h4 class="page-title">Dashboard</h4>
                 </div>
             </div>
@@ -79,7 +90,7 @@
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1"><span
                                             data-plugin="counterup">{{ number_format($todayPaid) }}</span>&nbsp;Ks</h3>
-                                    <p class="text-muted mb-1 text-truncate">Today Sales</p>
+                                    <p class="text-muted mb-1 text-truncate">ယနေ့ ရောင်းရငွေ</p>
                                 </div>
                             </div>
                         </div> <!-- end row-->
@@ -100,7 +111,7 @@
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1"><span
                                             data-plugin="counterup">{{ number_format($weeklyPaid) }}</span>&nbsp;Ks</h3>
-                                    <p class="text-muted mb-1 text-truncate">Weekly Sales</p>
+                                    <p class="text-muted mb-1 text-truncate">ယခုအပတ် ရောင်းရငွေ</p>
                                 </div>
                             </div>
                         </div> <!-- end row-->
@@ -120,8 +131,9 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1"><span
-                                            data-plugin="counterup">{{ number_format($monthlyPaid) }}</span>&nbsp;Ks</h3>
-                                    <p class="text-muted mb-1 text-truncate">Monthly Sale</p>
+                                            data-plugin="counterup">{{ number_format($monthlyPaid) }}</span>&nbsp;Ks
+                                    </h3>
+                                    <p class="text-muted mb-1 text-truncate">ယခုလ ရောင်းရငွေ</p>
                                 </div>
                             </div>
                         </div> <!-- end row-->
@@ -141,8 +153,8 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1"><span
-                                            data-plugin="counterup">{{ count($todaySale) }}</span></h3>
-                                    <p class="text-muted mb-1 text-truncate">Today Sales Count</p>
+                                            data-plugin="counterup">{{ $totalDue }}</span></h3>
+                                    <p class="text-muted mb-1 text-truncate">ရရန်ရှိငွေ</p>
                                 </div>
                             </div>
                         </div> <!-- end row-->
@@ -179,23 +191,23 @@
 
                             {{-- <div id="total-revenue" class="mt-0"  data-colors="#f1556c"></div> --}}
 
-                            <h5 class="text-muted mt-0">Total sales made today</h5>
-                            <h2>{{ number_format($todayPaid) }}&nbsp;Ks</h2>
+                            <h5 class="text-muted mt-0">ယနေ့ အမြတ်ငွေ</h5>
+                            <h2>{{ number_format($profit) }}&nbsp;Ks</h2>
 
                             <p class="text-muted w-75 mx-auto sp-line-2"></p>
 
                             <div class="row mt-3">
                                 <div class="col-4">
-                                    <p class="text-muted font-15 mb-1 text-truncate">Target</p>
-                                    <h4>1,000,000 ks</h4>
+                                    <p class="text-muted font-15 mb-1 text-truncate">ယခုအပတ် အမြတ်ငွေ</p>
+                                    <h4>{{ number_format($weeklyProfit) }}&nbsp;Ks</h4>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-muted font-15 mb-1 text-truncate">Last week</p>
-                                    <h4>{{ number_format($weeklyPaid) }} Ks</h4>
+                                    <p class="text-muted font-15 mb-1 text-truncate">ယခုလ အမြတ်ငွေ</p>
+                                    <h4>{{ number_format($monthlyProfit) }} Ks</h4>
                                 </div>
                                 <div class="col-4">
-                                    <p class="text-muted font-15 mb-1 text-truncate">Last Month</p>
-                                    <h4>{{ number_format($monthlyPaid) }} ks</h4>
+                                    <p class="text-muted font-15 mb-1 text-truncate">ယခုနှစ် အမြတ်ငွေ</p>
+                                    <h4>{{ number_format($yearlyProfit) }} ks</h4>
                                 </div>
                             </div>
 

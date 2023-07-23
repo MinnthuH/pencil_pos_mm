@@ -5,14 +5,43 @@
     POS | Pencil POS System
 @endsection
 {{-- jquery link  --}}
-{{-- <script src="{{ asset('backend/assets/jquery.js') }}"></script> --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('backend/assets/jquery.js') }}"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
+<style type="text/css">
+    /* CSS for the search input field */
+    #searchInput {
+        width: 100%;
+        max-width: 400px;
+        /* Adjust the maximum width as per your design */
+        margin: 0 auto;
+        /* To center the input field horizontally */
+    }
+
+    /* CSS for the product cards */
+    .col-lg-3.col-md-3.col-sm-6.col-6.mt-3 {
+        /* Adjust the card styling as per your design */
+    }
+
+    /* CSS for the right column (scrollable area) */
+    .scrollable-col {
+        height: calc(100vh - 130px); /* Adjust the height as needed */
+        overflow-y: auto;
+    }
+
+    /* CSS for the left column (fixed position) */
+    .fixed-col {
+        position: sticky;
+        top: 20px; /* Adjust the top position as needed */
+        height: calc(100vh - 170px); /* Adjust the height as needed */
+        overflow-y: auto;
+    }
+</style>
 
 <div class="content">
 
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-4 fixed-col">
             <div class="card">
                 <div class="card text-center">
                     <div class="card-body">
@@ -93,7 +122,7 @@
             </div> <!-- end card -->
         </div> <!-- end col-->
 
-        <div class="col-lg-8">
+        <div class="col-lg-8 scrollable-col">
             <div class="card">
                 <div class="card-body pb-2">
                     <div class="dropdown float-end">
@@ -123,6 +152,7 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $item->id }}">
                                     <input type="hidden" name="porductName" value="{{ $item->product_name }}">
+                                    <input type="hidden" name="buyPrice" value="{{ $item->buy_price }}">
                                     <input type="hidden" name="qty" value="1">
                                     <input type="hidden" name="price" value="{{ $item->selling_price }}">
 
@@ -215,6 +245,7 @@
                             @csrf
                             <input type="hidden" name="id" value="${product.id}">
                             <input type="hidden" name="porductName" value="${product.product_name}">
+                            <input type="hidden" name="buyPrice" value="${product.buy_price}">
                             <input type="hidden" name="qty" value="1">
                             <input type="hidden" name="price" value="${product.selling_price}">
                             <button type="submit" class="btn btn-link">
@@ -252,7 +283,7 @@
             var filteredProducts = products.filter(function(product) {
                 return (
                     product.product_name.toLowerCase().includes(searchTerm) ||
-                    product.porduct_code.toLowerCase().includes(searchTerm)
+                    product.product_code.toLowerCase().includes(searchTerm)
                 );
             });
 
@@ -270,6 +301,7 @@
                             @csrf
                             <input type="hidden" name="id" value="${product.id}">
                             <input type="hidden" name="porductName" value="${product.product_name}">
+                            <input type="hidden" name="buyPrice" value="${product.buy_price}">
                             <input type="hidden" name="qty" value="1">
                             <input type="hidden" name="price" value="${product.selling_price}">
                             <button type="submit" class="btn btn-link">

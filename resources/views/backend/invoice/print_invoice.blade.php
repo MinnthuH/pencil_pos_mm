@@ -145,7 +145,7 @@
                                             name="sub_total">{{ $sale->accepted_ammount }}
                                             Ks</span>
                                     </p>
-                                    <p><b>ကျန်ငွေ</b> <span class="float-end" name="sub_total">{{ $sale->due ?? '0' }}
+                                    <p><b class="text-danger">ကျန်ငွေ</b> <span class="float-end text-danger" name="sub_total">{{ $sale->due ?? '0' }}
                                             Ks</span>
                                     </p>
                                     <p><b>ပြန်အမ်းငွေ</b> <span class="float-end"

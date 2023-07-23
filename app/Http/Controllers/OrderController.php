@@ -19,7 +19,6 @@ class OrderController extends Controller
     public function FinalInvoice(Request $request)
     {
 
-
         DB::beginTransaction();
 
         try {
@@ -28,16 +27,17 @@ class OrderController extends Controller
 
 
             $rtotal = $request->total;
-            $rpay = $request->payNow; // ပိုပေးလျှင် အခြေအနေကိုပြင်ရန်
-
+            $rpay = $request->payNow;
+            $invoiceNo = $this->generateInvoiceNumber();
 
            $result = Sale::insertGetId([
                 'user_id' => $request->userId,
                 'customer_id' => $request->customerId,
                 'invoice_date' => Carbon::now(),
-                'invoice_no' => 'INV' . mt_rand(10000000, 99999999),
+                'invoice_no' => $invoiceNo,
                 'payment_type' => $request->paymetnStatus,
                 'sub_total' => $request->subTotal,
+                'capital' => $request->capital,
                 'discount' => 0,
                 'accepted_ammount' => $request->payNow,
                 'due' => $request->due,
@@ -52,7 +52,8 @@ class OrderController extends Controller
             $data['order_status'] = $request->orderStaus;
             $data['total_products'] = $request->porductCount;
             $data['sub_total'] = $request->subTotal;
-            $data['invoice_no'] = 'pos' . mt_rand(10000000, 99999999);
+            $data['capital'] = $request->capital;
+            $data['invoice_no'] = $invoiceNo;
             $data['total'] = $request->total;
             $data['paymet_status'] = $request->paymetnStatus;
             $data['pay'] = $request->payNow;
@@ -97,6 +98,7 @@ class OrderController extends Controller
 
         } catch (\Exception $e) {
             // An error occurred, so rollback the transaction
+            dd($e);
 
             DB::rollback();
 
@@ -223,4 +225,21 @@ class OrderController extends Controller
         return redirect()->route('pending#due')->with($noti);
 
     } // End Method
+
+
+
+    ////////////////////////Private Funciton//////////////////////////
+    private function generateInvoiceNumber()
+{
+    // You can customize the format of the invoice number as per your requirements.
+    // For example, you can use the date along with a random number or hash.
+
+    $invoicePrefix = 'INV'; // You can set a prefix for the invoice number (e.g., 'INV' for Invoice).
+    $randomNumberLength = 6; // You can set the desired length of the random number.
+
+    $invoiceNumber = $invoicePrefix . '-' . date('Ymd') . '-' . mt_rand(100000, 999999);
+
+    return $invoiceNumber;
+}
+
 }

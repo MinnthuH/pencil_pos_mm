@@ -30,6 +30,7 @@ class SaleController extends Controller
         return view('backend.sale.sale_reprint', compact('sale', 'saleItem'));
     } // End Method
 
+
     public function stockProduct($id)
     {
 
@@ -45,31 +46,35 @@ class SaleController extends Controller
     public function exportDailySales()
     {
         $currentDate = Carbon::now()->format('Y-m-d');
-        $sales = Sale::whereDate('invoice_date', $currentDate)->get();
+        $sales = Sale::with('user', 'customer') // Eager load the user and customer relationships.
+            ->whereDate('invoice_date', $currentDate)
+            ->get();
 
         return Excel::download(new SalesExport($sales), 'daily_sales.xlsx');
     }
 
     public function exportWeeklySales()
-    {
-        $startDate = Carbon::now()->startOfWeek()->format('Y-m-d');
-        $endDate = Carbon::now()->endOfWeek()->format('Y-m-d');
-        $sales = Sale::whereBetween('invoice_date', [$startDate, $endDate])->get();
+{
+    $startDate = Carbon::now()->startOfWeek()->format('Y-m-d');
+    $endDate = Carbon::now()->endOfWeek()->format('Y-m-d');
+    $sales = Sale::with('user', 'customer') // Eager load the user and customer relationships.
+        ->whereBetween('invoice_date', [$startDate, $endDate])
+        ->get();
 
-        return Excel::download(new SalesExport($sales), 'weekly_sales.xlsx');
-    }
+    return Excel::download(new SalesExport($sales), 'weekly_sales.xlsx');
+}
 
-    public function exportMonthlySales()
-    {
-        $currentMonth = Carbon::now()->format('m');
-        $currentYear = Carbon::now()->format('Y');
-        $sales = Sale::whereMonth('invoice_date', $currentMonth)
-            ->whereYear('invoice_date', $currentYear)
-            ->get();
+public function exportMonthlySales()
+{
+    $currentMonth = Carbon::now()->format('m');
+    $currentYear = Carbon::now()->format('Y');
+    $sales = Sale::with('user', 'customer') // Eager load the user and customer relationships.
+        ->whereMonth('invoice_date', $currentMonth)
+        ->whereYear('invoice_date', $currentYear)
+        ->get();
 
-        return Excel::download(new SalesExport($sales), 'monthly_sales.xlsx');
-    }
-
+    return Excel::download(new SalesExport($sales), 'monthly_sales.xlsx');
+}
     // pending due method
     public function PendingDue(){
 

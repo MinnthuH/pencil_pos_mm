@@ -181,6 +181,16 @@ class RoleTableSeeder extends Seeder
             'group_name' => 'product'
         ]);
         Permission::create([
+            'name' => 'product.edit',
+            'guard_name' => 'web',
+            'group_name' => 'product'
+        ]);
+        Permission::create([
+            'name' => 'product.delete',
+            'guard_name' => 'web',
+            'group_name' => 'product'
+        ]);
+        Permission::create([
             'name' => 'product.import',
             'guard_name' => 'web',
             'group_name' => 'product'

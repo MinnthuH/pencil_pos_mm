@@ -1,20 +1,22 @@
 <?php
 
+use Carbon\Carbon;
+use App\Models\Sale;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PosController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Backend\AttendanceController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\SaleController;
+use App\Http\Controllers\Backend\SalaryController;
+use App\Http\Controllers\Backend\ExpenseController;
+use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\EmployeeController;
-use App\Http\Controllers\Backend\ExpenseController;
-use App\Http\Controllers\Backend\ProductController;
-use App\Http\Controllers\Backend\RoleController;
-use App\Http\Controllers\Backend\SalaryController;
-use App\Http\Controllers\Backend\SaleController;
 use App\Http\Controllers\Backend\SupplierController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PosController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -155,6 +157,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::post('refill/stock', 'refillStock')->name('refill.stock'); // refill stock
     Route::get('noti/expire','NotiExpireProduct')->name('noti.expire'); // Noti Expire route
     Route::post('reduce/stock', 'ReduceStock')->name('reduce.stock'); // Reduce Stock
+    Route::get('noti/stock','NotiStock')->name('noti.stock'); // Noti Stock
 
 
 });
@@ -185,7 +188,7 @@ Route::controller(PosController::class)->group(function () {
 
 
     Route::post('/add-cart', 'AddCart'); // Add card
-    Route::get('/allitem', 'AllItem'); // All Item
+    // Route::get('/allitem', 'AllItem'); // All Item
     Route::post('cart_update/{rowId}', 'UpdateCart'); // Update Cart
     Route::get('/cart_remove/{rowId}', 'RemoveCart'); // Remove Item
     Route::post('/create-invoice', 'CreateInvoice'); // Create Invoice

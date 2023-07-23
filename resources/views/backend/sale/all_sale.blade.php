@@ -61,16 +61,19 @@
                                         <td>{{ $item['user']['name'] }}</td>
                                         <td>{{ $item->invoice_date }}</td>
                                         <td>{{ $item->invoice_no }}</td>
-                                        <td> <span style="color: {{ $item->payment_type === 'အကြွေး' ? 'red' : ($item->payment_type === 'Moblie Payment' ? 'green' : '') }}">
-                                            {{ $item->payment_type }}
-                                        </span></td>
+                                        <td> <span
+                                                style="color: {{ $item->payment_type === 'အကြွေး' ? 'red' : ($item->payment_type === 'Moblie Payment' ? 'green' : '') }}">
+                                                {{ $item->payment_type }}
+                                            </span></td>
                                         <td>{{ $item->sub_total }}</td>
                                         <td>{{ $item->accepted_ammount }}</td>
                                         <td>{{ $item->due }}</td>
                                         <td>{{ $item->return_change }}</td>
                                         <td>
-                                            <a href="{{ route('detail#sale', $item->id) }}" class="btn btn-info sm"
-                                                title="Detail Data"><i class="far fa-eye"></i></a>
+                                            @if (Auth::user()->can('admin.manage'))
+                                                <a href="{{ route('detail#sale', $item->id) }}" class="btn btn-info sm"
+                                                    title="Detail Data"><i class="far fa-eye"></i></a>
+                                            @endif
 
                                         </td>
                                     </tr>

@@ -53,7 +53,7 @@
                                         <td>{{ $item->product_name }}</td>
                                         <td>{{ $item['category']['category_name'] }}</td>
                                         <td>{{ $item['supplier']['name'] }}</td>
-                                        <td>{{ $item->porduct_code }}</td>
+                                        <td>{{ $item->product_code }}</td>
                                         <td class="text-danger">{{ $item->expire_date }}</td>
                                         <td>
                                             <button class="btn btn-warning waves-effect waves-light">{{ $item->product_store }}</button>

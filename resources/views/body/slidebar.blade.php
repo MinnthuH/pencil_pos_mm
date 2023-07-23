@@ -13,10 +13,18 @@
 
                 <li>
                     <a href="{{ route('dashboard') }}">
-                        <i class="mdi mdi-view-dashboard-outline"></i>
+                        <i class="fas fa-home"></i>
                         <span> Home </span>
                     </a>
                 </li>
+                @if (Auth::user()->can('admin.manage'))
+                    <li>
+                        <a href="{{ route('admin.manage') }}">
+                            <i class="mdi mdi-view-dashboard-outline"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+                @endif
 
                 @if (Auth::user()->can('pos.menu'))
                     <li>
@@ -260,59 +268,62 @@
                                 <a href="{{ route('manage#stock') }}">ကုန်ပစ္စည်းလက်ကျန်စာရင်း</a>
                             </li>
                             <li>
+                                <a href="{{ route('noti.stock') }}">သတိပေးပစ္စည်းစာရင်း</a>
+                            </li>
+                            <li>
                                 <a href="{{ route('noti.expire') }}">Expired သတိပေး</a>
                             </li>
                         </ul>
                     </div>
                 </li>
                 @if (Auth::user()->can('role&permission.menu'))
-                <li class="my-1">
-                    <a href="#permission" data-bs-toggle="collapse">
-                        <i class="fas fa-user-shield"></i>
-                        <span> Role & Permission </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="permission">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="{{ route('all#permission') }}">All Permission</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('all#roles') }}">All Roles</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('add#rolepermission') }}">Roles In Permission</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('all#rolepermission') }}">All Roles In Permission</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                    <li class="my-1">
+                        <a href="#permission" data-bs-toggle="collapse">
+                            <i class="fas fa-user-shield"></i>
+                            <span> Role & Permission </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="permission">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="{{ route('all#permission') }}">All Permission</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('all#roles') }}">All Roles</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('add#rolepermission') }}">Roles In Permission</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('all#rolepermission') }}">All Roles In Permission</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                 @endif
                 @if (Auth::user()->can('role&permission.menu'))
-                <li class="my-1">
-                    <a href="#admin" data-bs-toggle="collapse">
-                        <i class="fas fa-user-cog"></i>
-                        <span> Setting Admin User </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="admin">
-                        <ul class="nav-second-level">
-                            @if (Auth::user()->can('admin.all'))
-                            <li>
-                                <a href="{{ route('all#admin') }}">All Admin</a>
-                            </li>
-                            @endif
-                            @if (Auth::user()->can('admin.add'))
-                            <li>
-                                <a href="{{ route('all#roles') }}">Add Role</a>
-                            </li>
-                            @endif
+                    <li class="my-1">
+                        <a href="#admin" data-bs-toggle="collapse">
+                            <i class="fas fa-user-cog"></i>
+                            <span> Setting Admin User </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="admin">
+                            <ul class="nav-second-level">
+                                @if (Auth::user()->can('admin.all'))
+                                    <li>
+                                        <a href="{{ route('all#admin') }}">All Admin</a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->can('admin.add'))
+                                    <li>
+                                        <a href="{{ route('all#roles') }}">Add Role</a>
+                                    </li>
+                                @endif
 
-                        </ul>
-                    </div>
-                </li>
+                            </ul>
+                        </div>
+                    </li>
                 @endif
 
 
@@ -342,21 +353,23 @@
                         </ul>
                     </div>
                 </li>
-                <li class="my-1">
-                    <a href="#backup" data-bs-toggle="collapse">
-                        <i class="fas fa-cloud-download-alt"></i>
-                        <span>Database Backup </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="backup">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="{{ route('backup#database') }}">Database Backup</a>
-                            </li>
+                @if (Auth::user()->can('admin.manage'))
+                    <li class="my-1">
+                        <a href="#backup" data-bs-toggle="collapse">
+                            <i class="fas fa-cloud-download-alt"></i>
+                            <span>Database Backup </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="backup">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="{{ route('backup#database') }}">Database Backup</a>
+                                </li>
 
-                        </ul>
-                    </div>
-                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
 
 
             </ul>

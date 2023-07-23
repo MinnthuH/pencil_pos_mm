@@ -80,7 +80,7 @@
                                         <div class="form-group mb-3">
                                             <label for="firstname" class="form-label">Product Code</label>
                                             <input type="text" name="productCode" class="form-control"
-                                                value="{{ $product->porduct_code }}">
+                                                value="{{ $product->product_code }}">
                                         </div>
                                     </div>
                                     <!-- end col -->
@@ -110,7 +110,7 @@
                                     <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
-                                            <label for="firstname" class="form-label">သက်တမ်းကုန်သည့်နေ့<</label>
+                                            <label for="firstname" class="form-label">သက်တမ်းကုန်သည့်နေ့</label>
                                             <input type="date" name="expireDate" class="form-control"
                                                 value="{{ $product->expire_date }}">
                                         </div>

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Exports\ProductExport;
-use App\Http\Controllers\Controller;
-use App\Imports\ProductImport;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Supplier;
 use Carbon\Carbon;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
-use Image;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use Intervention\Image\Facades\Image;
 use Picqer\Barcode\BarcodeGeneratorPNG;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class ProductController extends Controller
 {
@@ -39,7 +39,7 @@ class ProductController extends Controller
     public function StoreProduct(Request $request)
     {
 
-        $pcode = IdGenerator::generate(['table' => 'products', 'field' => 'porduct_code', 'length' => 8, 'prefix' => 'PC']);
+        $pcode = IdGenerator::generate(['table' => 'products', 'field' => 'product_code', 'length' => 8, 'prefix' => 'PC']);
 
         $image = $request->file('productImage');
         $nameGen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension(); // set photo name (1326491.jpg/png..)
@@ -50,7 +50,7 @@ class ProductController extends Controller
             'product_name' => $request->productName,
             'category_id' => $request->categoryId,
             'supplier_id' => $request->supplierId,
-            'porduct_code' => $pcode,
+            'product_code' => $pcode,
             'product_garage' => $request->productGarage,
             'product_image' => $saveUrl,
             'product_store' => $request->productStore,
@@ -97,7 +97,7 @@ class ProductController extends Controller
                 'product_name' => $request->productName,
                 'category_id' => $request->categoryId,
                 'supplier_id' => $request->supplierId,
-                'porduct_code' => $request->productCode,
+                'product_code' => $request->productCode,
                 'product_garage' => $request->productGarage,
                 'product_image' => $saveUrl,
                 'product_store' => $request->productStore,
@@ -105,6 +105,7 @@ class ProductController extends Controller
                 'expire_date' => $request->expireDate,
                 'buy_price' => $request->buyingPrice,
                 'selling_price' => $request->sellingPrice,
+                'unit' => $request->unit,
                 'created_at' => Carbon::now(),
             ]);
             $noti = [
@@ -118,13 +119,14 @@ class ProductController extends Controller
                 'product_name' => $request->productName,
                 'category_id' => $request->categoryId,
                 'supplier_id' => $request->supplierId,
-                'porduct_code' => $request->productCode,
+                'product_code' => $request->productCode,
                 'product_garage' => $request->productGarage,
                 'product_store' => $request->productStore,
                 'buying_date' => $request->buyingDate,
                 'expire_date' => $request->expireDate,
                 'buy_price' => $request->buyingPrice,
                 'selling_price' => $request->sellingPrice,
+                'unit' => $request->unit,
                 'created_at' => Carbon::now(),
             ]);
             $noti = [
@@ -157,7 +159,7 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
         $generator = new BarcodeGeneratorPNG();
-        $barcodeData = $generator->getBarcode($product->porduct_code, $generator::TYPE_CODE_128);
+        $barcodeData = $generator->getBarcode($product->product_code, $generator::TYPE_CODE_128);
         $barcodeImage = base64_encode($barcodeData);
         return view('backend.product.code_product', compact('product', 'barcodeImage'));
     } //End Method
@@ -269,5 +271,11 @@ class ProductController extends Controller
             return redirect()->route('noti.expire')->with($noti);
         }
     } // End Method
+
+    // Noti less Stock Method
+    public function NotiStock(){
+        $lessProducts = Product::where('product_store', '<', 5)->get();
+        return view('backend.stock.less_stock',compact('lessProducts'));
+    } // End method
 
 }

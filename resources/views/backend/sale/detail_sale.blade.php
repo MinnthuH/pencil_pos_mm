@@ -148,7 +148,7 @@
                                             <td><img src="{{asset($item->product->product_image)}}" style="width:50px;height:40px;" alt=""></td>
 
                                             <td>{{$item->product->product_name}}</td>
-                                            <td>{{$item->product->porduct_code}}</td>
+                                            <td>{{$item->product->product_code}}</td>
                                             <td>{{$item->quantity}}</td>
                                             <td>{{$item->product->selling_price}}</td>
                                             <td>{{$item->total}}</td>

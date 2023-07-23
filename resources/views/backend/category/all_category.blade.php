@@ -44,15 +44,18 @@
                             <tbody>
                                 @foreach ($allCategory as $key => $item)
                                     <tr>
-                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $item->id }}</td>
                                         <td>{{ $item->category_name }}</td>
                                         <td>
-                                            <a href="{{ route('edit#category', $item->id) }}" class="btn btn-info sm"
-                                                title="Edit Data"><i class="far fa-edit"></i></a>
+                                            @if (Auth::user()->can('admin.manage'))
+                                                <a href="{{ route('edit#category', $item->id) }}"
+                                                    class="btn btn-info sm" title="Edit Data"><i
+                                                        class="far fa-edit"></i></a>
 
-                                            <a href="{{ route('delete#category', $item->id) }}"
-                                                class="btn btn-danger sm" title="Delete Data" id="delete"><i
-                                                    class="fas fa-trash-alt"></i></a>
+                                                <a href="{{ route('delete#category', $item->id) }}"
+                                                    class="btn btn-danger sm" title="Delete Data" id="delete"><i
+                                                        class="fas fa-trash-alt"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

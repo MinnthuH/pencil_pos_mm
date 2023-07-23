@@ -99,6 +99,7 @@
                                                 <th style="width: 10%">Qty</th>
                                                 <th style="width: 10%">Unit Cost</th>
                                                 <th style="width: 10%" class="text-end">Total</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -137,7 +138,6 @@
                                     <p><b>ကျသင့်ငွေ</b> <span class="float-end" name="sub_total">{{ Cart::subtotal() }}
                                             Ks</span>
                                     </p>
-
                                     <h3>{{ Cart::total() }} Ks</h3>
                                 </div>
                                 <div class="clearfix"></div>
@@ -212,6 +212,7 @@
                     <input type="hidden" name="porductCount" value="{{ Cart::count() }}">
                     <input type="hidden" name="subTotal" value="{{ Cart::subtotal() }}">
                     <input type="hidden" name="total" value="{{ Cart::total() }}">
+                    <input type="hidden" name="capital" value="{{ $totalBuyPrice }}">
 
                     <div class="mb-3 text-center">
                         <button class="btn btn-blue" type="submit">ပေးချေမည်</button>
@@ -281,6 +282,7 @@
     });
 
 </script>
+
 
 
 

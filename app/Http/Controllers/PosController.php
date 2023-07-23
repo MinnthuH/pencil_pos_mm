@@ -45,13 +45,14 @@ class PosController extends Controller
     // Add Cart Method
     public function AddCart(Request $request)
     {
-        Cart::add([
+        // dd($request->toArray());
+        $addCard = Cart::add([
             [
                 'id' => $request->id,
                 'name' => $request->porductName,
                 'qty' => $request->qty,
                 'price' => $request->price,
-                'options' => ['size' => 'large']
+                'options' => ['bPrice' => $request->buyPrice]
             ],
         ]);
         $noti = [
@@ -61,13 +62,13 @@ class PosController extends Controller
         return redirect()->back()->with($noti);
     } // End Method
 
-    // All Item Method
-    public function AllItem()
-    {
+    // // All Item Method
+    // public function AllItem()
+    // {
 
-        $productItem = Cart::content();
-        return view('backend.pos.text_item', compact('productItem'));
-    } // End Mehtod
+    //     $productItem = Cart::content();
+    //     return view('backend.pos.text_item', compact('productItem'));
+    // } // End Mehtod
 
     // Update Cart Method
     public function UpdateCart(Request $request, $rowId)
@@ -103,7 +104,17 @@ class PosController extends Controller
         $cartItem = Cart::content();
         $customerId = $request->customerId;
         $customer = Customer::where('id', $customerId)->first();
+        $Capital = Cart::content();
+        $totalBuyPrice = 0; // Initialize totalBuyPrice to zero
 
-        return view('backend.invoice.product_invoice', compact('cartItem', 'customer'));
+        foreach ($Capital as $item) {
+            $totalBuyPrice += $item->options['bPrice'] * $item->qty;
+        }
+
+        // dd($cartItem->toArray());
+
+        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice'));
     } // End Method
+
+
 }

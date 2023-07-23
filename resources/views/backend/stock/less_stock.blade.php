@@ -45,7 +45,7 @@
 
 
                             <tbody>
-                                @foreach ($product as $key => $item)
+                                @foreach ($lessProducts as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td><img src="{{ asset($item->product_image) }}" style="width:50px;height:40px;"
@@ -56,7 +56,7 @@
                                         <td>{{ $item->product_code }}</td>
                                         <td>
                                             <button
-                                                class="btn btn-warning waves-effect waves-light">{{ $item->product_store }}</button>
+                                                class="btn btn-danger waves-effect waves-light">{{ $item->product_store }}</button>
                                         </td>
                                         <td>
                                             @if (Auth::user()->can('admin.manage'))

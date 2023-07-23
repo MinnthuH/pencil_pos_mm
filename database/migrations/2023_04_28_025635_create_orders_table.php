@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+                Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('customer_id');
             $table->string('order_date');
@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('sub_total')->nullable();
             $table->string('invoice_no')->nullable();
             $table->string('total')->nullable();
+            $table->string('capital')->nullable();
             $table->string('paymet_status')->nullable();
             $table->string('pay')->nullable();
             $table->string('due')->nullable();
