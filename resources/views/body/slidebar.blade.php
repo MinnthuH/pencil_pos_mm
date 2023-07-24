@@ -353,7 +353,7 @@
                         </ul>
                     </div>
                 </li>
-                @if (Auth::user()->can('admin.manage'))
+                {{-- @if (Auth::user()->can('admin.manage'))
                     <li class="my-1">
                         <a href="#backup" data-bs-toggle="collapse">
                             <i class="fas fa-cloud-download-alt"></i>
@@ -369,7 +369,7 @@
                             </ul>
                         </div>
                     </li>
-                @endif
+                @endif --}}
 
 
             </ul>

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use File;
+use Artisan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\RedirectResponse;
-use File;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -200,7 +201,7 @@ class AdminController extends Controller
 
     // Backup Now Method
     public function BackupNow(){
-        \Artisan::call('backup:run');
+        Artisan::call('backup:run');
 
         $noti = [
             'message' => 'Database Backup Successfully',
