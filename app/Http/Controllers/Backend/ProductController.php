@@ -9,6 +9,7 @@ use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Exports\ProductExport;
 use App\Imports\ProductImport;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Intervention\Image\Facades\Image;
@@ -54,6 +55,7 @@ class ProductController extends Controller
             'product_garage' => $request->productGarage,
             'product_image' => $saveUrl,
             'product_store' => $request->productStore,
+            'product_track' => $request->trackStock,
             'buying_date' => $request->buyingDate,
             'expire_date' => $request->expireDate,
             'buy_price' => $request->buyingPrice,
@@ -101,6 +103,7 @@ class ProductController extends Controller
                 'product_garage' => $request->productGarage,
                 'product_image' => $saveUrl,
                 'product_store' => $request->productStore,
+                'product_track' => $request->trackStock,
                 'buying_date' => $request->buyingDate,
                 'expire_date' => $request->expireDate,
                 'buy_price' => $request->buyingPrice,
@@ -122,6 +125,7 @@ class ProductController extends Controller
                 'product_code' => $request->productCode,
                 'product_garage' => $request->productGarage,
                 'product_store' => $request->productStore,
+                'product_track' => $request->trackStock,
                 'buying_date' => $request->buyingDate,
                 'expire_date' => $request->expireDate,
                 'buy_price' => $request->buyingPrice,
@@ -274,7 +278,7 @@ class ProductController extends Controller
 
     // Noti less Stock Method
     public function NotiStock(){
-        $lessProducts = Product::where('product_store', '<', 5)->get();
+        $lessProducts = Product::where('product_store', '<', DB::raw('product_track'))->get();
         return view('backend.stock.less_stock',compact('lessProducts'));
     } // End method
 

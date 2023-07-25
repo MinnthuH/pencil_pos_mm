@@ -258,7 +258,7 @@
                 </li>
                 <li class="my-1">
                     <a href="#stock" data-bs-toggle="collapse">
-                        <i class=" fas fa-hand-holding-usd"></i>
+                        <i class=" fas fa-book-open"></i>
                         <span> ကုန်ပစ္စည်းစာရင်း </span>
                         <span class="menu-arrow"></span>
                     </a>

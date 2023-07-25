@@ -16,12 +16,14 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <a href="{{ route('import#product') }}"
-                                class="btn btn-blue rounded-pill waves-effect waves-light"> Import</a>
-                            &nbsp;
-                            <a href="{{ route('export#product') }}"
-                                class="btn btn-blue rounded-pill waves-effect waves-light"> Export</a>
-                            &nbsp;
+                            @if (Auth::user()->can('admin.manage'))
+                                <a href="{{ route('import#product') }}"
+                                    class="btn btn-blue rounded-pill waves-effect waves-light"> Import</a>
+                                &nbsp;
+                                <a href="{{ route('export#product') }}"
+                                    class="btn btn-blue rounded-pill waves-effect waves-light"> Export</a>
+                                &nbsp;
+                            @endif
                             <a href="{{ route('add#product') }}"
                                 class="btn btn-blue rounded-pill waves-effect waves-light">ကုန်ပစ္စည်း အသစ်ထည့်ရန်</a>
                         </ol>
@@ -76,8 +78,9 @@
                                             <a href="{{ route('code#product', $item->id) }}" class="btn btn-warning sm"
                                                 title="barcode"><i class="fas fa-barcode"></i></a>
                                             @if (Auth::user()->can('product.edit'))
-                                                <a href="{{ route('edit#product', $item->id) }}" class="btn btn-info sm"
-                                                    title="Edit Data"><i class="far fa-edit"></i></a>
+                                                <a href="{{ route('edit#product', $item->id) }}"
+                                                    class="btn btn-info sm" title="Edit Data"><i
+                                                        class="far fa-edit"></i></a>
                                             @endif
                                             @if (Auth::user()->can('product.delete'))
                                                 <a href="{{ route('delete#porduct', $item->id) }}"

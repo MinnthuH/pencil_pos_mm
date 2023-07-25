@@ -102,6 +102,14 @@
                                     <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
+                                            <label for="firstname" class="form-label">အနည်းဆုံးကျန်ရမည့် အရေအတွက်</label>
+                                            <input type="text" name="trackStock" class="form-control"
+                                                value="{{ $product->product_track }}">
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
                                             <label for="firstname" class="form-label">ဝယ်ယူသည့်နေ့</label>
                                             <input type="date" name="buyingDate" class="form-control"
                                                 value="{{ $product->buying_date }}">

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('product_garage')->nullable();
             $table->string('product_image')->nullable();
             $table->integer('product_store')->nullable();
+            $table->integer('product_track')->nullable();
             $table->string('buying_date')->nullable();
             $table->string('expire_date')->nullable();
             $table->integer('buy_price')->nullable();

@@ -15,15 +15,15 @@ class CategorySeeder extends Seeder
     {
         Category::create([
 
-            'category_name' => 'အချိုရည်',
+            'category_name' => 'ဖျော်ရည်နှင့်ယာမကာ',
         ]);
         Category::create([
 
-            'category_name' => 'မုန့်ခြောက်',
+            'category_name' => 'မုန့်မျိုးစုံ',
         ]);
         Category::create([
 
-            'category_name' => 'ခေါက်ဆွဲခြောက်',
+            'category_name' => 'ဆေးဝါး',
         ]);
         Category::create([
 
@@ -32,6 +32,10 @@ class CategorySeeder extends Seeder
         Category::create([
 
             'category_name' => 'ကော်ဖီ နှင့် နို့မှုန့်',
+        ]);
+        Category::create([
+
+            'category_name' => 'အလှကုန်',
         ]);
     }
 }
