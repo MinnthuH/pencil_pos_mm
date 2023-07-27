@@ -39,7 +39,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group mb-3">
                                             <label for="firstname" class="form-label">Xlsx file Import</label>
-                                            <input type="file" name="importfile" class="form-control">
+                                            <input type="file" name="importfile" class="form-control" required>
                                         </div>
                                     </div>
                                     <!-- end col -->

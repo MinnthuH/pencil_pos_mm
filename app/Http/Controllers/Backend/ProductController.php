@@ -184,7 +184,12 @@ class ProductController extends Controller
     // Import Product
     public function Import(Request $request)
     {
-        Excel::import(new ProductImport, $request->file('importfile'));
+        // $file = $request->file('importfile');
+        // // Skip the first row (header row) during the import process.
+        // Excel::useFirstRowAsHeader()->import(new ProductImport, $file);
+
+        $file = $request->file('importfile');
+        Excel::import(new ProductImport, $file);
 
         $noti = [
             'message' => 'ကုန်ပစ္စည်းအသစ်များ ဖိုင်ဖြင့်ထည့်သွင်းခြင်း အောင်မြင်ပါသည်',
@@ -245,7 +250,6 @@ class ProductController extends Controller
 
     // Reduce Stock Method
     public function ReduceStock(Request $request)
-
     {
 
         $id = $request->productId;
@@ -277,9 +281,10 @@ class ProductController extends Controller
     } // End Method
 
     // Noti less Stock Method
-    public function NotiStock(){
+    public function NotiStock()
+    {
         $lessProducts = Product::where('product_store', '<', DB::raw('product_track'))->get();
-        return view('backend.stock.less_stock',compact('lessProducts'));
+        return view('backend.stock.less_stock', compact('lessProducts'));
     } // End method
 
 }

@@ -16,7 +16,7 @@ class ProductExport implements FromCollection, WithHeadings
     public function collection()
     {
         return Product::with('category', 'supplier')
-            ->select('product_name', 'category_id', 'supplier_id', 'product_code', 'product_garage', 'product_store', 'buying_date', 'expire_date', 'buy_price', 'selling_price')
+            ->select('product_name', 'category_id', 'supplier_id', 'product_code', 'product_garage', 'product_store', 'buying_date', 'expire_date', 'buy_price', 'selling_price','product_track')
             ->get()
             ->map(function ($product) {
                 return [
@@ -30,6 +30,7 @@ class ProductExport implements FromCollection, WithHeadings
                     'Expire Date' => $product->expire_date,
                     'Buying Price' => $product->buy_price,
                     'Selling Price' => $product->selling_price,
+                    'Product Track' => $product->product_track,
                 ];
             });
     }
@@ -46,6 +47,7 @@ class ProductExport implements FromCollection, WithHeadings
             'Expire Date',
             'Buying Price',
             'Selling Price',
+            'Product Track',
         ];
     }
 }
