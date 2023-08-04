@@ -35,11 +35,11 @@
         $yearlyCapital = App\Models\Sale::whereYear('invoice_date', $currentYear)->sum('capital');
         $yearlyProfit = $yearlyPaid - $yearlyCapital;
 
-        $totalPaid = App\Models\Order::sum('pay');
-        $totalDue = App\Models\Order::sum('due');
+        // $totalPaid = App\Models\Order::sum('pay');
+        $totalDue = App\Models\Sale::sum('due');
 
-        $completeOrder = App\Models\Order::where('order_status', 'complete')->get();
-        $pendingOrder = App\Models\Order::where('order_status', 'pending')->get();
+        // $completeOrder = App\Models\Order::where('order_status', 'complete')->get();
+        // $pendingOrder = App\Models\Order::where('order_status', 'pending')->get();
         $sales = App\Models\Sale::orderBy('id', 'DESC')->get();
     @endphp
 
@@ -238,7 +238,7 @@
                         <h3 class="header-title mb-3">အရောင်းစာရင်းများ</h3>
 
                         <div class="table-responsive">
-                            <table class="table table-borderless table-nowrap table-hover table-centered m-0">
+                            <table id="basic-datatable" class="table dt-responsive nowrap w-100">
 
                                 <thead class="table-light">
                                     <tr>

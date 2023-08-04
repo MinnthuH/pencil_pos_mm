@@ -26,8 +26,9 @@ class SaleController extends Controller
     {
         $sale = Sale::where('id', $id)->first();
         $saleItem = OrderDetail::with('product')->where('sale_id', $id)->orderBy('id', 'DESC')->get();
-        // return view('backend.sale.detail_sale', compact('sale', 'saleItem'));
-        return view('backend.sale.sale_reprint', compact('sale', 'saleItem'));
+        // return view('backend.sale.sale_reprint', compact('sale', 'saleItem'));
+        return view('backend.sale.sale_reprint2', compact('sale', 'saleItem'));
+
     } // End Method
 
 

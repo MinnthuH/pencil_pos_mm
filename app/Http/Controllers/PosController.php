@@ -15,29 +15,19 @@ class PosController extends Controller
     public function Pos()
     {
 
-        $todayDate = Carbon::now();
-        $products = Product::where('expire_date', '>', $todayDate)->latest()->get();
+        $products = Product::where('expire_date', '>', Carbon::now())
+        ->where('product_store', '>',0)->latest()->get();
         $customers = Customer::latest()->get();
         $categories = Category::latest()->get();
         return view('backend.pos.pos_page', compact('products', 'customers', 'categories'));
     } // End Method
 
-    // Product Search with category
-    // public function categorySearch($id)
-    // {
-    //     $product = Product::where('category_id', $id)->get();
-    //     $todayDate = Carbon::now();
-    //     $products = Product::where('expire_date', '>', $todayDate)->latest()->get();
-    //     $customers = Customer::latest()->get();
-    //     $categories = Category::latest()->get();
-    //     return view('backend.pos.pos_category_page2', compact('products', 'customers', 'categories', 'product'));
-    // } // End Method
-
-
 
     public function GetProductsByCategory($categoryId)
     {
-        $products = Product::where('category_id', $categoryId)->get();
+        $products = Product::where('category_id', $categoryId)
+            ->where('product_store', '>',0)
+            ->where('expire_date', '>', Carbon::now())->latest()->get();
         return response()->json($products);
     }
 

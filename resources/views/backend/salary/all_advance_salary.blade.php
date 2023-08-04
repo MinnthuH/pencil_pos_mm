@@ -31,7 +31,7 @@ All AdvSalary | Pencil POS System
                     <div class="card-body">
 
                         <table id="basic-datatable" class="table dt-responsive nowrap w-100">
-                            <thead>
+                            <thead class="bg-primary">
                                 <tr>
                                     <th>Sl</th>
                                     <th>Image</th>

@@ -77,20 +77,6 @@
                         </div>
                         <!-- end row -->
 
-                        <div class="row mt-3">
-                            <div class="col-sm-6">
-                                <h6>Billing Address</h6>
-                                <address>
-                                    {{ $sale['customer']['shopname'] }} - {{ $sale['customer']['city'] }}
-                                    <br>
-                                    <abbr title="Phone">Shop Name:</abbr> {{ $sale['customer']['shopname'] }}<br>
-                                    <abbr title="Phone">Phone:</abbr> {{ $sale['customer']['phone'] }}<br>
-                                    <abbr title="Phone">Email:</abbr> {{ $sale['customer']['email'] }}
-                                </address>
-                            </div> <!-- end col -->
-
-                        </div>
-                        <!-- end row -->
 
                         <div class="row">
                             <div class="col-12">

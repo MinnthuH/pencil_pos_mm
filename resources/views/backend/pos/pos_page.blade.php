@@ -6,7 +6,7 @@
 @endsection
 {{-- jquery link  --}}
 <script src="{{ asset('backend/assets/jquery.js') }}"></script>
-{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+
 
 <style type="text/css">
     /* CSS for the search input field */

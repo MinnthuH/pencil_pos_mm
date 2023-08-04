@@ -4,6 +4,23 @@
 @section('title')
     Invoice | Pencil POS System
 @endsection
+<style>
+    @media print {
+        /* Set paper size to 80mm */
+        @page {
+            size: 80mm;
+        }
+
+        /* Adjust margins as needed */
+        body {
+            margin: 0;
+            padding: 10mm; /* Set appropriate padding to adjust content position */
+        }
+
+        /* Set font size and other styles for printing */
+        /* Add your custom styles here */
+    }
+</style>
 
 <div class="content">
 
