@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice</title>
+    <link href="{{ asset('backend/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="{{ asset('backend/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
+
 
 </head>
 <style type="text/css">
@@ -14,6 +18,9 @@
         color: #000;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 12px;
+    }
+    .logo {
+        text-align: center;
     }
 
     #resturant-name,
@@ -77,6 +84,7 @@
     .btn-back {
         background-color: #4fa950;
     }
+
     @media print {
         .btn {
             display: none;
@@ -88,24 +96,20 @@
 
     <div id="wrapper">
         <div id="receipt-header">
-            <h3 id="resturant-name">Pencil POS</h3>
-            <p>Address: 1/70 Dama Pyi Ya Street Tawtike</p>
-            <p>Yangon</p>
-            <p>Tel: 09795516433</p>
-        </div>
-        <div class="col-md-4 offset-md-2">
-            <div class="mt-3 float-end">
-                <p><strong>Invoice Date : </strong> <span class="float-end">
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ $sale->invoice_date }}</span></p>
-                <p><strong>Invoice No : </strong> <span class="float-end">{{ $sale->invoice_no }}
-                    </span></p>
-                <p><strong>Payment Type : </strong> <span class="float-end"> {{ $sale->payment_type }}
-                    </span></p>
-                <p><strong>Cashier : </strong> <span class="float-end">{{ Auth::user()->name }}
-                    </span></p>
+            <div class="logo">
+                <img src="{{ !empty($shop->logo) ? url('upload/shop_logo/' . $shop->logo) : url('upload/no_image.jpg') }}" width="70px" height="70px" alt="">
             </div>
-        </div><!-- end col -->
+            <h3 id="shop-name" class="text-center">{{ $shop->name }}</h3>
+            <h4 class="text-center">Reprint</h4>
+            <p class="text-center">Address: {{ $shop->address }}</p>
+            <p class="text-center">Tel: {{ $shop->phone }}</p>
+            <p>Customer :<strong>{{ $sale['customer']['name'] }}</strong></p>
+            <p>Invoice Date :<strong>{{ $sale->invoice_date }}</strong></p>
+            <p>Invoice No :<strong>{{ $sale->invoice_no }}</strong></p>
+            <p>Payment Type :<strong>{{ $sale->payment_type }}</strong></p>
+            <p>Cashier :<strong>{{ Auth::user()->name }}</strong></p>
+        </div>
+
         <div id="receipt-body">
             <table class="tb-sale-detail">
                 <thead>
@@ -121,13 +125,15 @@
                     @php
                         $sl = 1;
                     @endphp
-                    @foreach ($contents as $key => $item)
+                    @foreach ($saleItem as $key => $item)
                         <tr>
-                            <td width="30">{{ $sl++ }}</td>
-                            <td width="180">{{ $item->name }}</td>
-                            <td width="50">{{ $item->qty }}</td>
-                            <td width="55">{{ $item->price }}</td>
-                            <td width="65">{{ $item->price * $item->qty }}Ks</td>
+                            <td width="30" class="text-start">{{ $sl++ }}</td>
+                            <td width="180" class="text-start"> {{ $item['product']['product_name'] }}</td>
+                            <td width="50">{{ $item->quantity }}</td>
+                            <td width="55" class="text-end">{{ number_format($item['product']['selling_price']) }}
+                            </td>
+                            <td width="65" class="text-end">
+                                {{ number_format($item['product']['selling_price'] * $item->quantity) }}&nbsp;Ks</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -136,27 +142,27 @@
                 <tbody>
                     <tr>
                         <td>Total Qty</td>
-                        <td>{{ $contents->count() }}</td>
+                        <td>{{ $saleItem->count() }}</td>
                         <td>ကျသင့်ငွေ</td>
-                        <td>{{ number_format($sale->sub_total) }}Ks</td>
+                        <td class="text-end">{{ number_format($sale->sub_total) }}&nbsp;Ks</td>
                     </tr>
                     <tr>
                         <td colspan="2">ပေးငွေ</td>
-                        <td colspan="2">{{ number_format($sale->accepted_ammount) }}Ks</td>
+                        <td colspan="2" class="text-end">{{ number_format($sale->accepted_ammount) }}&nbsp;Ks</td>
                     </tr>
                     <tr>
                         <td colspan="2">ပြန်အမ်းငွေ</td>
-                        <td colspan="2">{{ number_format($sale->return_change ?? '0') }}Ks</td>
+                        <td colspan="2">{{ number_format($sale->return_change ?? '0') }}&nbsp;Ks</td>
                     </tr>
                     <tr>
                         <td colspan="2">ကျန်ငွေ</td>
-                        <td colspan="2">{{ number_format($sale->due ?? '0') }}Ks</td>
+                        <td colspan="2">{{ number_format($sale->due ?? '0') }}&nbsp;Ks</td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div id="receipt-footer">
-            <p>ဝယ်ယူအားပေးမှုကို အထူးကျေးဇူးတင်ပါသည်</p>
+            <p>{{ $shop->description }}</p>
         </div>
         <div id="buttons">
             <form action="{{ route('stock#product', $sale->id) }}" method="get">
@@ -168,7 +174,7 @@
 
             <form action="{{ route('stock#product', $sale->id) }}" method="get">
                 <button class="btn btn-print" type="submit" onclick="window.print(); return false;">
-                    Print
+                    RePrint
                 </button>
             </form>
 

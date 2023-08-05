@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Sale;
+use App\Models\Shop;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Customer;
@@ -93,9 +94,10 @@ class OrderController extends Controller
             $customerId = $request->customerId;
             $customer = Customer::where('id', $customerId)->first();
             $sale= Sale::latest()->firstOrFail();
+            $shop = Shop::first();
 
             // return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents'));
-            return view('backend.invoice.print_invoice2', compact('sale','customer','rpay','returnChange','contents'));
+            return view('backend.invoice.print_invoice_A5', compact('sale','customer','rpay','returnChange','contents','shop'));
 
 
         } catch (\Exception $e) {

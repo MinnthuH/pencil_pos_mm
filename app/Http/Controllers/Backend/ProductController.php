@@ -93,7 +93,14 @@ class ProductController extends Controller
             $image = $request->file('productImage');
             $nameGen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension(); // set photo name (1326491.jpg/png..)
             Image::make($image)->resize(300, 300)->save('upload/product/' . $nameGen);
-            $saveUrl = 'upload/product/' . $nameGen;
+            $newImageUrl = 'upload/product/' . $nameGen;
+
+            $product = Product::findOrFail($productId);
+            $currentImageUrl = $product->product_image;
+
+            if ($currentImageUrl && $currentImageUrl !== $newImageUrl && file_exists($currentImageUrl)) {
+                unlink($currentImageUrl);
+            }
 
             Product::findOrFail($productId)->update([
                 'product_name' => $request->productName,
@@ -101,7 +108,7 @@ class ProductController extends Controller
                 'supplier_id' => $request->supplierId,
                 'product_code' => $request->productCode,
                 'product_garage' => $request->productGarage,
-                'product_image' => $saveUrl,
+                'product_image' => $newImageUrl,
                 'product_store' => $request->productStore,
                 'product_track' => $request->trackStock,
                 'buying_date' => $request->buyingDate,

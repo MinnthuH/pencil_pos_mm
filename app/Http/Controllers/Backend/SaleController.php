@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Exports\SalesExport;
-use App\Http\Controllers\Controller;
-use App\Models\OrderDetail;
-use App\Models\Product;
-use App\Models\Sale;
 use Carbon\Carbon;
+use App\Models\Sale;
+use App\Models\Shop;
+use App\Models\Product;
+use App\Models\OrderDetail;
+use App\Exports\SalesExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
@@ -24,10 +25,11 @@ class SaleController extends Controller
     // Detail Sale
     public function detailSale($id)
     {
+        $shop = Shop::first();
         $sale = Sale::where('id', $id)->first();
         $saleItem = OrderDetail::with('product')->where('sale_id', $id)->orderBy('id', 'DESC')->get();
         // return view('backend.sale.sale_reprint', compact('sale', 'saleItem'));
-        return view('backend.sale.sale_reprint2', compact('sale', 'saleItem'));
+        return view('backend.sale.sale_reprint_80mm', compact('sale', 'saleItem','shop'));
 
     } // End Method
 

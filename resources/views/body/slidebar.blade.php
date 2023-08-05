@@ -353,6 +353,22 @@
                         </ul>
                     </div>
                 </li>
+                @if (Auth::user()->can('admin.manage'))
+                    <li class="my-1">
+                        <a href="#shopinfo" data-bs-toggle="collapse">
+                            <i class="fas fa-coins"></i>
+                            <span> ဆိုင်အချက်အလက် </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="shopinfo">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="{{ route('shop#info') }}">Shop info </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
                 {{-- @if (Auth::user()->can('admin.manage'))
                     <li class="my-1">
                         <a href="#backup" data-bs-toggle="collapse">

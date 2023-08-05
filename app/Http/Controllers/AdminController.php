@@ -215,7 +215,7 @@ class AdminController extends Controller
     public function DownloadDb($getFilename){
 
         $path = storage_path('app/Pencil_POS/'.$getFilename);
-        return response()->download($path);
+        // return response()->download($path);
     } // End Method
 
     // Delete Databasde

@@ -100,8 +100,8 @@
 
                                                     </td>
                                                     <td>{{ $item->quantity }}</td>
-                                                    <td>{{ $item['product']['selling_price'] }} Ks</td>
-                                                    <td class="text-end">{{ $item['product']['selling_price'] * $item->quantity }} Ks</td>
+                                                    <td>{{ $item['product']['selling_price'] }}</td>
+                                                    <td class="text-end">{{ $item['product']['selling_price'] * $item->quantity }} </td>
                                                 </tr>
                                             @endforeach
 
@@ -136,7 +136,7 @@
                                             Ks</span>
                                     </p>
                                     <p><b>ပြန်အမ်းငွေ</b> <span class="float-end"
-                                            name>{{ $sale->return_change ?? '0' }} Ks</span></p>
+                                            name>{{ $sale->return_change ?? '0' }}</span></p>
 
                                     <h3>{{ $sale->sub_total }} Ks</h3>
                                 </div>

@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\EmployeeController;
 use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\AttendanceController;
+use App\Http\Controllers\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update#password'); // admin profile page
 
 }); //End User Middleware
+
+// All Shop Route
+Route::controller(ShopController::class)->group(function () {
+    Route::get('/shop-info', 'ShopInfo')->name('shop#info'); // shop info page
+    Route::post('/shopinfo/update', 'ShopInfoUpdate')->name('shop#infoUpdate'); // shop info page
+});
 
 // Employee All Route
 Route::controller(EmployeeController::class)->group(function () {
@@ -277,5 +284,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('delete/database/{getFilename}', 'DeleteDb'); // Delete Database
 
 });
+
+
 
 require __DIR__ . '/auth.php';
