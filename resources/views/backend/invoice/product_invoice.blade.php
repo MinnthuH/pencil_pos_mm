@@ -36,8 +36,8 @@
                                 <div class="auth-logo">
                                     <div class="logo logo-dark">
                                         <span class="logo-lg">
-                                            <img src="{{ asset('backend/assets/images/pecnil_textwithlogo.png') }}" alt=""
-                                                height="22">
+                                            <img src="{{ asset('backend/assets/images/pecnil_textwithlogo.png') }}"
+                                                alt="" height="22">
                                         </span>
                                     </div>
 
@@ -172,7 +172,7 @@
                 <div class="text-center mt-2 mb-4">
                     <div class="auth-logo">
                         <h3>Invoice Of {{ $customer->name }}</h3>
-                        <h3>Total Amonunt {{ Cart::total() }} Ks</h3>
+                        {{-- <h3>Total Amonunt {{ Cart::total() }} Ks</h3> --}}
                     </div>
                 </div>
 
@@ -180,13 +180,21 @@
                 <form class="px-3" action="{{ url('final-invoice') }}" method="post" id="myForm">
                     @csrf
                     <div class="mb-3">
+                        <label for="username" class="form-label">Total Amount</label>
+                        <input class="form-control" type="number" id="totalAmount" name="totalAmount" value="{{ Cart::total() }}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Discount</label>
+                        <input class="form-control" type="number" id="discount" name="discount" value="0">
+                    </div>
+                    <div class="mb-3">
                         <label for="username" class="form-label">Payment</label>
                         <select name="paymetnStatus" class="form-select mt-3" id="example-select">
                             <option selected disabled>ငွေပေးချေခြင်းပုံစံ ရွေးချယ်ရန်</option>
 
                             <option value="လက်ငင်း">လက်ငင်း</option>
                             <option value="Moblie Payment">Mobile Payment</option>
-                            <option value="အကြွေး">အကြွေး</option>
+                            <option value="အကြွေး" id="installmentOption">အကြွေး</option>
 
                         </select>
                     </div>
@@ -225,62 +233,105 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var payNowInput = document.getElementById('payNow');
         var returnChangeInput = document.getElementById('returnChange');
         var dueInput = document.getElementById('due');
+        var discountInput = document.getElementById('discount');
+        var totalAmountInput = document.getElementById('totalAmount');
+        var totalHiddenInput = document.getElementsByName('total')[0]; // Get the hidden input element
+        var installmentOption = document.getElementById('installmentOption');
 
-        payNowInput.addEventListener('input', function() {
-            var total = parseFloat('{{ Cart::total() }}'); // Get the total amount
-            var payAmount = parseFloat(payNowInput.value); // Get the pay amount entered by the user
-            var returnChange = payAmount - total; // Calculate the return change
+        function updateInstallmentOption() {
+            if (dueInput.value !== '') {
+                installmentOption.selected = true;
+            } else {
+                installmentOption.selected = false;
+            }
+        }
+
+        function updateReturnAndDue() {
+            var total = parseFloat(totalAmountInput.value);
+            var payAmount = parseFloat(payNowInput.value);
+            var returnChange = payAmount - total;
 
             if (!isNaN(returnChange) && returnChange >= 0) {
-                returnChangeInput.value = returnChange.toFixed(0); // Display the return change in the input field
-                dueInput.value = ''; // Clear the "due" input field if payNow input is greater than or equal to the total amount
+                returnChangeInput.value = returnChange.toFixed(0);
+                dueInput.value = '';
             } else {
-                returnChangeInput.value = ''; // Clear the input field if the return change is negative or NaN
-                dueInput.value = Math.abs(returnChange).toFixed(0); // Calculate and display the due amount in the "due" input field
+                returnChangeInput.value = '';
+                dueInput.value = Math.abs(returnChange).toFixed(0);
             }
+
+            updateInstallmentOption();
+        }
+
+        discountInput.addEventListener('input', function() {
+            var initialTotal = parseFloat('{{ Cart::total() }}');
+            var discount = parseFloat(discountInput.value) || 0;
+            var newTotal = initialTotal - discount;
+
+            if (!isNaN(newTotal) && newTotal >= 0) {
+                totalAmountInput.value = newTotal.toFixed(0);
+                totalHiddenInput.value = newTotal.toFixed(0); // Update hidden input value
+            } else {
+                totalAmountInput.value = initialTotal.toFixed(0);
+                totalHiddenInput.value = initialTotal.toFixed(0); // Update hidden input value
+            }
+
+            updateReturnAndDue();
         });
+
+        payNowInput.addEventListener('input', function() {
+            updateReturnAndDue();
+        });
+
+        dueInput.addEventListener('input', function() {
+            updateInstallmentOption();
+        });
+
+        updateInstallmentOption();
+        updateReturnAndDue();
     });
 </script>
 
+
+
 <script type="text/javascript">
-    $(document).ready(function (){
+    $(document).ready(function() {
         $('#myForm').validate({
             rules: {
                 payNow: {
-                    required : true,
+                    required: true,
                 },
                 paymetnStatus: {
-                    required : true,
+                    required: true,
                 },
             },
-            messages :{
+            messages: {
                 payNow: {
-                    required : 'ပေးငွေဖြည့်ပါ',
+                    required: 'ပေးငွေဖြည့်ပါ',
                 },
                 paymetnStatus: {
-                    required : 'ငွေပေးချေမှု ပုံစံရွေးချယ်ပါ',
+                    required: 'ငွေပေးချေမှု ပုံစံရွေးချယ်ပါ',
                 },
 
             },
-            errorElement : 'span',
-            errorPlacement: function (error,element) {
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
                 error.addClass('invalid-feedback');
                 element.closest('.form-group').append(error);
             },
-            highlight : function(element, errorClass, validClass){
+            highlight: function(element, errorClass, validClass) {
                 $(element).addClass('is-invalid');
             },
-            unhighlight : function(element, errorClass, validClass){
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).removeClass('is-invalid');
             },
         });
     });
-
 </script>
 
 

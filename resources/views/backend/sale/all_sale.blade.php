@@ -43,11 +43,12 @@
                             <thead>
                                 <tr>
                                     <th>Sl</th>
-                                    <th class="text-wrap">အရောင်းတာဝန်ခံ အမည်</th>
+                                    <th class="text-wrap">အရောင်းတာဝန်ခံ</th>
                                     <th>ဘောင်ချာ နေစွဲ</th>
                                     <th>ဘောင်ချာနံပါတ်</th>
                                     <th>ငွေပေးချေမှု ပုံစံ</th>
                                     <th>ကျသင့်ငွေ</th>
+                                    <th>Discount</th>
                                     <th>ပေးငွေ</th>
                                     <th>ကျန်ငွေ</th>
                                     <th>ပြန်အမ်းငွေ</th>
@@ -67,10 +68,11 @@
                                                 style="color: {{ $item->payment_type === 'အကြွေး' ? 'red' : ($item->payment_type === 'Moblie Payment' ? 'green' : '') }}">
                                                 {{ $item->payment_type }}
                                             </span></td>
-                                        <td>{{ $item->sub_total }}</td>
-                                        <td>{{ $item->accepted_ammount }}</td>
-                                        <td>{{ $item->due }}</td>
-                                        <td>{{ $item->return_change }}</td>
+                                            <td class="text-end">{{ number_format($item->sub_total) }}</td>
+                                            <td class="text-end">{{ number_format($item->discount) }}</td>
+                                            <td class="text-end">{{ number_format($item->accepted_ammount) }}</td>
+                                            <td class="text-end">{{ number_format($item->due) }}</td>
+                                            <td class="text-end">{{ number_format($item->return_change) }}</td>
                                         <td>
                                             @if (Auth::user()->can('admin.manage'))
                                                 <a href="{{ route('detail#sale', $item->id) }}" class="btn btn-info sm"

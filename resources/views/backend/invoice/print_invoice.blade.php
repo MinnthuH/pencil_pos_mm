@@ -45,6 +45,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    <div id="receipt-header">
+                        <h3 id="shop-name" class="text-center">{{ $shop->name }}</h3>
+                        <p class="text-center">Address: {{ $shop->address }}</p>
+                        <p class="text-center">Tel: {{ $shop->phone }}</p>
+                    </div>
                     <div class="card-body">
                         <!-- Logo & title -->
                         <div class="clearfix">
@@ -65,16 +70,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center">
-                                <h4 class="m-0 d-print-none">Invoice</h4>
-                                <p>Current date and time: {{ \Carbon\Carbon::now() }}</p>
-                            </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mt-3">
                                     <p><b>Hello, {{ $customer->name }}</b></p>
+                                     <address>
+                                    {{ $customer->address }} - {{ $customer->city }}
+                                    <br>
+                                    <abbr title="Phone">Shop Name:</abbr> {{ $customer->shopname }}<br>
+                                    <abbr title="Phone">Phone:</abbr> {{ $customer->phone }}<br>
+                                    <abbr title="Phone">Email:</abbr> {{ $customer->email }}
+                                </address>
                                 </div>
 
                             </div><!-- end col -->
@@ -89,23 +97,11 @@
                                         </span></p>
                                     <p><strong>Cashier. : </strong> <span class="float-end">{{ Auth::user()->name }}
                                         </span></p>
+
+                                    <p><strong>Deli Services. : </strong> <span class="float-end">Royal Express
+                                        </span></p>
                                 </div>
                             </div><!-- end col -->
-                        </div>
-                        <!-- end row -->
-
-                        <div class="row mt-3">
-                            <div class="col-sm-6">
-                                <h6>Billing Address</h6>
-                                <address>
-                                    {{ $customer->address }} - {{ $customer->city }}
-                                    <br>
-                                    <abbr title="Phone">Shop Name:</abbr> {{ $customer->shopname }}<br>
-                                    <abbr title="Phone">Phone:</abbr> {{ $customer->phone }}<br>
-                                    <abbr title="Phone">Email:</abbr> {{ $customer->email }}
-                                </address>
-                            </div> <!-- end col -->
-
                         </div>
                         <!-- end row -->
 
@@ -155,9 +151,12 @@
                             </div> <!-- end col -->
                             <div class="col-sm-6">
                                 <div class="float-end">
-                                    <p><b>ကျသင့်ငွေ</b> <span class="float-end" name="sub_total">{{ $sale->sub_total }}
+                                    <p><b>Sub total</b>&nbsp;&nbsp;<span class="float-end" name="sub_total">{{ $sale->sub_total }}
                                             Ks</span>
                                     </p>
+                                    <p><b>Discount</b>&nbsp;&nbsp;<span class="float-end" name="sub_total">{{ $sale->discount }}
+                                        Ks</span>
+                                </p>
                                     <p><b>ပေးငွေ</b> <span class="float-end"
                                             name="sub_total">{{ $sale->accepted_ammount }}
                                             Ks</span>
@@ -168,7 +167,7 @@
                                     <p><b>ပြန်အမ်းငွေ</b> <span class="float-end"
                                             name>{{ $sale->return_change ?? '0' }} Ks</span></p>
 
-                                    <h3>{{ $sale->sub_total }} Ks</h3>
+                                    <h3 class="float-end">{{ $sale->total }} Ks</h3>
                                 </div>
                                 <div class="clearfix"></div>
                             </div> <!-- end col -->

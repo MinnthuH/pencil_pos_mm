@@ -5,7 +5,7 @@
 
     @php
         $currentDate = Carbon\Carbon::now()->format('Y-m-d');
-        $todayPaid = App\Models\Sale::whereDate('invoice_date', $currentDate)->sum('sub_total');
+        $todayPaid = App\Models\Sale::whereDate('invoice_date', $currentDate)->sum('total');
         $todayCapital = App\Models\Sale::whereDate('invoice_date', $currentDate)->sum('capital');
         $todaySale = App\Models\Sale::whereDate('invoice_date', $currentDate)->get();
         $profit = $todayPaid - $todayCapital;
@@ -15,7 +15,7 @@
         $endDate = date('Y-m-d', strtotime('next Sunday'));
 
         // Calculate the sum of payments for the current week
-        $weeklyPaid = App\Models\Sale::whereBetween('invoice_date', [$startDate, $endDate])->sum('sub_total');
+        $weeklyPaid = App\Models\Sale::whereBetween('invoice_date', [$startDate, $endDate])->sum('total');
         $weeklyCapital = App\Models\Sale::whereBetween('invoice_date', [$startDate, $endDate])->sum('capital');
         $weeklyProfit = $weeklyPaid - $weeklyCapital;
 
@@ -26,12 +26,12 @@
         // Calculate the sum of payments for the current month
         $monthlyPaid = App\Models\Sale::whereMonth('invoice_date', $currentMonth)
             ->whereYear('invoice_date', $currentYear)
-            ->sum('sub_total');
+            ->sum('total');
         $monthlyCapital = App\Models\Sale::whereMonth('invoice_date', $currentMonth)->sum('capital');
         $monthlyProfit = $monthlyPaid - $monthlyCapital;
 
         // Calculate the sum of payments for the current year
-        $yearlyPaid = App\Models\Sale::whereYear('invoice_date', $currentYear)->sum('sub_total');
+        $yearlyPaid = App\Models\Sale::whereYear('invoice_date', $currentYear)->sum('total');
         $yearlyCapital = App\Models\Sale::whereYear('invoice_date', $currentYear)->sum('capital');
         $yearlyProfit = $yearlyPaid - $yearlyCapital;
 
@@ -243,11 +243,12 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>စဉ်</th>
-                                        <th>အရောင်းဝန်ထမ်း</th>
+                                        <th class="text-wrap">အရောင်းဝန်ထမ်း</th>
                                         <th>ဘောင်ချာ နေ့စွဲ</th>
                                         <th>ဘောင်ချာ နံပါတ်</th>
                                         <th>ငွေပေးချေမှု ပုံစံ</th>
                                         <th>ကျသင့်ငွေ</th>
+                                        <th>Discount</th>
                                         <th>ပေးငွေ</th>
                                         <th>ပြန်အမ်းငွေ</th>
                                         <th>Action</th>
@@ -265,9 +266,10 @@
                                             <td> <span
                                                     style="color: {{ $item->payment_type === 'အကြွေး' ? 'red' : ($item->payment_type === 'Moblie Payment' ? 'green' : '') }}">
                                                     {{ $item->payment_type }}
-                                            <td>{{ $item->sub_total }}</td>
-                                            <td>{{ $item->accepted_ammount }}</td>
-                                            <td>{{ $item->return_change }}</td>
+                                            <td class="text-end">{{ number_format($item->sub_total) }}</td>
+                                            <td class="text-end">{{ number_format($item->discount) }}</td>
+                                            <td class="text-end">{{ number_format($item->accepted_ammount) }}</td>
+                                            <td class="text-end">{{ number_format($item->return_change) }}</td>
                                             <td>
                                                 <a href="{{ route('detail#sale', $item->id) }}"
                                                     class="btn btn-info sm" title="Detail Data"><i

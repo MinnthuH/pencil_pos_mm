@@ -38,8 +38,9 @@ class OrderController extends Controller
                 'invoice_no' => $invoiceNo,
                 'payment_type' => $request->paymetnStatus,
                 'sub_total' => $request->subTotal,
+                'total' => $request->total,
                 'capital' => $request->capital,
-                'discount' => 0,
+                'discount' => $request->discount,
                 'accepted_ammount' => $request->payNow,
                 'due' => $request->due,
                 'return_change' => $request->returnChange,
@@ -97,7 +98,7 @@ class OrderController extends Controller
             $shop = Shop::first();
 
             // return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents'));
-            return view('backend.invoice.print_invoice_A5', compact('sale','customer','rpay','returnChange','contents','shop'));
+            return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents','shop'));
 
 
         } catch (\Exception $e) {
@@ -105,7 +106,6 @@ class OrderController extends Controller
             dd($e);
 
             DB::rollback();
-
 
             // Handle the error, log it, or redirect to an error page
         }

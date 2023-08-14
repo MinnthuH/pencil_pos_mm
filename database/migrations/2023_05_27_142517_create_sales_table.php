@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('invoice_no')->unique();
             $table->string('payment_type')->nullable();
             $table->string('sub_total')->nullable();
+            $table->string('total')->nullable();
             $table->string('capital')->nullable();
             $table->string('discount')->nullable();
             $table->string('accepted_ammount')->nullable();
