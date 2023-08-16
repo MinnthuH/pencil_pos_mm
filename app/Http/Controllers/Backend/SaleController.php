@@ -22,6 +22,37 @@ class SaleController extends Controller
         return view('backend.sale.all_sale', compact('sales'));
     } // End Method
 
+    // Delete Sale Method
+    public function DeleteSale($id){
+        Sale::findOrFail($id)->delete();
+        $noti = [
+            'message' => 'အရောင်းစာရင်း ပယ်ဖျက်ခြင်း အောင်မြင်ပါသည်',
+            'alert-type' => 'success',
+        ];
+        return redirect()->route('all#sale')->with($noti);
+      }// End Method
+
+    // Trash Sale Method
+    public function TrashSale(){
+        $sales = Sale::onlyTrashed()->get();
+        return view('backend.sale.trash_sale',compact('sales'));
+
+    }// End Method
+
+    // Force Delete Sale Method
+    public function ForceDeleteSale($id){
+        $sale = Sale::withTrashed()->findOrFail($id);
+        if(!empty($sale)){
+            $sale->forceDelete();
+        }
+        $noti = [
+            'message' => 'အရောင်းစာရင်း အပြီးပယ်ဖျက်ပြီးပါပြီ',
+            'alert-type' => 'success',
+        ];
+        return redirect()->back();
+
+    } // End Method
+
     // Detail Sale
     public function detailSale($id)
     {

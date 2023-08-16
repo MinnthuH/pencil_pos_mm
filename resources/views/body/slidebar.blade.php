@@ -253,6 +253,11 @@
                             <li>
                                 <a href="{{ route('pending.due') }}">ကြွေးကျန်စာရင်းများ</a>
                             </li>
+                            @if (Auth::user()->can('admin.manage'))
+                            <li>
+                                <a href="{{ route('trash.sale') }}">ပယ်ဖျက်အရောင်းစာရင်းများ</a>
+                            </li>
+                            @endif
                         </ul>
                     </div>
                 </li>

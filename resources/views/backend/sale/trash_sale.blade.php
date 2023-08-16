@@ -3,7 +3,7 @@
 
 @section('admin')
 @section('title')
-    Sales | Pencil POS System
+    TrashSales | Pencil POS System
 @endsection
 <div class="content">
 
@@ -14,20 +14,6 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
-                    <div class="page-title-right">
-                        @if (Auth::user()->can('admin.manage'))
-                            <ol class="breadcrumb m-0">
-                                <a href="{{ route('sales.export.daily') }}"
-                                    class="btn btn-blue rounded-pill waves-effect waves-light">Export Daily Sales</a>
-                                &nbsp;
-                                <a href="{{ route('sales.export.weekly') }}"
-                                    class="btn btn-blue rounded-pill waves-effect waves-light">Export Weekly Sales</a>
-                                &nbsp;
-                                <a href="{{ route('sales.export.monthly') }}"
-                                    class="btn btn-blue rounded-pill waves-effect waves-light">Export Monthly Sales</a>
-                            </ol>
-                        @endif
-                    </div>
                     <h4 class="page-title">အရောင်းစာရင်း</h4>
                 </div>
             </div>
@@ -75,10 +61,8 @@
                                         <td class="text-end">{{ number_format($item->return_change) }}</td>
                                         <td>
 
-                                            <a href="{{ route('detail#sale', $item->id) }}" class="btn btn-info sm"
-                                                title="Detail Data"><i class="far fa-eye"></i></a>
                                             @if (Auth::user()->can('admin.manage'))
-                                                <a href="{{ route('delete.sale', $item->id) }}"
+                                                <a href="{{ route('force.delete.sale', $item->id) }}"
                                                     class="btn btn-danger sm" title="Delete Data" id="delete"><i
                                                         class="fas fa-trash-alt"></i></a>
                                             @endif

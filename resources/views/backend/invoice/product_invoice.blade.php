@@ -135,7 +135,7 @@
                             </div> <!-- end col -->
                             <div class="col-sm-6">
                                 <div class="float-end">
-                                    <p><b>ကျသင့်ငွေ</b> <span class="float-end" name="sub_total">{{ Cart::subtotal() }}
+                                    <p><b>ကျသင့်ငွေ</b>&nbsp;&nbsp;<span class="float-end" name="sub_total">{{ Cart::subtotal() }}
                                             Ks</span>
                                     </p>
                                     <h3>{{ Cart::total() }} Ks</h3>
@@ -185,7 +185,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="username" class="form-label">Discount</label>
-                        <input class="form-control" type="number" id="discount" name="discount" value="0">
+                        <input class="form-control" type="number" id="discount" name="discount">
                     </div>
                     <div class="mb-3">
                         <label for="username" class="form-label">Payment</label>
@@ -294,6 +294,32 @@
 
         updateInstallmentOption();
         updateReturnAndDue();
+    });
+</script>
+
+{{-- prevent minus value  --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var discountInput = document.getElementById('discount');
+        var payNowInput = document.getElementById('payNow');
+        var returnChangeInput = document.getElementById('returnChange');
+        var dueInput = document.getElementById('due');
+
+        function convertToPositive(inputElement) {
+            inputElement.addEventListener('input', function() {
+                var value = parseFloat(inputElement.value);
+                if (isNaN(value)) {
+                    inputElement.value = '';
+                } else if (value < 0) {
+                    inputElement.value = Math.abs(value);
+                }
+            });
+        }
+
+        convertToPositive(discountInput);
+        convertToPositive(payNowInput);
+        convertToPositive(returnChangeInput);
+        convertToPositive(dueInput);
     });
 </script>
 

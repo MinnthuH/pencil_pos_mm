@@ -224,6 +224,9 @@ Route::controller(OrderController::class)->group(function () {
 // Sale All Route
 Route::controller(SaleController::class)->group(function () {
     Route::get('/all/sale', 'allSale')->name('all#sale'); // All Sale
+    Route::get('/sale/delete/{id}', 'DeleteSale')->name('delete.sale'); // Delete Sale
+    Route::get('/trash/sale', 'TrashSale')->name('trash.sale'); // Trash Sale
+    Route::get('/sale/force-delete/{id}', 'ForceDeleteSale')->name('force.delete.sale'); // Force Delete Sale
     Route::get('/sale/detail/{id}', 'detailSale')->name('detail#sale'); // Detail Sale
     Route::get('/stock/product/{id}', 'stockProduct')->name('stock#product'); // prodct stock - from pordcut_store from prodcuts
     Route::get('sales/export/daily', 'exportDailySales')->name('sales.export.daily');
