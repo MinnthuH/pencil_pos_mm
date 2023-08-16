@@ -88,14 +88,14 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="firstname" class="form-label">ကုန်ပစ္စည်း အရေအတွက်</label>
-                                            <input type="text" name="productStore" class="form-control">
+                                            <input type="number" name="productStore" class="form-control">
                                         </div>
                                     </div>
                                     <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="firstname" class="form-label">အနည်းဆုံးကျန်ရမည့် အရေအတွက်</label>
-                                            <input type="text" name="trackStock" class="form-control">
+                                            <input type="number" name="trackStock" class="form-control">
                                         </div>
                                     </div>
                                     <!-- end col -->

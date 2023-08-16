@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Image;
+use Intervention\Image\Facades\Image;
 
 class SupplierController extends Controller
 {

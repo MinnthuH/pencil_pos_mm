@@ -113,6 +113,26 @@
                         </div>
                     </li>
                 @endif
+                <li class="my-1">
+                    <a href="#salary" data-bs-toggle="collapse">
+                        <i class="fas fa-truck"></i>
+                        <span> Deli စီမံခန့်ခွဲခြင်း </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="salary">
+                        <ul class="nav-second-level">
+
+                                <li>
+                                    <a href="{{ route('all.deli') }}">Deli စာရင်းများ</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ route('add.deli') }}">Deli အသစ်ထည့်ရန်</a>
+                                </li>
+
+                        </ul>
+                    </div>
+                </li>
 
 
                 {{-- @if (Auth::user()->can('salary.menu'))
@@ -254,9 +274,9 @@
                                 <a href="{{ route('pending.due') }}">ကြွေးကျန်စာရင်းများ</a>
                             </li>
                             @if (Auth::user()->can('admin.manage'))
-                            <li>
-                                <a href="{{ route('trash.sale') }}">ပယ်ဖျက်အရောင်းစာရင်းများ</a>
-                            </li>
+                                <li>
+                                    <a href="{{ route('trash.sale') }}">ပယ်ဖျက်အရောင်းစာရင်းများ</a>
+                                </li>
                             @endif
                         </ul>
                     </div>

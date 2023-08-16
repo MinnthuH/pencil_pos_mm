@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DeliController;
 use Carbon\Carbon;
 use App\Models\Sale;
 use Illuminate\Support\Facades\Route;
@@ -104,6 +105,17 @@ Route::controller(SupplierController::class)->group(function () {
     Route::post('update/supplier', 'UpdateSupplier')->name('update#supplier'); // update supplier data
     Route::get('delete/supplier/{id}', 'DeleteSupplier')->name('delete#supplier'); // edit supplier data
     Route::get('detail/supplier/{id}', 'DetailSupplier')->name('detail#supplier'); // detail supplier data
+
+});
+
+// Deli All Route
+Route::controller(DeliController::class)->group(function () {
+    Route::get('all/deli', 'AllDeli')->name('all.deli'); // all deli page
+    Route::get('add/deli', 'AddDeli')->name('add.deli'); // add deli page
+    Route::post('store/deli', 'StoreDeli')->name('stroe.deli'); // store deli data
+    Route::get('edit/deli/{id}', 'EditDeli')->name('edit.deli'); // edit deli data
+    Route::post('update/deli', 'UpdateDeli')->name('update.deli'); // update deli data
+    Route::get('delete/deli/{id}', 'DeleteDeli')->name('delete.deli'); // edit deli data
 
 });
 

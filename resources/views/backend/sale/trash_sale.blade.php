@@ -60,13 +60,11 @@
                                         <td class="text-end">{{ number_format($item->due) }}</td>
                                         <td class="text-end">{{ number_format($item->return_change) }}</td>
                                         <td>
-
                                             @if (Auth::user()->can('admin.manage'))
                                                 <a href="{{ route('force.delete.sale', $item->id) }}"
                                                     class="btn btn-danger sm" title="Delete Data" id="delete"><i
                                                         class="fas fa-trash-alt"></i></a>
                                             @endif
-
                                         </td>
                                     </tr>
                                 @endforeach
