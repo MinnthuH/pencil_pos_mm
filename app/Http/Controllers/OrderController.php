@@ -98,9 +98,9 @@ class OrderController extends Controller
             $sale= Sale::latest()->firstOrFail();
             $shop = Shop::first();
 
-            // return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents'));
-            return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents','shop'));
-
+            return view('backend.invoice.print_invoice_80mm', compact('sale','customer','rpay','returnChange','contents','shop'));
+            // return view('backend.invoice.print_invoice_A5', compact('sale','customer','rpay','returnChange','contents','shop'));
+            // return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents','shop'));
 
         } catch (\Exception $e) {
             // An error occurred, so rollback the transaction

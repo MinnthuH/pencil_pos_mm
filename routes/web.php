@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DeliController;
+use App\Http\Controllers\PrintController;
 use Carbon\Carbon;
 use App\Models\Sale;
 use Illuminate\Support\Facades\Route;
@@ -299,6 +300,8 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('delete/database/{getFilename}', 'DeleteDb'); // Delete Database
 
 });
+
+Route::get('/print-invoice', [PrintController::class,'printInvoice'])->name('print.invoice');
 
 
 

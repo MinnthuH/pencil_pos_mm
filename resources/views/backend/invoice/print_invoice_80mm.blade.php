@@ -100,7 +100,7 @@
             <p>Invoice No :<strong>{{ $sale->invoice_no }}</strong></p>
             <p>Payment Type :<strong>{{ $sale->payment_type }}</strong></p>
             <p>Cashier :<strong>{{ Auth::user()->name }}</strong></p>
-            <p>Deli :<strong>{{ $sale['deli']['name'] }}</strong></p>
+            <p>Deli Services :<strong>{{ $sale['deli']['name'] ?? '' }}</strong></p>
 
         </div>
         <div id="receipt-body">
@@ -158,14 +158,14 @@
             <p>{{ $shop->description }}</p>
         </div>
         <div id="buttons">
-            <form action="{{ route('stock#product', $sale->id) }}" method="get">
+            <form action="{{ route('pos') }}" method="get">
                 <button class="btn btn-back d-print-none" type="submit" id="backButton">
                     Back to Cashier
                 </button>
             </form>
 
 
-            <form action="{{ route('stock#product', $sale->id) }}" method="get">
+            <form action="{{ route('print.invoice') }}" method="get">
                 <button class="btn btn-print" type="submit" onclick="window.print(); return false;">
                     Print
                 </button>

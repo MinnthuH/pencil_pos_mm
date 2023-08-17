@@ -101,7 +101,7 @@
                                         </span></p>
 
                                     <p><strong>Deli Services. : </strong> <span
-                                            class="float-end">{{ $sale['deli']['name'] }}
+                                            class="float-end">{{ $sale['deli']['name'] ?? '' }}
                                         </span></p>
                                 </div>
                             </div><!-- end col -->
@@ -185,7 +185,7 @@
                         <div class="mt-4 mb-1">
                             <div class="text-end d-print-none">
 
-                                <a href="{{ route('stock#product', $sale->id) }}" onclick="window.print()"
+                                <a href="{{ route('pos') }}" onclick="window.print()"
                                     class="btn btn-primary waves-effect waves-light" id="printButton">
                                     <i class="mdi mdi-printer me-1"></i> Print
                                 </a>

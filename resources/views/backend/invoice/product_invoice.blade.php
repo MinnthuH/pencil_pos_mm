@@ -217,7 +217,7 @@
 
 
                     <input type="hidden" name="customerId" value="{{ $customer->id }}">
-                    <input type="hidden" name="deliId" value="{{ $deli->id }}">
+                    <input type="hidden" name="deliId" value="{{ $deli->id ?? '' }}">
                     <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
                     <input type="hidden" name="orderDate" value="{{ date('d-F-Y') }}">
                     <input type="hidden" name="orderStaus" value="pending">
