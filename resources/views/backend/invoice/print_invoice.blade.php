@@ -6,6 +6,7 @@
 @endsection
 <style>
     @media print {
+
         /* Set paper size to 80mm */
         @page {
             size: 80mm;
@@ -14,7 +15,8 @@
         /* Adjust margins as needed */
         body {
             margin: 0;
-            padding: 10mm; /* Set appropriate padding to adjust content position */
+            padding: 10mm;
+            /* Set appropriate padding to adjust content position */
         }
 
         /* Set font size and other styles for printing */
@@ -76,13 +78,13 @@
                             <div class="col-md-6">
                                 <div class="mt-3">
                                     <p><b>Hello, {{ $customer->name }}</b></p>
-                                     <address>
-                                    {{ $customer->address }} - {{ $customer->city }}
-                                    <br>
-                                    <abbr title="Phone">Shop Name:</abbr> {{ $customer->shopname }}<br>
-                                    <abbr title="Phone">Phone:</abbr> {{ $customer->phone }}<br>
-                                    <abbr title="Phone">Email:</abbr> {{ $customer->email }}
-                                </address>
+                                    <address>
+                                        {{ $customer->address }} - {{ $customer->city }}
+                                        <br>
+                                        <abbr title="Phone">Shop Name:</abbr> {{ $customer->shopname }}<br>
+                                        <abbr title="Phone">Phone:</abbr> {{ $customer->phone }}<br>
+                                        <abbr title="Phone">Email:</abbr> {{ $customer->email }}
+                                    </address>
                                 </div>
 
                             </div><!-- end col -->
@@ -98,7 +100,8 @@
                                     <p><strong>Cashier. : </strong> <span class="float-end">{{ Auth::user()->name }}
                                         </span></p>
 
-                                    <p><strong>Deli Services. : </strong> <span class="float-end">Royal Express
+                                    <p><strong>Deli Services. : </strong> <span
+                                            class="float-end">{{ $sale['deli']['name'] }}
                                         </span></p>
                                 </div>
                             </div><!-- end col -->
@@ -151,17 +154,20 @@
                             </div> <!-- end col -->
                             <div class="col-sm-6">
                                 <div class="float-end">
-                                    <p><b>Sub total</b>&nbsp;&nbsp;<span class="float-end" name="sub_total">{{ $sale->sub_total }}
+                                    <p><b>Sub total</b>&nbsp;&nbsp;<span class="float-end"
+                                            name="sub_total">{{ $sale->sub_total }}
                                             Ks</span>
                                     </p>
-                                    <p><b>Discount</b>&nbsp;&nbsp;<span class="float-end" name="sub_total">{{ $sale->discount }}
-                                        Ks</span>
-                                </p>
+                                    <p><b>Discount</b>&nbsp;&nbsp;<span class="float-end"
+                                            name="sub_total">{{ $sale->discount }}
+                                            Ks</span>
+                                    </p>
                                     <p><b>ပေးငွေ</b> <span class="float-end"
                                             name="sub_total">{{ $sale->accepted_ammount }}
                                             Ks</span>
                                     </p>
-                                    <p><b class="text-danger">ကျန်ငွေ</b> <span class="float-end text-danger" name="sub_total">{{ $sale->due ?? '0' }}
+                                    <p><b class="text-danger">ကျန်ငွေ</b> <span class="float-end text-danger"
+                                            name="sub_total">{{ $sale->due ?? '0' }}
                                             Ks</span>
                                     </p>
                                     <p><b>ပြန်အမ်းငွေ</b> <span class="float-end"
@@ -176,17 +182,17 @@
 
 
 
-                            <div class="mt-4 mb-1">
-                                <div class="text-end d-print-none">
+                        <div class="mt-4 mb-1">
+                            <div class="text-end d-print-none">
 
-                                    <a href="{{ route('stock#product', $sale->id) }}" onclick="window.print()"
-                                        class="btn btn-primary waves-effect waves-light" id="printButton">
-                                        <i class="mdi mdi-printer me-1"></i> Print
-                                     </a>
+                                <a href="{{ route('stock#product', $sale->id) }}" onclick="window.print()"
+                                    class="btn btn-primary waves-effect waves-light" id="printButton">
+                                    <i class="mdi mdi-printer me-1"></i> Print
+                                </a>
 
 
-                                </div>
                             </div>
+                        </div>
 
                     </div>
                 </div> <!-- end card -->

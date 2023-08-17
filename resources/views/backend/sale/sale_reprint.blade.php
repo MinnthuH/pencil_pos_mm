@@ -57,7 +57,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mt-3">
-                                    <p><b>Hello, {{ $sale['customer']['name']}}</b></p>
+                                    <p><b>Hello, {{ $sale['customer']['name'] }}</b></p>
                                 </div>
 
                             </div><!-- end col -->
@@ -68,9 +68,11 @@
                                             {{ $sale->invoice_date }}</span></p>
                                     <p><strong>Sale Status : </strong><span
                                             class="float-end">{{ $sale->payment_type }}</span></p>
-                                    <p><strong>Invoice No. : </strong> <span class="float-end">{{ $sale->invoice_no}}
+                                    <p><strong>Invoice No. : </strong> <span class="float-end">{{ $sale->invoice_no }}
                                         </span></p>
-                                    <p><strong>Cashier. : </strong> <span class="float-end">{{$sale['user']['name'] }}
+                                    <p><strong>Cashier. : </strong> <span class="float-end">{{ $sale['user']['name'] }}
+                                        </span></p>
+                                    <p><strong>Deli. : </strong> <span class="float-end">{{ $sale['deli']['name'] }}
                                         </span></p>
                                 </div>
                             </div><!-- end col -->
@@ -94,14 +96,15 @@
                                         <tbody>
                                             @foreach ($saleItem as $key => $item)
                                                 <tr>
-                                                    <td>{{ $key +1 }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>
                                                         <b>{{ $item['product']['product_name'] }}</b> <br />
 
                                                     </td>
                                                     <td>{{ $item->quantity }}</td>
                                                     <td>{{ $item['product']['selling_price'] }}</td>
-                                                    <td class="text-end">{{ $item['product']['selling_price'] * $item->quantity }} </td>
+                                                    <td class="text-end">
+                                                        {{ $item['product']['selling_price'] * $item->quantity }} </td>
                                                 </tr>
                                             @endforeach
 
@@ -147,17 +150,17 @@
 
 
 
-                            <div class="mt-4 mb-1">
-                                <div class="text-end d-print-none">
+                        <div class="mt-4 mb-1">
+                            <div class="text-end d-print-none">
 
-                                    <a href="{{ route('stock#product', $sale->id) }}" onclick="window.print()"
-                                        class="btn btn-primary waves-effect waves-light" id="printButton">
-                                        <i class="mdi mdi-printer me-1"></i> Print
-                                     </a>
+                                <a href="{{ route('stock#product', $sale->id) }}" onclick="window.print()"
+                                    class="btn btn-primary waves-effect waves-light" id="printButton">
+                                    <i class="mdi mdi-printer me-1"></i> Print
+                                </a>
 
 
-                                </div>
                             </div>
+                        </div>
 
                     </div>
                 </div> <!-- end card -->

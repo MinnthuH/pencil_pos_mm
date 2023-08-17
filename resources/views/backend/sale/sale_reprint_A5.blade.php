@@ -105,6 +105,7 @@
             <p>Invoice No :<strong>{{ $sale->invoice_no }}</strong></p>
             <p>Payment Type :<strong>{{ $sale->payment_type }}</strong></p>
             <p>Cashier :<strong>{{ Auth::user()->name }}</strong></p>
+            <p>Deli :<strong>{{ $sale['deli']['name'] }}</strong></p>
         </div>
         <div id="receipt-body">
             <table class="tb-sale-detail">

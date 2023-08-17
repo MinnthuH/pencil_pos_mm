@@ -7,7 +7,6 @@
 <script src="{{ asset('backend/assets/jquery.js') }}"></script>
 <div class="content">
 
-
     <!-- Start Content-->
     <div class="container-fluid">
 
@@ -66,6 +65,10 @@
                                     <p><strong>Order Date : </strong> <span class="float-end">
                                             &nbsp;&nbsp;&nbsp;&nbsp;
                                             {{ \Carbon\Carbon::now()->setTimezone('Asia/Yangon')->format('Y-m-d H:i:s') }}
+                                        </span></p>
+                                        <p><strong>Deli Services : </strong> <span class="float-end">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                            {{ $deli->name ?? 'null' }}
                                         </span></p>
 
                                 </div>
@@ -138,7 +141,7 @@
                                     <p><b>ကျသင့်ငွေ</b>&nbsp;&nbsp;<span class="float-end" name="sub_total">{{ Cart::subtotal() }}
                                             Ks</span>
                                     </p>
-                                    <h3>{{ Cart::total() }} Ks</h3>
+                                    <h3 class="text-end">{{ Cart::total() }} Ks</h3>
                                 </div>
                                 <div class="clearfix"></div>
                             </div> <!-- end col -->
@@ -214,6 +217,7 @@
 
 
                     <input type="hidden" name="customerId" value="{{ $customer->id }}">
+                    <input type="hidden" name="deliId" value="{{ $deli->id }}">
                     <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
                     <input type="hidden" name="orderDate" value="{{ date('d-F-Y') }}">
                     <input type="hidden" name="orderStaus" value="pending">

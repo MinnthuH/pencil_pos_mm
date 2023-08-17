@@ -34,6 +34,7 @@ class OrderController extends Controller
            $result = Sale::insertGetId([
                 'user_id' => $request->userId,
                 'customer_id' => $request->customerId,
+                'deli_id' => $request->deliId,
                 'invoice_date' => Carbon::now(),
                 'invoice_no' => $invoiceNo,
                 'payment_type' => $request->paymetnStatus,

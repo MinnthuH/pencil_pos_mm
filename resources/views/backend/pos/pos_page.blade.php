@@ -99,11 +99,14 @@
                         @csrf
 
                         <div class="form-group mb-3">
-                            <label for="costomer" class="form-label">Add Customer</label>
 
-                            <a href="{{ route('add#customer') }}"
-                                class="btn btn-outline-blue rounded-pill waves-effect waves-light"><i
-                                    class="fas fa-plus"></i></a>
+                            <select name="deliId" class="form-select mt-3" id="example-select">
+                                <option selected disabled>Deli ရွေးချယ်ပါ...</option>
+                                @foreach ($delis as $deli)
+                                    <option value="{{ $deli->id }}">{{ $deli->name }}
+                                    </option>
+                                @endforeach
+                            </select>
 
                             <select name="customerId" class="form-select mt-3" id="example-select">
                                 <option selected disabled>ဖေါက်သည် ရွေးချယ်ပါ...</option>

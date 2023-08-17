@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Deli;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
@@ -19,7 +20,8 @@ class PosController extends Controller
         ->where('product_store', '>',0)->latest()->get();
         $customers = Customer::latest()->get();
         $categories = Category::latest()->get();
-        return view('backend.pos.pos_page', compact('products', 'customers', 'categories'));
+        $delis = Deli::latest()->get();
+        return view('backend.pos.pos_page', compact('products', 'customers', 'categories','delis'));
     } // End Method
 
 
@@ -93,6 +95,8 @@ class PosController extends Controller
 
         $cartItem = Cart::content();
         $customerId = $request->customerId;
+        $deliId = $request->deliId;
+        $deli = Deli::where('id', $deliId)->first();
         $customer = Customer::where('id', $customerId)->first();
         $Capital = Cart::content();
         $totalBuyPrice = 0; // Initialize totalBuyPrice to zero
@@ -103,7 +107,7 @@ class PosController extends Controller
 
         // dd($cartItem->toArray());
 
-        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice'));
+        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice','deli'));
     } // End Method
 
 
