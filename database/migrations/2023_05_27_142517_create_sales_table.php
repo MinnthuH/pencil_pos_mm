@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('customer_id');
-            $table->integer('deli_id');
+            $table->integer('deli_id')->nullable();
             $table->string('invoice_date');
             $table->string('invoice_no')->unique();
             $table->string('payment_type')->nullable();

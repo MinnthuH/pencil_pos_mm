@@ -15,9 +15,8 @@ class PosController extends Controller
     // POS Dashboard Method
     public function Pos()
     {
-
         $products = Product::where('expire_date', '>', Carbon::now())
-        ->where('product_store', '>',0)->latest()->get();
+        ->whereColumn('product_store', '>=','product_track')->latest()->get();
         $customers = Customer::latest()->get();
         $categories = Category::latest()->get();
         $delis = Deli::latest()->get();
@@ -28,7 +27,7 @@ class PosController extends Controller
     public function GetProductsByCategory($categoryId)
     {
         $products = Product::where('category_id', $categoryId)
-            ->where('product_store', '>',0)
+            ->whereColumn('product_store', '>=','product_track')
             ->where('expire_date', '>', Carbon::now())->latest()->get();
         return response()->json($products);
     }

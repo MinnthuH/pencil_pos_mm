@@ -92,6 +92,9 @@
 
     <div id="wrapper">
         <div id="receipt-header">
+            <div class="logo">
+                <img src="{{ !empty($shop->logo) ? url('upload/shop_logo/' . $shop->logo) : url('upload/no_image.jpg') }}" width="70px" height="70px" alt="">
+            </div>
             <h3 id="shop-name" class="text-center">{{ $shop->name }}</h3>
             <p class="text-center">Address: {{ $shop->address }}</p>
             <p class="text-center">Tel: {{ $shop->phone }}</p>
@@ -158,14 +161,14 @@
             <p>{{ $shop->description }}</p>
         </div>
         <div id="buttons">
-            <form action="{{ route('pos') }}" method="get">
+            <form action="{{ route('stock#product', $sale->id) }}" method="get">
                 <button class="btn btn-back d-print-none" type="submit" id="backButton">
                     Back to Cashier
                 </button>
             </form>
 
 
-            <form action="{{ route('print.invoice') }}" method="get">
+            <form action="{{ route('stock#product', $sale->id) }}" method="get">
                 <button class="btn btn-print" type="submit" onclick="window.print(); return false;">
                     Print
                 </button>

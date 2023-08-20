@@ -7,22 +7,26 @@
 <style>
     @media print {
 
-        /* Set paper size to 80mm */
+        /* Set paper size to A4 */
         @page {
-            size: 80mm;
+            size: A4;
+            margin: 0;
+            /* Adjust margins as needed */
         }
 
-        /* Adjust margins as needed */
+        /* Adjust content positioning within the A4 page */
         body {
-            margin: 0;
-            padding: 10mm;
-            /* Set appropriate padding to adjust content position */
+            margin: 20mm;
+            /* Set appropriate margins for your content */
+            padding: 0;
+            /* Reset padding since margins are used */
         }
 
         /* Set font size and other styles for printing */
         /* Add your custom styles here */
     }
 </style>
+
 
 <div class="content">
 
@@ -47,64 +51,49 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    <div class="logo text-center">
+                        <img src="{{ !empty($shop->logo) ? url('upload/shop_logo/' . $shop->logo) : url('upload/no_image.jpg') }}"
+                            width="70px" height="70px" alt="">
+                    </div>
                     <div id="receipt-header">
                         <h3 id="shop-name" class="text-center">{{ $shop->name }}</h3>
                         <p class="text-center">Address: {{ $shop->address }}</p>
                         <p class="text-center">Tel: {{ $shop->phone }}</p>
                     </div>
                     <div class="card-body">
-                        <!-- Logo & title -->
-                        <div class="clearfix">
-                            <div class="float-start">
-                                <div class="auth-logo">
-                                    <div class="logo logo-dark">
-                                        <span class="logo-lg">
-                                            <img src="{{ asset('backend/assets/images/pecnil_textwithlogo.png') }}"
-                                                alt="" height="22">
-                                        </span>
-                                    </div>
-
-                                    <div class="logo logo-light">
-                                        <span class="logo-lg">
-                                            <img src="{{ asset('backend/assets/images/PencilLogo.png') }}"
-                                                alt="" height="22">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="mt-3">
-                                    <p><b>Hello, {{ $customer->name }}</b></p>
-                                    <address>
-                                        {{ $customer->address }} - {{ $customer->city }}
-                                        <br>
-                                        <abbr title="Phone">Shop Name:</abbr> {{ $customer->shopname }}<br>
-                                        <abbr title="Phone">Phone:</abbr> {{ $customer->phone }}<br>
-                                        <abbr title="Phone">Email:</abbr> {{ $customer->email }}
-                                    </address>
-                                </div>
+                                <div class="col-md-6">
+                                    <div class="mt-3">
+                                        <p><b>Hello, {{ $customer->name }}</b></p>
+                                        <address>
+                                            {{ $customer->address }} - {{ $customer->city }}
+                                            <br>
+                                            <abbr title="Phone">Shop Name:</abbr> {{ $customer->shopname }}<br>
+                                            <abbr title="Phone">Phone:</abbr> {{ $customer->phone }}<br>
+                                            <abbr title="Phone">Email:</abbr> {{ $customer->email }}
+                                        </address>
+                                    </div>
+                                </div><!-- end col -->
+                                <div class="col-md-4 offset-md-2">
+                                    <div class="mt-3 float-end">
+                                        <p><strong>Order Date : </strong> <span class="float-end">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                {{ $sale->invoice_date }}</span></p>
+                                        <p><strong>Order Status : </strong><span
+                                                class="float-end">{{ $sale->payment_type }}</span></p>
+                                        <p><strong>Invoice No. : </strong> <span
+                                                class="float-end">{{ $sale->invoice_no }}
+                                            </span></p>
+                                        <p><strong>Cashier. : </strong> <span
+                                                class="float-end">{{ Auth::user()->name }}
+                                            </span></p>
 
-                            </div><!-- end col -->
-                            <div class="col-md-4 offset-md-2">
-                                <div class="mt-3 float-end">
-                                    <p><strong>Order Date : </strong> <span class="float-end">
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-                                            {{ $sale->invoice_date }}</span></p>
-                                    <p><strong>Order Status : </strong><span
-                                            class="float-end">{{ $sale->payment_type }}</span></p>
-                                    <p><strong>Invoice No. : </strong> <span class="float-end">{{ $sale->invoice_no }}
-                                        </span></p>
-                                    <p><strong>Cashier. : </strong> <span class="float-end">{{ Auth::user()->name }}
-                                        </span></p>
+                                        <p><strong>Deli Services. : </strong> <span
+                                                class="float-end">{{ $sale['deli']['name'] ?? '' }}
+                                            </span></p>
+                                    </div>
+                                </div><!-- end col -->
 
-                                    <p><strong>Deli Services. : </strong> <span
-                                            class="float-end">{{ $sale['deli']['name'] ?? '' }}
-                                        </span></p>
-                                </div>
-                            </div><!-- end col -->
                         </div>
                         <!-- end row -->
 
@@ -185,7 +174,7 @@
                         <div class="mt-4 mb-1">
                             <div class="text-end d-print-none">
 
-                                <a href="{{ route('pos') }}" onclick="window.print()"
+                                <a href="{{ route('stock#product', $sale->id) }}" onclick="window.print()"
                                     class="btn btn-primary waves-effect waves-light" id="printButton">
                                     <i class="mdi mdi-printer me-1"></i> Print
                                 </a>

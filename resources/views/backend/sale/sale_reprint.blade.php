@@ -72,7 +72,7 @@
                                         </span></p>
                                     <p><strong>Cashier. : </strong> <span class="float-end">{{ $sale['user']['name'] }}
                                         </span></p>
-                                    <p><strong>Deli. : </strong> <span class="float-end">{{ $sale['deli']['name'] }}
+                                    <p><strong>Deli. : </strong> <span class="float-end">{{ $sale['deli']['name']??'' }}
                                         </span></p>
                                 </div>
                             </div><!-- end col -->
