@@ -28,7 +28,7 @@
                                 class="btn btn-blue rounded-pill waves-effect waves-light">ကုန်ပစ္စည်း အသစ်ထည့်ရန်</a>
                         </ol>
                     </div>
-                    <h4 class="page-title">ကုန်ပစ္စည်းစာရင်းများ</h4>
+                    <h4 class="page-title">ကုန်ပစ္စည်းစာရင်းများ </h4>
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-
+                        <h4 style="font-size:30px;" align="center">Total :{{ count($product) }} Pcs</h4>
                         <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                             <thead>
                                 <tr>

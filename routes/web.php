@@ -199,9 +199,7 @@ Route::controller(ExpenseController::class)->group(function () {
 Route::controller(PosController::class)->group(function () {
     Route::get('pos', 'Pos')->name('pos')->middleware('permission:pos.menu'); // Pos page
 
-    // Route::get('/category/search/{id}', 'categorySearch'); // Product search with category
-
-    Route::get('/get-products-by-category/{categoryId}','GetProductsByCategory'); // Product search with category update
+    Route::get('/get-products-by-category/{categoryId}','GetProductsByCategory')->name('get.products.by.category'); // Product search with category update
 
     Route::get('/get-product-by-code/{productCode}', 'getProductByCode')->name('get.product.by.code');
 

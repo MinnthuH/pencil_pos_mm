@@ -14,23 +14,38 @@ class PosController extends Controller
 {
     // POS Dashboard Method
     public function Pos()
-    {
-        $products = Product::where('expire_date', '>', Carbon::now())
-        ->whereColumn('product_store', '>=','product_track')->latest()->get();
-        $customers = Customer::latest()->get();
-        $categories = Category::latest()->get();
-        $delis = Deli::latest()->get();
-        return view('backend.pos.pos_page', compact('products', 'customers', 'categories','delis'));
-    } // End Method
+{
+    $products = Product::where('expire_date', '>', Carbon::now())
+        ->whereColumn('product_store', '>=', 'product_track')
+        ->latest()
+        ->paginate(16); // Change the number '10' to the desired number of products per page
 
+    $customers = Customer::latest()->get();
+    $categories = Category::latest()->get();
+    $delis = Deli::latest()->get();
 
-    public function GetProductsByCategory($categoryId)
-    {
-        $products = Product::where('category_id', $categoryId)
-            ->whereColumn('product_store', '>=','product_track')
-            ->where('expire_date', '>', Carbon::now())->latest()->get();
-        return response()->json($products);
+    return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'delis'));
+}
+
+public function GetProductsByCategory(Request $request, $categoryId)
+{
+    $query = Product::where('category_id', $categoryId)
+        ->whereColumn('product_store', '>=', 'product_track')
+        ->where('expire_date', '>', Carbon::now())
+        ->latest();
+
+    // Handle search
+    $searchTerm = $request->input('search');
+    if ($searchTerm) {
+        $query->where(function ($subquery) use ($searchTerm) {
+            $subquery->where('product_name', 'like', '%' . $searchTerm . '%')
+                     ->orWhere('product_code', 'like', '%' . $searchTerm . '%');
+        });
     }
+    $products = $query->paginate(16); // Change the number '10' to the desired number of products per page
+
+    return response()->json($products);
+}
 
 
     // Add Cart Method
@@ -52,14 +67,6 @@ class PosController extends Controller
         ];
         return redirect()->back()->with($noti);
     } // End Method
-
-    // // All Item Method
-    // public function AllItem()
-    // {
-
-    //     $productItem = Cart::content();
-    //     return view('backend.pos.text_item', compact('productItem'));
-    // } // End Mehtod
 
     // Update Cart Method
     public function UpdateCart(Request $request, $rowId)
@@ -106,7 +113,7 @@ class PosController extends Controller
 
         // dd($cartItem->toArray());
 
-        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice','deli'));
+        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice', 'deli'));
     } // End Method
 
 
