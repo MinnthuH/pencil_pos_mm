@@ -196,7 +196,7 @@ class AdminController extends Controller
 
     //////////////////////Database Backup Method//////////////////////////
     public function DatabaseBackup(){
-        return view('admin.db_backup')->with('file',File::allFiles(storage_path('/app/Pencil_POS')));
+        return view('admin.db_backup')->with('files',File::allFiles(storage_path('/app/Pencil_POS')));
     } // End Method
 
     // Backup Now Method
@@ -215,7 +215,7 @@ class AdminController extends Controller
     public function DownloadDb($getFilename){
 
         $path = storage_path('app/Pencil_POS/'.$getFilename);
-        // return response()->download($path);
+        return response()->download($path);
     } // End Method
 
     // Delete Databasde

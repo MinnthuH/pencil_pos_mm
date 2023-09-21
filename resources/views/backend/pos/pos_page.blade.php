@@ -172,8 +172,13 @@
                                         <div class="card" style="width: 8.5rem;">
                                             <div class="position-relative">
                                                 <!-- Add position-relative class to the card container -->
-                                                <img src="{{ asset($item->product_image) }}" id="em_photo"
-                                                    class="card-img-top">
+                                                @if ($item->product_image)
+                                                    <img src="{{ asset($item->product_image) }}" id="em_photo"
+                                                        class="card-img-top">
+                                                @else
+                                                    <img src="{{ asset('upload/no_image.jpg') }}" id="em_photo"
+                                                        class="card-img-top">
+                                                @endif
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ $item->product_name }}</h5>
                                                     <span
@@ -271,7 +276,7 @@
                     <input type="hidden" name="price" value="${product.selling_price}">
                     <button type="submit" class="btn btn-link">
                         <div class="card" style="width: 8.5rem;">
-                            <img src="${product.product_image}" id="em_photo" class="card-img-top">
+                            <img src="${product.product_image ? product.product_image : '{{ asset('upload/no_image.jpg') }}'}" id="em_photo" class="card-img-top">
                             <div class="card-body">
                                 <h5 class="card-title">${product.product_name}</h5>
                                 <span class="badge bg-dark">${product.selling_price}&nbsp;ks</span>

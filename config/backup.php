@@ -170,7 +170,7 @@ return [
 
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'minthu.mingalarit@gmail.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
+                'name' => env('MAIL_FROM_NAME', 'DatabaseBackup'),
             ],
         ],
 

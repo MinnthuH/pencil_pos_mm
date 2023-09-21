@@ -24,6 +24,7 @@
                 </div>
             </div>
         </div>
+
         <!-- end page title -->
 
         <div class="row">
@@ -45,25 +46,26 @@
 
 
                             <tbody>
-                                @foreach ($file as $key => $item)
+                                @foreach ($files as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $item->getFilename() }}</td>
                                         <td>{{ $item->getSize() }} KB</td>
                                         <td>{{ $item->getPath() }}</td>
                                         <td>
-                                            {{-- @if (Auth::user()->can('employee.edit')) --}}
-                                                <a href="{{ url($item->getFilename()) }}" class="btn btn-blue sm"
-                                                    title="Download"><i class="fas fa-cloud-download-alt"></i></a>
-                                            {{-- @endif --}}
 
-                                            {{-- @if (Auth::user()->can('employee.delete')) --}}
-                                                <a href="{{ url('delete/database/'.$item->getFilename()) }}"
-                                                    class="btn btn-danger sm" title="Delete Data" id="delete"><i
-                                                        class="fas fa-trash-alt"></i></a>
-                                            {{-- @endif --}}
+                                            <a href="{{ url($item->getFilename()) }}" class="btn btn-blue sm"
+                                                title="Download"><i class="fas fa-cloud-download-alt"></i></a>
+
+
+                                            <a href="{{ url('delete/database/' . $item->getFilename()) }}"
+                                                class="btn btn-danger sm" title="Delete Data" id="delete"><i
+                                                    class="fas fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
+                                    @php
+                                        dd($item->getFilename(), $item->getSize(), $item->getPath());
+                                    @endphp
                                 @endforeach
 
                             </tbody>

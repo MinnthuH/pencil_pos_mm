@@ -381,7 +381,7 @@
                 @if (Auth::user()->can('admin.manage'))
                     <li class="my-1">
                         <a href="#shopinfo" data-bs-toggle="collapse">
-                            <i class="fas fa-coins"></i>
+                            <i class=" fab fa-shopify"></i>
                             <span> ဆိုင်အချက်အလက် </span>
                             <span class="menu-arrow"></span>
                         </a>

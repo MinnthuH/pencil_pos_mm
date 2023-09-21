@@ -18,7 +18,7 @@ class PosController extends Controller
     $products = Product::where('expire_date', '>', Carbon::now())
         ->whereColumn('product_store', '>=', 'product_track')
         ->latest()
-        ->paginate(16); // Change the number '10' to the desired number of products per page
+        ->paginate(20); // Change the number '10' to the desired number of products per page
 
     $customers = Customer::latest()->get();
     $categories = Category::latest()->get();
@@ -42,7 +42,7 @@ public function GetProductsByCategory(Request $request, $categoryId)
                      ->orWhere('product_code', 'like', '%' . $searchTerm . '%');
         });
     }
-    $products = $query->paginate(16); // Change the number '10' to the desired number of products per page
+    $products = $query->paginate(20); // Change the number '10' to the desired number of products per page
 
     return response()->json($products);
 }

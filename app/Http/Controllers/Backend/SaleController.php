@@ -59,8 +59,8 @@ class SaleController extends Controller
         $shop = Shop::first();
         $sale = Sale::where('id', $id)->first();
         $saleItem = OrderDetail::with('product')->where('sale_id', $id)->orderBy('id', 'DESC')->get();
-        // return view('backend.sale.sale_reprint_80mm', compact('sale', 'saleItem','shop'));
-        return view('backend.sale.sale_reprint_A5', compact('sale', 'saleItem','shop'));
+        return view('backend.sale.sale_reprint_80mm', compact('sale', 'saleItem','shop'));
+        // return view('backend.sale.sale_reprint_A5', compact('sale', 'saleItem','shop'));
         // return view('backend.sale.sale_reprint', compact('sale', 'saleItem','shop'));
 
     } // End Method
