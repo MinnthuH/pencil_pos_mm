@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Backend;
 
-use Carbon\Carbon;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Supplier;
-use Illuminate\Http\Request;
 use App\Exports\ProductExport;
-use App\Imports\ProductImport;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Maatwebsite\Excel\Facades\Excel;
-use Intervention\Image\Facades\Image;
-use Picqer\Barcode\BarcodeGeneratorPNG;
+use App\Imports\ProductImport;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Supplier;
+use Carbon\Carbon;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
+use Maatwebsite\Excel\Facades\Excel;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 class ProductController extends Controller
 {
@@ -253,7 +253,6 @@ class ProductController extends Controller
         return view('backend.stock.noti_expire')->with('products', $products);
 
     } // End Method
-
 
     // Reduce Stock Method
     public function ReduceStock(Request $request)
