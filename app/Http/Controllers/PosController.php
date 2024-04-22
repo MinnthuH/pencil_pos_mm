@@ -2,51 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Deli;
-use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
-use Illuminate\Http\Request;
+use App\Models\Deli;
+use App\Models\Product;
+use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\Request;
 
 class PosController extends Controller
 {
     // POS Dashboard Method
     public function Pos()
-{
-    $products = Product::where('expire_date', '>', Carbon::now())
-        ->whereColumn('product_store', '>=', 'product_track')
-        ->latest()
-        ->paginate(20); // Change the number '10' to the desired number of products per page
+    {
+        $products = Product::where('expire_date', '>', Carbon::now())
+            ->whereColumn('product_store', '>=', 'product_track')
+            ->latest()
+            ->paginate(10); // Change the number '10' to the desired number of products per page
+        // dd($products);
 
-    $customers = Customer::latest()->get();
-    $categories = Category::latest()->get();
-    $delis = Deli::latest()->get();
+        $customers = Customer::latest()->get();
+        $categories = Category::latest()->get();
+        $delis = Deli::latest()->get();
 
-    return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'delis'));
-}
-
-public function GetProductsByCategory(Request $request, $categoryId)
-{
-    $query = Product::where('category_id', $categoryId)
-        ->whereColumn('product_store', '>=', 'product_track')
-        ->where('expire_date', '>', Carbon::now())
-        ->latest();
-
-    // Handle search
-    $searchTerm = $request->input('search');
-    if ($searchTerm) {
-        $query->where(function ($subquery) use ($searchTerm) {
-            $subquery->where('product_name', 'like', '%' . $searchTerm . '%')
-                     ->orWhere('product_code', 'like', '%' . $searchTerm . '%');
-        });
+        return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'delis'));
     }
-    $products = $query->paginate(20); // Change the number '10' to the desired number of products per page
 
-    return response()->json($products);
-}
+    public function GetProductsByCategory(Request $request, $categoryId)
+    {
+        $query = Product::where('category_id', $categoryId)
+            ->whereColumn('product_store', '>=', 'product_track')
+            ->where('expire_date', '>', Carbon::now())
+            ->latest();
 
+        // Handle search
+        $searchTerm = $request->input('search');
+        if ($searchTerm) {
+            $query->where(function ($subquery) use ($searchTerm) {
+                $subquery->where('product_name', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('product_code', 'like', '%' . $searchTerm . '%');
+            });
+        }
+        $products = $query->paginate(20); // Change the number '10' to the desired number of products per page
+
+        return response()->json($products);
+    }
 
     // Add Cart Method
     public function AddCart(Request $request)
@@ -58,7 +58,7 @@ public function GetProductsByCategory(Request $request, $categoryId)
                 'name' => $request->porductName,
                 'qty' => $request->qty,
                 'price' => $request->price,
-                'options' => ['bPrice' => $request->buyPrice]
+                'options' => ['bPrice' => $request->buyPrice],
             ],
         ]);
         $noti = [
@@ -115,6 +115,5 @@ public function GetProductsByCategory(Request $request, $categoryId)
 
         return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice', 'deli'));
     } // End Method
-
 
 }

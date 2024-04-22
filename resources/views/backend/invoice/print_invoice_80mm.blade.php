@@ -12,6 +12,12 @@
 
 </head>
 <style type="text/css">
+    .logo {
+        display: flex;
+        justify-content: center;
+
+    }
+
     #wrapper {
         width: 280px;
         margin: 0 auto;
@@ -81,6 +87,7 @@
     .btn-back {
         background-color: #4fa950;
     }
+
     @media print {
         .btn {
             display: none;
@@ -93,7 +100,8 @@
     <div id="wrapper">
         <div id="receipt-header">
             <div class="logo">
-                <img src="{{ !empty($shop->logo) ? url('upload/shop_logo/' . $shop->logo) : url('upload/no_image.jpg') }}" width="70px" height="70px" alt="">
+                <img src="{{ !empty($shop->logo) ? url('upload/shop_logo/' . $shop->logo) : url('upload/no_image.jpg') }}"
+                    width="70px" height="70px" alt="">
             </div>
             <h3 id="shop-name" class="text-center">{{ $shop->name }}</h3>
             <p class="text-center">Address: {{ $shop->address }}</p>
@@ -122,7 +130,7 @@
                         $sl = 1;
                     @endphp
                     @foreach ($contents as $key => $item)
-                         <tr>
+                        <tr>
                             <td width="30" class="text-start">{{ $sl++ }}</td>
                             <td width="180" class="text-start"> {{ $item->name }}</td>
                             <td width="50">{{ $item->qty }}</td>

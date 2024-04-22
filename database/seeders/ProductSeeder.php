@@ -132,6 +132,7 @@ class ProductSeeder extends Seeder
             'product_garage' => 'A',
             'product_store' => 30,
             'product_track' => 5,
+            'buy_price' => 80000,
             'selling_price' => 95000,
         ]);
         Product::create([
@@ -143,6 +144,7 @@ class ProductSeeder extends Seeder
             'product_garage' => 'B',
             'product_store' => 20,
             'product_track' => 5,
+            'buy_price' => 80000,
             'selling_price' => 3000,
         ]);
         Product::create([

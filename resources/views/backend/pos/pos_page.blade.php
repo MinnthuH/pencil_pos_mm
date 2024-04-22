@@ -171,14 +171,17 @@
                                     <button type="submit" class="btn btn-link">
                                         <div class="card" style="width: 8.5rem;">
                                             <div class="position-relative">
+
+                                                <img src="{{ asset($item->product_image ?: 'upload/no_image.jpg') }}"
+                                                    alt="Product Image" class="img-fluid">
                                                 <!-- Add position-relative class to the card container -->
-                                                @if ($item->product_image)
+                                                {{-- @if (!empty($item->product_image))
                                                     <img src="{{ asset($item->product_image) }}" id="em_photo"
                                                         class="card-img-top">
                                                 @else
                                                     <img src="{{ asset('upload/no_image.jpg') }}" id="em_photo"
                                                         class="card-img-top">
-                                                @endif
+                                                @endif --}}
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ $item->product_name }}</h5>
                                                     <span
@@ -191,6 +194,9 @@
                                                 <!-- Use position-absolute, top-0, and start-0 classes to position the product store badge -->
                                             </div>
                                         </div>
+                                        <!-- Example: Display product_image value for debugging -->
+                                        <p>Product Image Path: {{ $item->product_image }}</p>
+
 
                                     </button>
                                 </form>
@@ -276,6 +282,8 @@
                     <input type="hidden" name="price" value="${product.selling_price}">
                     <button type="submit" class="btn btn-link">
                         <div class="card" style="width: 8.5rem;">
+
+
                             <img src="${product.product_image ? product.product_image : '{{ asset('upload/no_image.jpg') }}'}" id="em_photo" class="card-img-top">
                             <div class="card-body">
                                 <h5 class="card-title">${product.product_name}</h5>
@@ -289,8 +297,10 @@
             </div>
                 `;
             });
+
             $('#product-list-container').html(productListHtml);
         }
+
 
         // Function to update products and pagination data
         function updateProductsAndPagination(data) {
