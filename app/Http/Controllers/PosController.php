@@ -88,6 +88,7 @@ class PosController extends Controller
     {
 
         Cart::remove($rowId);
+
         $noti = [
             'message' => 'ဈေးခြင်းထဲမှ ဖယ်ရှားခြင်း အောင်မြင်ပါသည်',
             'alert-type' => 'success',

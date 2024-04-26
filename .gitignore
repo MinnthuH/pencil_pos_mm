@@ -4,6 +4,7 @@
 /public/hot
 /storage/*.key
 /vendor
+/public/upload/product/
 .env
 .env.backup
 .env.production
@@ -17,3 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 db/mysql.sock
+
+
