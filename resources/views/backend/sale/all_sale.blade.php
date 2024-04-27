@@ -74,8 +74,10 @@
                                         <td class="text-end">{{ number_format($item->due) }}</td>
                                         <td class="text-end">{{ number_format($item->return_change) }}</td>
                                         <td>
+                                            <a href="{{ route('refurn.sale', $item->id) }}" class="btn btn-info sm"
+                                                title="Detail Data"><i class=" far fa-share-square"></i></a>
 
-                                            <a href="{{ route('detail#sale', $item->id) }}" class="btn btn-info sm"
+                                            <a href="{{ route('detail/sale', $item->id) }}" class="btn btn-info sm"
                                                 title="Detail Data"><i class="far fa-eye"></i></a>
                                             @if (Auth::user()->can('admin.manage'))
                                                 <a href="{{ route('delete.sale', $item->id) }}"

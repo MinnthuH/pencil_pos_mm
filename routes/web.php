@@ -1,25 +1,24 @@
 <?php
 
-use App\Http\Controllers\DeliController;
-use App\Http\Controllers\PrintController;
-use Carbon\Carbon;
-use App\Models\Sale;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PosController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Backend\RoleController;
-use App\Http\Controllers\Backend\SaleController;
-use App\Http\Controllers\Backend\SalaryController;
-use App\Http\Controllers\Backend\ExpenseController;
-use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\AttendanceController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\EmployeeController;
+use App\Http\Controllers\Backend\ExpenseController;
+use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\SalaryController;
+use App\Http\Controllers\Backend\SaleController;
 use App\Http\Controllers\Backend\SupplierController;
-use App\Http\Controllers\Backend\AttendanceController;
+use App\Http\Controllers\DeliController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PosController;
+use App\Http\Controllers\PrintController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RefurnController;
 use App\Http\Controllers\ShopController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -175,10 +174,9 @@ Route::controller(ProductController::class)->group(function () {
 
     ////// Add Stock ////
     Route::post('refill/stock', 'refillStock')->name('refill.stock'); // refill stock
-    Route::get('noti/expire','NotiExpireProduct')->name('noti.expire'); // Noti Expire route
+    Route::get('noti/expire', 'NotiExpireProduct')->name('noti.expire'); // Noti Expire route
     Route::post('reduce/stock', 'ReduceStock')->name('reduce.stock'); // Reduce Stock
-    Route::get('noti/stock','NotiStock')->name('noti.stock'); // Noti Stock
-
+    Route::get('noti/stock', 'NotiStock')->name('noti.stock'); // Noti Stock
 
 });
 
@@ -199,11 +197,9 @@ Route::controller(ExpenseController::class)->group(function () {
 Route::controller(PosController::class)->group(function () {
     Route::get('pos', 'Pos')->name('pos')->middleware('permission:pos.menu'); // Pos page
 
-    Route::get('/get-products-by-category/{categoryId}','GetProductsByCategory')->name('get.products.by.category'); // Product search with category update
+    Route::get('/get-products-by-category/{categoryId}', 'GetProductsByCategory')->name('get.products.by.category'); // Product search with category update
 
     Route::get('/get-product-by-code/{productCode}', 'getProductByCode')->name('get.product.by.code');
-
-
 
     Route::post('/add-cart', 'AddCart'); // Add card
     // Route::get('/allitem', 'AllItem'); // All Item
@@ -238,7 +234,7 @@ Route::controller(SaleController::class)->group(function () {
     Route::get('/sale/delete/{id}', 'DeleteSale')->name('delete.sale'); // Delete Sale
     Route::get('/trash/sale', 'TrashSale')->name('trash.sale'); // Trash Sale
     Route::get('/sale/force-delete/{id}', 'ForceDeleteSale')->name('force.delete.sale'); // Force Delete Sale
-    Route::get('/sale/detail/{id}', 'detailSale')->name('detail#sale'); // Detail Sale
+    Route::get('/sale/detail/{id}', 'detailSale')->name('detail/sale'); // Detail Sale
     Route::get('/stock/product/{id}', 'stockProduct')->name('stock#product'); // prodct stock - from pordcut_store from prodcuts
     Route::get('sales/export/daily', 'exportDailySales')->name('sales.export.daily');
     Route::get('sales/export/weekly', 'exportWeeklySales')->name('sales.export.weekly');
@@ -299,8 +295,12 @@ Route::controller(AdminController::class)->group(function () {
 
 });
 
-Route::get('/print-invoice', [PrintController::class,'printInvoice'])->name('print.invoice');
+// All Refurn Route
+Route::controller(RefurnController::class)->group(function () {
+    Route::get('/refurn/sale/{id}', 'RefurnSale')->name('refurn.sale'); // Refurn Route
 
+});
 
+Route::get('/print-invoice', [PrintController::class, 'printInvoice'])->name('print.invoice');
 
 require __DIR__ . '/auth.php';

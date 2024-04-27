@@ -146,6 +146,13 @@
     {{-- validate js  --}}
     <script src="{{ asset('backend/assets/js/validate.min.js') }}"></script>
 
+
+    <!-- Table Editable plugin-->
+    <script src="{{ asset('backend/assets/libs/jquery-tabledit/jquery.tabledit.min.js') }}"></script>
+
+    <!-- Table editable init-->
+    <script src="{{ asset('backend/assets/js/pages/tabledit.init.js') }}"></script>
+
     <script>
         @if (Session::has('message'))
             var type = "{{ Session::get('alert-type', 'info') }}"
