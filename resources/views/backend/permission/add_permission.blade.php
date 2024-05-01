@@ -33,14 +33,14 @@
                             <form method="post" action="{{ route('store#permission') }}" id="myForm">
                                 @csrf
 
-                                <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Add Permission
+                                <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Add
+                                    Permission
                                 </h5>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="permission name" class="form-label">Permission Name</label>
-                                            <input type="text" name="permissionName"
-                                                class="form-control">
+                                            <input type="text" name="permissionName" class="form-control">
 
                                         </div>
                                     </div>
@@ -59,6 +59,7 @@
                                                 <option value="category">Category</option>
                                                 <option value="product">Product</option>
                                                 <option value="expense">Expense</option>
+                                                <option value="warehouse">Warehouse</option>
                                                 <option value="product">Product</option>
                                                 <option value="stock">Stock</option>
                                                 <option value="admin">Admin</option>
@@ -94,41 +95,40 @@
 </div> <!-- content -->
 
 <script type="text/javascript">
-    $(document).ready(function (){
+    $(document).ready(function() {
         $('#myForm').validate({
             rules: {
                 permissionName: {
-                    required : true,
+                    required: true,
                 },
                 gorupName: {
-                    required : true,
+                    required: true,
                 },
 
             },
-            messages :{
+            messages: {
                 permissionName: {
-                    required : 'Please Enter Permission Name',
+                    required: 'Please Enter Permission Name',
                 },
                 gorupName: {
-                    required : 'Please Select Group',
+                    required: 'Please Select Group',
                 },
 
 
             },
-            errorElement : 'span',
-            errorPlacement: function (error,element) {
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
                 error.addClass('invalid-feedback');
                 element.closest('.form-group').append(error);
             },
-            highlight : function(element, errorClass, validClass){
+            highlight: function(element, errorClass, validClass) {
                 $(element).addClass('is-invalid');
             },
-            unhighlight : function(element, errorClass, validClass){
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).removeClass('is-invalid');
             },
         });
     });
-
 </script>
 
 

@@ -1,0 +1,100 @@
+@extends('admin_dashboard')
+
+
+@section('admin')
+@section('title')
+    All Inventory | Pencil POS System
+@endsection
+<div class="content">
+
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            {{-- @if (Auth::user()->can('admin.manage'))
+                                <a href="{{ route('import#product') }}"
+                                    class="btn btn-blue rounded-pill waves-effect waves-light"> Import</a>
+                                &nbsp;
+                                <a href="{{ route('export#product') }}"
+                                    class="btn btn-blue rounded-pill waves-effect waves-light"> Export</a>
+                                &nbsp;
+                            @endif --}}
+                            @if (Auth::user()->can('warhouse.add'))
+                                <a href="{{ route('search.inventory') }}"
+                                    class="btn btn-blue rounded-pill waves-effect waves-light">စတို ကုန်ပစ္စည်း
+                                    အသစ်ထည့်ရန်</a>
+                            @endif
+                        </ol>
+                    </div>
+                    <h4 class="page-title">စတို ကုန်ပစ္စည်းစာရင်းများ </h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        {{-- <h4 style="font-size:30px;" align="center">Total :{{ count($product) }} Pcs</h4> --}}
+                        <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th>စဉ်</th>
+                                    <th>ဓါတ်ပုံ</th>
+                                    <th>အမည်</th>
+                                    <th>ဝယ်ယူသည့်ေန့</th>
+                                    <th>ဝယ်ယူသည့် ေဈးနှုန်း</th>
+                                    <th>ဝယ်ယူခဲ့သည့် အေရအတွက်</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                @foreach ($inventory as $key => $item)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+
+                                        <td><img src="{{ asset($item->product->product_image) }}"
+                                                style="width:50px;height:40px;" alt=""></td>
+                                        <td>{{ $item['product']['product_name'] }}</td>
+                                        <td>{{ $item->buy_date }}</td>
+                                        <td>{{ $item->buy_price }}</td>
+                                        <td>{{ $item->buy_qty }}</td>
+
+                                        <td>
+                                            @if (Auth::user()->can('warehouse.edit'))
+                                                <a href="{{ route('edit.inventory', $item->id) }}"
+                                                    class="btn btn-info sm" title="Edit Inventory"><i
+                                                        class="far fa-edit"></i></a>
+                                            @endif
+                                            @if (Auth::user()->can('warehouse.delete'))
+                                                <a href="{{ route('delete#porduct', $item->id) }}"
+                                                    class="btn btn-danger sm" title="Delete Data" id="delete"><i
+                                                        class="fas fa-trash-alt"></i></a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+
+                    </div> <!-- end card body-->
+                </div> <!-- end card -->
+            </div><!-- end col-->
+        </div>
+        <!-- end row-->
+
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+@endsection

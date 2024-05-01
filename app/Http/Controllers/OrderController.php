@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Models\Customer;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Shop;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\Customer;
-use App\Models\OrderDetail;
-use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -26,12 +26,11 @@ class OrderController extends Controller
             // Perform your database operations within the transaction
             // For example, inserting/updating records or deleting data
 
-
             $rtotal = $request->total;
             $rpay = $request->payNow;
             $invoiceNo = $this->generateInvoiceNumber();
 
-           $result = Sale::insertGetId([
+            $result = Sale::insertGetId([
                 'user_id' => $request->userId,
                 'customer_id' => $request->customerId,
                 'deli_id' => $request->deliId,
@@ -47,7 +46,6 @@ class OrderController extends Controller
                 'return_change' => $request->returnChange,
                 'created_at' => Carbon::now()->setTimezone('Asia/Yangon'),
             ]);
-
 
             $data = array();
             $data['customer_id'] = $request->customerId;
@@ -67,7 +65,6 @@ class OrderController extends Controller
             $order_id = Order::insertGetId($data);
             $contents = Cart::content();
 
-
             $pdata = array();
             foreach ($contents as $content) {
                 $pdata['order_id'] = $order_id;
@@ -83,7 +80,6 @@ class OrderController extends Controller
 
             } // end foreach
 
-
             $noti = [
                 'message' => 'Order Complete Successfully',
                 'alert-type' => 'success',
@@ -95,10 +91,10 @@ class OrderController extends Controller
             $returnChange = $request->returnChange;
             $customerId = $request->customerId;
             $customer = Customer::where('id', $customerId)->first();
-            $sale= Sale::latest()->firstOrFail();
+            $sale = Sale::latest()->firstOrFail();
             $shop = Shop::first();
 
-            return view('backend.invoice.print_invoice_80mm', compact('sale','customer','rpay','returnChange','contents','shop'));
+            return view('backend.invoice.print_invoice_80mm', compact('sale', 'customer', 'rpay', 'returnChange', 'contents', 'shop'));
             // return view('backend.invoice.print_invoice_A5', compact('sale','customer','rpay','returnChange','contents','shop'));
             // return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents','shop'));
 
@@ -110,8 +106,6 @@ class OrderController extends Controller
 
             // Handle the error, log it, or redirect to an error page
         }
-
-
 
     } // End Method
 
@@ -141,7 +135,7 @@ class OrderController extends Controller
 
         $order_id = $request->id;
 
-        $product = OrderDetail::where('order_id',$order_id)->get();
+        $product = OrderDetail::where('order_id', $order_id)->get();
         foreach ($product as $item) {
             Product::where('id', $item->product_id)
                 ->update(['product_store' => DB::raw('product_store-' . $item->quantity)]);
@@ -174,13 +168,14 @@ class OrderController extends Controller
     } // End Method
 
     // Order Invoice Download
-    public function InvoiceDownload($id){
+    public function InvoiceDownload($id)
+    {
 
         $order = Order::where('id', $id)->first();
 
         $orderItem = OrderDetail::with('product')->where('order_id', $id)->orderBy('id', 'DESC')->get();
 
-        $pdf = Pdf::loadView('backend.order.order_invoice', compact('order','orderItem'))->setPaper('a4')->setOption([
+        $pdf = Pdf::loadView('backend.order.order_invoice', compact('order', 'orderItem'))->setPaper('a4')->setOption([
             'tempDir' => public_path(),
             'chroot' => public_path(),
         ]);
@@ -191,20 +186,23 @@ class OrderController extends Controller
     //////////// Due /////////////
 
     // pending due method
-    public function PendingDue(){
+    public function PendingDue()
+    {
 
-            $alldue = Order::where('due','>','0')->orderBy('id','DESC')->get();
-            return view('backend.order.pending_due',compact('alldue'));
-    }// End Method
+        $alldue = Order::where('due', '>', '0')->orderBy('id', 'DESC')->get();
+        return view('backend.order.pending_due', compact('alldue'));
+    } // End Method
 
     // order due method
-    public function OrderDueAjax($id){
+    public function OrderDueAjax($id)
+    {
         $order = Order::findOrFail($id);
         return response()->json($order);
     } // End Method
 
     // Update Due Method
-    public function UpdateDue(Request $request){
+    public function UpdateDue(Request $request)
+    {
 
         $orderId = $request->id;
         $payAmount = $request->pay;
@@ -218,8 +216,8 @@ class OrderController extends Controller
         $paidPay = $mainPay + $dueAmmount;
 
         Order::findOrFail($orderId)->update([
-            'pay' =>$paidPay,
-            'due' =>$paidDue,
+            'pay' => $paidPay,
+            'due' => $paidDue,
         ]);
 
         $noti = [
@@ -231,20 +229,18 @@ class OrderController extends Controller
 
     } // End Method
 
-
-
     ////////////////////////Private Funciton//////////////////////////
     private function generateInvoiceNumber()
-{
-    // You can customize the format of the invoice number as per your requirements.
-    // For example, you can use the date along with a random number or hash.
+    {
+        // You can customize the format of the invoice number as per your requirements.
+        // For example, you can use the date along with a random number or hash.
 
-    $invoicePrefix = 'INV'; // You can set a prefix for the invoice number (e.g., 'INV' for Invoice).
-    $randomNumberLength = 6; // You can set the desired length of the random number.
+        $invoicePrefix = 'INV'; // You can set a prefix for the invoice number (e.g., 'INV' for Invoice).
+        $randomNumberLength = 6; // You can set the desired length of the random number.
 
-    $invoiceNumber = $invoicePrefix . '-' . date('Ymd') . '-' . mt_rand(100000, 999999);
+        $invoiceNumber = $invoicePrefix . '-' . date('Ymd') . '-' . mt_rand(100000, 999999);
 
-    return $invoiceNumber;
-}
+        return $invoiceNumber;
+    }
 
 }

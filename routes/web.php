@@ -18,6 +18,7 @@ use App\Http\Controllers\PrintController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RefurnController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\WarehouseInventory;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -302,5 +303,17 @@ Route::controller(RefurnController::class)->group(function () {
 });
 
 Route::get('/print-invoice', [PrintController::class, 'printInvoice'])->name('print.invoice');
+
+// Warehoure Inventory All Route
+Route::controller(WarehouseInventory::class)->group(function () {
+    Route::get('search/inventory', 'SearchInventory')->name('search.inventory')->middleware('permission:product.menu'); // Search Inventroy route
+    Route::get('all/inventory', 'AllInventory')->name('all.inventory'); // All Inventroy route
+    Route::get('add/inventory/{id}', 'AddInventory')->name('add.inventory'); // add inventory route
+    Route::post('store/inventory', 'StoreInventory')->name('stroe.inventory'); // store inventory route
+    Route::get('edit/inventory/{id}', 'EditInventory')->name('edit.inventory'); // edit inventory route
+    Route::post('update/inventory', 'UpdateInventory')->name('update.inventory'); // update inventory route
+    Route::get('delete/inventory/{id}', 'DeleteInventory')->name('delete.inventory'); // delete inventory route
+
+});
 
 require __DIR__ . '/auth.php';

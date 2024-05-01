@@ -122,13 +122,13 @@
                     <div class="collapse" id="salary">
                         <ul class="nav-second-level">
 
-                                <li>
-                                    <a href="{{ route('all.deli') }}">Deli စာရင်းများ</a>
-                                </li>
+                            <li>
+                                <a href="{{ route('all.deli') }}">Deli စာရင်းများ</a>
+                            </li>
 
-                                <li>
-                                    <a href="{{ route('add.deli') }}">Deli အသစ်ထည့်ရန်</a>
-                                </li>
+                            <li>
+                                <a href="{{ route('add.deli') }}">Deli အသစ်ထည့်ရန်</a>
+                            </li>
 
                         </ul>
                     </div>
@@ -231,6 +231,32 @@
                                         <a href="{{ route('import#product') }}">ကုန်ပစ္စည်း ဖိုင်ဖြင့်သွင်းရန်</a>
                                     </li>
                                 @endif
+
+                            </ul>
+                        </div>
+                    </li>
+                @endif
+
+                @if (Auth::user()->can('warehouse.menu'))
+                    <li>
+                        <a href="#inventory" data-bs-toggle="collapse">
+                            <i class="fas fa-boxes"></i>
+                            <span> စတို စီမံခန့်ခွဲခြင်း </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="inventory">
+                            <ul class="nav-second-level">
+                                @if (Auth::user()->can('warehouse.all'))
+                                    <li>
+                                        <a href="{{ route('search.inventory') }}">ကုန်ပစ္စည်းရှာခြင်း </a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->can('warhouse.add'))
+                                    <li>
+                                        <a href="{{ route('all.inventory') }}">All Inventory</a>
+                                    </li>
+                                @endif
+
 
                             </ul>
                         </div>
