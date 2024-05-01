@@ -3,7 +3,7 @@
 
 @section('admin')
 @section('title')
-    All Stock | Pencil POS System
+    Stock Inventory | Pencil POS System
 @endsection
 <script type="text/javascript" src="{{ asset('backend/assets/jquery.js') }}"></script>
 <div class="content">
@@ -18,7 +18,7 @@
                     <div class="page-title-right">
 
                     </div>
-                    <h4 class="page-title">ကုန်ပစ္စည်းများ လက်ကျန် စာရင်း</h4>
+                    <h4 class="page-title">စတိုကုန်ပစ္စည်း လက်ကျန် စာရင်း</h4>
                 </div>
             </div>
         </div>
@@ -36,37 +36,38 @@
                                     <th>ဓါတ်ပုံ</th>
                                     <th>ကုန်ပစ္စည်းအမည်</th>
                                     <th>အမျိုးအစား</th>
-                                    <th>တင်သွင်းသူ</th>
                                     <th>Code</th>
                                     <th>လက်ကျန်</th>
-                                    {{-- <th>အသစ်ဖြည့်ရန်</th> --}}
+                                    <th>ဆိုင်သို့လွှဲရန်</th>
                                 </tr>
                             </thead>
 
 
                             <tbody>
-                                @foreach ($product as $key => $item)
+                                @foreach ($inventory as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td><img src="{{ asset($item->product_image) }}" style="width:50px;height:40px;"
-                                                alt=""></td>
-                                        <td>{{ $item->product_name }}</td>
-                                        <td>{{ $item['category']['category_name'] }}</td>
-                                        <td>{{ $item['supplier']['name'] }}</td>
-                                        <td>{{ $item->product_code }}</td>
+                                        <td><img src="{{ asset($item->product->product_image) }}"
+                                                style="width:50px;height:40px;" alt=""></td>
+                                        <td>{{ $item->product->product_name }}</td>
+                                        <td>{{ $item->product->category->category_name }}</td>
+                                        <td>{{ $item->product->product_code }}</td>
                                         <td>
                                             <button
-                                                class="btn btn-warning waves-effect waves-light">{{ $item->product_store }}</button>
+                                                class="btn btn-warning waves-effect waves-light">{{ $item->total_buy_qty }}</button>
                                         </td>
-                                        {{-- <td>
-                                            @if (Auth::user()->can('admin.manage'))
+                                        <td>
+                                            @if (Auth::user()->can('warehouse.edit'))
                                                 <a href="#" class="btn btn-info sm" data-bs-toggle="modal"
-                                                    data-bs-target="#signup-modal" data-productid="{{ $item->id }}"
-                                                    title="Add Stock"><i class="fas fa-chart-line"></i></a>
+                                                    data-bs-target="#signup-modal"
+                                                    data-productid="{{ $item->product_id }}" title="Transfer">
+                                                    <i class="fas fa-chart-line"></i>
+                                                </a>
                                             @endif
-                                        </td> --}}
+                                        </td>
                                     </tr>
                                 @endforeach
+
                             </tbody>
                         </table>
                     </div>
@@ -79,16 +80,16 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form class="px-3" action="{{ route('refill.stock') }}" method="post">
+                        <form class="px-3" action="{{ route('transfer.stock') }}" method="post">
                             @csrf
                             <input type="hidden" name="productId" id="product-id-input">
                             <div class="mb-3">
-                                <label for="stock" class="form-label">ကုန်ပစ္စည်း အရေအတွက်</label>
-                                <input class="form-control" type="number" id="naem" name="refillStock"
-                                    placeholder="ပြန်လည်ဖြည့်စွက်မည့် ကုန်ပစ္စည်း အရေအတွက်ထည့်ပါ">
+                                <label for="stock" class="form-label">လွှဲေပြာင်းမည့် ကုန်ပစ္စည်း အရေအတွက်</label>
+                                <input class="form-control" type="number" id="naem" name="transferStock"
+                                    placeholder="လွှဲေပြာင်းမည့် ကုန်ပစ္စည်း အရေအတွက်ထည့်ပါ" required min="1">
                             </div>
                             <div class="mb-3 text-center">
-                                <button class="btn btn-blue" type="submit">Add</button>
+                                <button class="btn btn-blue" type="submit">Transfer</button>
                             </div>
                         </form>
                     </div>

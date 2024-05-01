@@ -256,6 +256,11 @@
                                         <a href="{{ route('all.inventory') }}">All Inventory</a>
                                     </li>
                                 @endif
+                                @if (Auth::user()->can('warhouse.add'))
+                                    <li>
+                                        <a href="{{ route('all.transfer.record') }}">All Tranfers</a>
+                                    </li>
+                                @endif
 
 
                             </ul>
@@ -315,8 +320,13 @@
                     </a>
                     <div class="collapse" id="stock">
                         <ul class="nav-second-level">
+                            @if (Auth::user()->can('warehouse.edit'))
+                                <li>
+                                    <a href="{{ route('stock.inventory') }}">စတို လက်ကျန်စာရင်း</a>
+                                </li>
+                            @endif
                             <li>
-                                <a href="{{ route('manage#stock') }}">ကုန်ပစ္စည်းလက်ကျန်စာရင်း</a>
+                                <a href="{{ route('manage#stock') }}">ဆိုင်လက်ကျန်စာရင်း</a>
                             </li>
                             <li>
                                 <a href="{{ route('noti.stock') }}">သတိပေးပစ္စည်းစာရင်း</a>

@@ -314,6 +314,11 @@ Route::controller(WarehouseInventory::class)->group(function () {
     Route::post('update/inventory', 'UpdateInventory')->name('update.inventory'); // update inventory route
     Route::get('delete/inventory/{id}', 'DeleteInventory')->name('delete.inventory'); // delete inventory route
 
+    Route::get('stock/inventory', 'StockInventory')->name('stock.inventory'); // stock inventory route
+    Route::post('transfer-stock', 'TransferStock')->name('transfer.stock'); // transfer stock
+    Route::get('all/transfer-record', 'AllTransferRecord')->name('all.transfer.record'); // all transfer record
+    Route::get('delete/transfer-record/{id}', 'DeleteTransferRecord')->name('delete.transfer.record'); // Delete transfer record
+
 });
 
 require __DIR__ . '/auth.php';
