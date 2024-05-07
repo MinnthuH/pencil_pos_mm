@@ -61,7 +61,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
 
-                                        <td><img src="{{ asset($item->product->product_image) }}"
+                                        <td><img src="{{ asset($item->product->product_image ?: 'upload/no_image.jpg') }}"
                                                 style="width:50px;height:40px;" alt=""></td>
                                         <td>{{ $item['product']['product_name'] }}</td>
                                         <td>{{ $item->buy_date }}</td>
