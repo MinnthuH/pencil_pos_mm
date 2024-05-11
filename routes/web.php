@@ -235,7 +235,7 @@ Route::controller(SaleController::class)->group(function () {
     Route::get('/sale/delete/{id}', 'DeleteSale')->name('delete.sale'); // Delete Sale
     Route::get('/trash/sale', 'TrashSale')->name('trash.sale'); // Trash Sale
     Route::get('/sale/force-delete/{id}', 'ForceDeleteSale')->name('force.delete.sale'); // Force Delete Sale
-    Route::get('/sale/detail/{id}', 'detailSale')->name('detail/sale'); // Detail Sale
+    Route::get('/sale/detail/{id}', 'detailSale')->name('detail#sale'); // Detail Sale
     Route::get('/stock/product/{id}', 'stockProduct')->name('stock#product'); // prodct stock - from pordcut_store from prodcuts
     Route::get('sales/export/daily', 'exportDailySales')->name('sales.export.daily');
     Route::get('sales/export/weekly', 'exportWeeklySales')->name('sales.export.weekly');
@@ -299,6 +299,7 @@ Route::controller(AdminController::class)->group(function () {
 // All Refurn Route
 Route::controller(RefurnController::class)->group(function () {
     Route::get('/refurn/sale/{id}', 'RefurnSale')->name('refurn.sale'); // Refurn Route
+    Route::post('/refurn/store', 'RefurnStore')->name('refurn.store'); // Refurn Store
 
 });
 

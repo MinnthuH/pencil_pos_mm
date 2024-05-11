@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('refurns', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('sale_id');
+            $table->bigInteger('sale_item_id');
+            $table->integer('refurnqty');
+            $table->integer('refurn_amout');
             $table->timestamps();
         });
     }

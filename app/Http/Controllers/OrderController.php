@@ -100,7 +100,6 @@ class OrderController extends Controller
 
         } catch (\Exception $e) {
             // An error occurred, so rollback the transaction
-            dd($e);
 
             DB::rollback();
 

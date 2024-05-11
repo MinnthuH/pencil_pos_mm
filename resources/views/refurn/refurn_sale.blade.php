@@ -5,150 +5,157 @@
 @section('title')
     Sales | Pencil POS System
 @endsection
-<div class="content">
+<script src="{{ asset('backend/assets/jquery.js') }}"></script>
 
-    <!-- Start Content-->
-    <div class="container-fluid">
+<div class="container-fluid">
 
-        <!-- start page title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
-
-                    </div>
-                    <h4 class="page-title">ပစ္စည်းပြန်လည် လဲလှယ်ခြင်း</h4>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <h4 class="page-title">Invoice No:&nbsp;&nbsp;{{ $sale->invoice_no }}</h4>
                 </div>
+                <h4 class="page-title">Product Refurn</h4>
             </div>
         </div>
-        <!-- end page title -->
+    </div>
+    <!-- end page title -->
 
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
+    <div class="row">
 
-                        <h5 class="mt-0">Inline edit</h5>
-                        <p class="sub-header">Inline edit like a spreadsheet on two columns only and without identifier
-                            column.</p>
-                        <div class="table-responsive">
-                            <table class="table table-centered mb-0" id="inline-editable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Garrett Winters</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>63</td>
-                                        <td>2011/07/25</td>
-                                        <td>$170,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Ashton Cox</td>
-                                        <td>Junior Technical Author</td>
-                                        <td>San Francisco</td>
-                                        <td>66</td>
-                                        <td>2009/01/12</td>
-                                        <td>$86,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Cedric Kelly</td>
-                                        <td>Senior Javascript Developer</td>
-                                        <td>Edinburgh</td>
-                                        <td>22</td>
-                                        <td>2012/03/29</td>
-                                        <td>$433,060</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Brielle Williamson</td>
-                                        <td>Integration Specialist</td>
-                                        <td>New York</td>
-                                        <td>61</td>
-                                        <td>2012/12/02</td>
-                                        <td>$372,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>Herrod Chandler</td>
-                                        <td>Sales Assistant</td>
-                                        <td>San Francisco</td>
-                                        <td>59</td>
-                                        <td>2012/08/06</td>
-                                        <td>$137,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Rhona Davidson</td>
-                                        <td>Integration Specialist</td>
-                                        <td>Tokyo</td>
-                                        <td>55</td>
-                                        <td>2010/10/14</td>
-                                        <td>$327,900</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>Colleen Hurst</td>
-                                        <td>Javascript Developer</td>
-                                        <td>San Francisco</td>
-                                        <td>39</td>
-                                        <td>2009/09/15</td>
-                                        <td>$205,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>Sonya Frost</td>
-                                        <td>Software Engineer</td>
-                                        <td>Edinburgh</td>
-                                        <td>23</td>
-                                        <td>2008/12/13</td>
-                                        <td>$103,600</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> <!-- end .table-responsive-->
-                    </div> <!-- end card-body -->
-                </div> <!-- end card -->
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-
-        <!-- end row-->
+        <div class="col-lg-8 col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="tab-pane" id="settings">
+                        <form id="myForm" method="post" action="{{ route('refurn.store') }}">
+                            @csrf
+                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Refurn Product
+                            </h5>
+                            <div class="row">
+                                <input type="hidden" name="sale_id" value="{{ $sale->id }}">
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label for="firstname" class="form-label">Product Name</label>
+                                        <select name="saleItemId" class="form-select" id="saleItemId">
+                                            <option selected disabled>Choose a product</option>
+                                            @foreach ($saleItem as $item)
+                                                <option value="{{ $item->id }}"
+                                                    data-unitcost="{{ $item->unitcost }}">
+                                                    {{ $item['product']['product_name'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label for="firstname" class="form-label">Refurn Qty</label>
+                                        <input type="number" name="refurnqty" id="refurnqty" class="form-control"
+                                            min="1">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label for="firstname" class="form-label">Refurn Amount</label>
+                                        <input type="number" name="refurn_amout" id="amount" class="form-control"
+                                            disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-danger waves-effect waves-light mt-2"><i
+                                        class="mdi mdi-content-save"></i> Refurn</button>
+                            </div>
+                        </form>
 
 
-    </div> <!-- container -->
+                    </div>
+                    <!-- end settings content-->
 
-</div> <!-- content -->
+                </div>
+            </div> <!-- end card-->
+
+        </div> <!-- end col -->
+    </div>
+    <!-- end row-->
+
+</div> <!-- container -->
+
+<script>
+    // Select necessary DOM elements
+    const saleItemSelect = document.getElementById('saleItemId');
+    const refurnQtyInput = document.getElementById('refurnqty');
+    const amountInput = document.getElementById('amount');
+
+    // Add event listeners for changes in product selection and quantity input
+    saleItemSelect.addEventListener('change', updateRefundAmount);
+    refurnQtyInput.addEventListener('input', updateRefundAmount);
+
+    function updateRefundAmount() {
+        // Get the selected product's unit cost from data attribute
+        const selectedOption = saleItemSelect.options[saleItemSelect.selectedIndex];
+        const unitCost = parseFloat(selectedOption.getAttribute('data-unitcost'));
+
+        // Get the quantity entered by the user
+        const refurnQty = parseFloat(refurnQtyInput.value) || 0;
+
+        // Calculate the refund amount
+        const refundAmount = unitCost * refurnQty;
+
+        // Update the amount input field with the calculated amount
+        amountInput.value = isNaN(refundAmount) ? '' : refundAmount.toFixed(2);
+
+        // Enable the amount input field (make it readonly) if a valid amount is calculated
+        if (!isNaN(refundAmount)) {
+            amountInput.removeAttribute('readonly');
+        } else {
+            amountInput.setAttribute('readonly', 'readonly');
+        }
+
+        // Add a submit event listener to the form
+        document.getElementById('myForm').addEventListener('submit', function() {
+            // Before submitting the form, ensure the amount field is enabled (not disabled)
+            amountInput.removeAttribute('disabled');
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#myForm').validate({
+            rules: {
+                saleItemId: {
+                    required: true,
+                },
+                refurnqty: {
+                    required: true,
+                }
+            },
+            messages: {
+                saleItemId: {
+                    required: 'ကုန်ပစ္စည်းအမည်  ေရွးချယ်ရန် လိုအပ်ပါသည်',
+                },
+                refurnqty: {
+                    required: 'Please select refurn quantity',
+                },
+
+            },
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            },
+        });
+    });
+</script>
+
+
 
 @endsection

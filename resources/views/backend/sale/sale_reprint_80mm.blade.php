@@ -19,6 +19,7 @@
         font-family: Arial, Helvetica, sans-serif;
         font-size: 12px;
     }
+
     .logo {
         text-align: center;
     }
@@ -97,7 +98,8 @@
     <div id="wrapper">
         <div id="receipt-header">
             <div class="logo">
-                <img src="{{ !empty($shop->logo) ? url('upload/shop_logo/' . $shop->logo) : url('upload/no_image.jpg') }}" width="70px" height="70px" alt="">
+                <img src="{{ !empty($shop->logo) ? url('upload/shop_logo/' . $shop->logo) : url('upload/no_image.jpg') }}"
+                    width="70px" height="70px" alt="">
             </div>
             <h3 id="shop-name" class="text-center">{{ $shop->name }}</h3>
             <h4 class="text-center">Reprint</h4>
@@ -108,7 +110,7 @@
             <p>Invoice No :<strong>{{ $sale->invoice_no }}</strong></p>
             <p>Payment Type :<strong>{{ $sale->payment_type }}</strong></p>
             <p>Cashier :<strong>{{ Auth::user()->name }}</strong></p>
-            <p>Deli :<strong>{{ $sale['deli']['name']??'' }}</strong></p>
+            <p>Deli :<strong>{{ $sale['deli']['name'] ?? '' }}</strong></p>
         </div>
 
         <div id="receipt-body">
@@ -141,6 +143,7 @@
             </table>
             <table class="tb-sale-total">
                 <tbody>
+
                     <tr>
                         <td>Total Qty</td>
                         <td>{{ $saleItem->count() }}</td>
