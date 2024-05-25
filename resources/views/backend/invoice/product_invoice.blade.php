@@ -66,10 +66,10 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;
                                             {{ \Carbon\Carbon::now()->setTimezone('Asia/Yangon')->format('Y-m-d H:i:s') }}
                                         </span></p>
-                                        <p><strong>Deli Services : </strong> <span class="float-end">
+                                    {{-- <p><strong>Deli Services : </strong> <span class="float-end">
                                             &nbsp;&nbsp;&nbsp;&nbsp;
                                             {{ $deli->name ?? 'null' }}
-                                        </span></p>
+                                        </span></p> --}}
 
                                 </div>
                             </div><!-- end col -->
@@ -138,10 +138,27 @@
                             </div> <!-- end col -->
                             <div class="col-sm-6">
                                 <div class="float-end">
-                                    <p><b>ကျသင့်ငွေ</b>&nbsp;&nbsp;<span class="float-end" name="sub_total">{{ Cart::subtotal() }}
+                                    <p><b>ကျသင့်ငွေ</b>&nbsp;&nbsp;<span class="float-end"
+                                            name="sub_total">{{ Cart::subtotal() }}
                                             Ks</span>
                                     </p>
-                                    <h3 class="text-end">{{ Cart::total() }} Ks</h3>
+
+                                    @if (!is_null($tranport) && !is_null($tranport->transport_chagre))
+                                        <p><b>Transport Charge</b>&nbsp;&nbsp;<span class="float-end"
+                                                name="transport_chagre">{{ $tranport->transport_chagre }} Ks</span>
+                                        </p>
+                                    @endif
+
+                                    @php
+                                        $subtotal = floatval(str_replace(',', '', Cart::subtotal())); // Convert Cart::subtotal to a float
+                                        $transportCharge = isset($tranport->transport_chagre)
+                                            ? floatval($tranport->transport_chagre)
+                                            : 0; // Check if transport charge is set
+                                        $total = $subtotal + $transportCharge;
+                                    @endphp
+
+
+                                    <h3 class="text-end">{{ number_format($total, 2) }} Ks</h3>
                                 </div>
                                 <div class="clearfix"></div>
                             </div> <!-- end col -->
@@ -184,7 +201,9 @@
                     @csrf
                     <div class="mb-3">
                         <label for="username" class="form-label">Total Amount</label>
-                        <input class="form-control" type="number" id="totalAmount" name="totalAmount" value="{{ Cart::total() }}" disabled>
+                        <input class="form-control" type="number" id="totalAmount" name="totalAmount"
+                            value="{{ $total }}" disabled>
+
                     </div>
                     <div class="mb-3">
                         <label for="username" class="form-label">Discount</label>
@@ -217,13 +236,17 @@
 
 
                     <input type="hidden" name="customerId" value="{{ $customer->id }}">
+                    @if (!is_null($tranport))
+                        <input type="hidden" name="transportId" value="{{ $tranport->id }}">
+                    @endif
+
                     <input type="hidden" name="deliId" value="{{ $deli->id ?? '' }}">
                     <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
                     <input type="hidden" name="orderDate" value="{{ date('d-F-Y') }}">
                     <input type="hidden" name="orderStaus" value="pending">
                     <input type="hidden" name="porductCount" value="{{ Cart::count() }}">
                     <input type="hidden" name="subTotal" value="{{ Cart::subtotal() }}">
-                    <input type="hidden" name="total" value="{{ Cart::total() }}">
+                    <input type="hidden" name="total" value="{{ $total }}">>
                     <input type="hidden" name="capital" value="{{ $totalBuyPrice }}">
 
                     <div class="mb-3 text-center">
@@ -238,7 +261,7 @@
 </div><!-- /.modal -->
 
 
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         var payNowInput = document.getElementById('payNow');
         var returnChangeInput = document.getElementById('returnChange');
@@ -299,7 +322,71 @@
         updateInstallmentOption();
         updateReturnAndDue();
     });
+</script> --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var payNowInput = document.getElementById('payNow');
+        var returnChangeInput = document.getElementById('returnChange');
+        var dueInput = document.getElementById('due');
+        var discountInput = document.getElementById('discount');
+        var totalAmountInput = document.getElementById('totalAmount');
+        var totalHiddenInput = document.getElementsByName('total')[0]; // Get the hidden input element
+        var installmentOption = document.getElementById('installmentOption');
+
+        function updateInstallmentOption() {
+            if (dueInput.value !== '') {
+                installmentOption.selected = true;
+            } else {
+                installmentOption.selected = false;
+            }
+        }
+
+        function updateReturnAndDue() {
+            var total = parseFloat(totalAmountInput.value);
+            var payAmount = parseFloat(payNowInput.value);
+            var returnChange = payAmount - total;
+
+            if (!isNaN(returnChange) && returnChange >= 0) {
+                returnChangeInput.value = returnChange.toFixed(0);
+                dueInput.value = '';
+            } else {
+                returnChangeInput.value = '';
+                dueInput.value = Math.abs(returnChange).toFixed(0);
+            }
+
+            updateInstallmentOption();
+        }
+
+        discountInput.addEventListener('input', function() {
+            var initialTotal = parseFloat('{{ $total }}');
+            var discount = parseFloat(discountInput.value) || 0;
+            var newTotal = initialTotal - discount;
+
+            if (!isNaN(newTotal) && newTotal >= 0) {
+                totalAmountInput.value = newTotal.toFixed(0);
+                totalHiddenInput.value = newTotal.toFixed(0); // Update hidden input value
+            } else {
+                totalAmountInput.value = initialTotal.toFixed(0);
+                totalHiddenInput.value = initialTotal.toFixed(0); // Update hidden input value
+            }
+
+            updateReturnAndDue();
+        });
+
+        payNowInput.addEventListener('input', function() {
+            updateReturnAndDue();
+        });
+
+        dueInput.addEventListener('input', function() {
+            updateInstallmentOption();
+        });
+
+        updateInstallmentOption();
+        updateReturnAndDue();
+    });
 </script>
+
 
 {{-- prevent minus value  --}}
 <script>

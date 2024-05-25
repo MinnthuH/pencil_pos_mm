@@ -35,7 +35,7 @@ class TransportController extends Controller
             'message' => 'Transport Add Successfully',
             'alert-type' => 'success',
         ];
-        return redirect()->route('add.transport')->with($noti);
+        return redirect()->route('all.transport')->with($noti);
     } // End method
 
     // Edit Transport Method

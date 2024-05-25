@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Customer;
-use App\Models\Deli;
 use App\Models\Product;
+use App\Models\Transport;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -23,9 +23,9 @@ class PosController extends Controller
 
         $customers = Customer::latest()->get();
         $categories = Category::latest()->get();
-        $delis = Deli::latest()->get();
+        $transports = Transport::latest()->get();
 
-        return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'delis'));
+        return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'transports'));
     }
 
     public function GetProductsByCategory(Request $request, $categoryId)
@@ -102,8 +102,8 @@ class PosController extends Controller
 
         $cartItem = Cart::content();
         $customerId = $request->customerId;
-        $deliId = $request->deliId;
-        $deli = Deli::where('id', $deliId)->first();
+        $transportId = $request->transportId;
+        $tranport = Transport::where('id', $transportId)->first();
         $customer = Customer::where('id', $customerId)->first();
         $Capital = Cart::content();
         $totalBuyPrice = 0; // Initialize totalBuyPrice to zero
@@ -114,7 +114,7 @@ class PosController extends Controller
 
         // dd($cartItem->toArray());
 
-        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice', 'deli'));
+        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice', 'tranport'));
     } // End Method
 
 }

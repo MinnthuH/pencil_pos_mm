@@ -8,6 +8,8 @@ use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Shop;
+use App\Models\Transport;
+use App\Models\TransportCharge;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -38,6 +40,7 @@ class OrderController extends Controller
                 'invoice_no' => $invoiceNo,
                 'payment_type' => $request->paymetnStatus,
                 'sub_total' => $request->subTotal,
+                'transprot_id' => $request->transportId,
                 'total' => $request->total,
                 'capital' => $request->capital,
                 'discount' => $request->discount,
@@ -65,6 +68,21 @@ class OrderController extends Controller
             $order_id = Order::insertGetId($data);
             $contents = Cart::content();
 
+            if (!is_null($request->transportId)) {
+                $transport = Transport::where('id', $request->transportId)->first();
+                $transportCharge = $transport->transport_chagre;
+                $staff_amount = $transportCharge * (1 / 3); // calculate for staff 1:3 ratio
+                $owner_amount = $transportCharge * (2 / 3); // calculate for owner 2:3 ratio
+
+                TransportCharge::insert([
+                    'sale_id' => $sale_id,
+                    'transport_id' => $request->transportId,
+                    'staff_amount' => $staff_amount,
+                    'owner_amount' => $owner_amount,
+                    'created_at' => Carbon::now(),
+                ]);
+            }
+
             $pdata = array();
             foreach ($contents as $content) {
                 $pdata['order_id'] = $order_id;
@@ -91,12 +109,14 @@ class OrderController extends Controller
             $returnChange = $request->returnChange;
             $customerId = $request->customerId;
             $customer = Customer::where('id', $customerId)->first();
+            $transportId = $request->transportId;
+            $transport = Transport::where('id', $transportId)->first();
             $sale = Sale::latest()->firstOrFail();
             $shop = Shop::first();
 
-            return view('backend.invoice.print_invoice_80mm', compact('sale', 'customer', 'rpay', 'returnChange', 'contents', 'shop'));
-            // return view('backend.invoice.print_invoice_A5', compact('sale','customer','rpay','returnChange','contents','shop'));
-            // return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents','shop'));
+            return view('backend.invoice.print_invoice_80mm', compact('sale', 'customer', 'rpay', 'returnChange', 'contents', 'shop', 'transport'));
+            // return view('backend.invoice.print_invoice_A5', compact('sale','customer','rpay','returnChange','contents','shop',''transport''));
+            // return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents','shop',''transport''));
 
         } catch (\Exception $e) {
             // An error occurred, so rollback the transaction
@@ -104,6 +124,7 @@ class OrderController extends Controller
             DB::rollback();
 
             // Handle the error, log it, or redirect to an error page
+            dd($e);
         }
 
     } // End Method

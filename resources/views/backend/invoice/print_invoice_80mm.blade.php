@@ -144,11 +144,19 @@
             </table>
             <table class="tb-sale-total">
                 <tbody>
+                    @if (!is_null($transport) && !is_null($transport->transport_chagre))
+                        <tr>
+                            <td colspan="2">Transport Charge</td>
+                            <td colspan="2" class="text-end">
+                                {{ number_format($transport->transport_chagre) }}&nbsp;Ks</td>
+                        </tr>
+                    @endif
+
                     <tr>
                         <td>Total Qty</td>
                         <td>{{ $contents->count() }}</td>
                         <td>ကျသင့်ငွေ</td>
-                        <td class="text-end">{{ number_format($sale->sub_total) }}&nbsp;Ks</td>
+                        <td class="text-end">{{ number_format($sale->total) }}&nbsp;Ks</td>
                     </tr>
                     <tr>
                         <td colspan="2">ပေးငွေ</td>

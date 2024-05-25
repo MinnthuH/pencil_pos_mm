@@ -107,10 +107,10 @@
 
                         <div class="form-group mb-3">
 
-                            <select name="deliId" class="form-select mt-3" id="example-select">
-                                <option selected disabled>Deli ရွေးချယ်ပါ...</option>
-                                @foreach ($delis as $deli)
-                                    <option value="{{ $deli->id }}">{{ $deli->name }}
+                            <select name="transportId" class="form-select mt-3" id="example-select">
+                                <option selected disabled>Transport ရွေးချယ်ပါ...</option>
+                                @foreach ($transports as $transport)
+                                    <option value="{{ $transport->id }}">{{ $transport->transport_type }}
                                     </option>
                                 @endforeach
                             </select>
