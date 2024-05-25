@@ -90,12 +90,12 @@
 
                 @if (Auth::user()->can('supplier.menu'))
                     <li class="my-1">
-                        <a href="#salary" data-bs-toggle="collapse">
+                        <a href="#supplier" data-bs-toggle="collapse">
                             <i class="fas fa-truck"></i>
                             <span> တင်သွင်းသူ စီမံခန့်ခွဲခြင်း </span>
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="salary">
+                        <div class="collapse" id="supplier">
                             <ul class="nav-second-level">
                                 @if (Auth::user()->can('supplier.all'))
                                     <li>
@@ -114,12 +114,12 @@
                     </li>
                 @endif
                 <li class="my-1">
-                    <a href="#salary" data-bs-toggle="collapse">
+                    <a href="#deli" data-bs-toggle="collapse">
                         <i class="fas fa-truck"></i>
                         <span> Deli စီမံခန့်ခွဲခြင်း </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="salary">
+                    <div class="collapse" id="deli">
                         <ul class="nav-second-level">
 
                             <li>
@@ -134,6 +134,28 @@
                     </div>
                 </li>
 
+                <li class="my-1">
+                    <a href="#transport" data-bs-toggle="collapse">
+                        <i class="fas fa-truck"></i>
+                        <span> Transport Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="transport">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('all.transport') }}">All Transport</a>
+                            </li>
+
+
+                            <li>
+                                <a href="{{ route('add.transport') }}">Add Transport</a>
+                            </li>
+
+
+
+                        </ul>
+                    </div>
+                </li>
 
                 {{-- @if (Auth::user()->can('salary.menu'))
                     <li>

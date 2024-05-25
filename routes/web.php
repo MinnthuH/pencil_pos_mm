@@ -18,6 +18,7 @@ use App\Http\Controllers\PrintController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RefurnController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\TransportController;
 use App\Http\Controllers\WarehouseInventory;
 use Illuminate\Support\Facades\Route;
 
@@ -321,6 +322,16 @@ Route::controller(WarehouseInventory::class)->group(function () {
     Route::get('all/transfer-record', 'AllTransferRecord')->name('all.transfer.record'); // all transfer record
     Route::get('delete/transfer-record/{id}', 'DeleteTransferRecord')->name('delete.transfer.record'); // Delete transfer record
 
+});
+
+// Transport All Route
+Route::controller(TransportController::class)->group(function () {
+    Route::get('all/transport', 'AllTransport')->name('all.transport'); // All transport route
+    Route::get('add/tranport', 'AddTransport')->name('add.transport'); // add transport route
+    Route::post('store/transport', 'StoreTransport')->name('stroe.transport'); // store transport route
+    Route::get('edit/transport/{id}', 'EditTransport')->name('edit.transport'); // edit transport route
+    Route::post('update/transport', 'UpdateTransport')->name('update.transport'); // update transport route
+    Route::get('delete/transport/{id}', 'DeleteTransport')->name('delete.transport'); // delete transport route
 });
 
 require __DIR__ . '/auth.php';
