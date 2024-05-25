@@ -309,6 +309,11 @@
                                     <a href="{{ route('trash.sale') }}">ပယ်ဖျက်အရောင်းစာရင်းများ</a>
                                 </li>
                             @endif
+                            @if (Auth::user()->can('admin.manage'))
+                                <li>
+                                    <a href="{{ route('refurn.all') }}">All Refurn</a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </li>

@@ -300,6 +300,7 @@ Route::controller(AdminController::class)->group(function () {
 Route::controller(RefurnController::class)->group(function () {
     Route::get('/refurn/sale/{id}', 'RefurnSale')->name('refurn.sale'); // Refurn Route
     Route::post('/refurn/store', 'RefurnStore')->name('refurn.store'); // Refurn Store
+    Route::get('/refurn/all', 'RefurnAll')->name('refurn.all'); // Refurn All
 
 });
 

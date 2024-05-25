@@ -85,11 +85,18 @@ class RefurnController extends Controller
         } catch (\Exception $e) {
             //throw $th;
 
-            dd($e);
             DB::rollback();
         }
 
         // dd($sale);
 
+    }
+
+    // All Refurn Method
+    public function RefurnAll()
+    {
+        $refurnAll = Refurn::latest()->get();
+
+        return view('refurn.refurn_all', compact('refurnAll'));
     }
 }
