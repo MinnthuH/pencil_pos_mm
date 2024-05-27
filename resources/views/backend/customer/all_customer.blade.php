@@ -49,8 +49,8 @@
                                 @foreach ($allCustomer as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td><img src="{{ asset($item->image) }}" style="width:50px;height:40px;"
-                                                alt=""></td>
+                                        <td><img src="{{ asset($item->image ?: 'upload/no_image.jpg') }}"
+                                                style="width:50px;height:40px;" alt=""></td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->shopname }}</td>

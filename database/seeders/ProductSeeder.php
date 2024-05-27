@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -12,228 +13,55 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        /* Product::create([
-        'id' => 1,
-        'product_name' => 'Shark',
-        'category_id' => 1,
-        'supplier_id' => 1,
-        'product_code' => 'Demo123',
-        'product_garage'=>'A',
-        'product_store' => 30,
-        'product_track' => 5,
-        'selling_price' => 2500,
-        ]);
-        Product::create([
-        'id' => 2,
-        'product_name' => 'Pussy',
-        'category_id' => 2,
-        'supplier_id' => 2,
-        'product_code' => 'Demo222',
-        'product_garage'=>'B',
-        'product_store' => 20,
-        'product_track' => 5,
-        'selling_price' => 3000,
-        ]);
-        Product::create([
-        'id' => 3,
-        'product_name' => 'မားမား',
-        'category_id' => 4,
-        'supplier_id' => 1,
-        'product_code' => 'Demo333',
-        'product_garage'=>'c',
-        'product_store' => 100,
-        'product_track' => 10,
-        'selling_price' => 500,
-        ]);
-        Product::create([
-        'id' => 4,
-        'product_name' => 'ဆား',
-        'category_id' => 4,
-        'supplier_id' => 2,
-        'product_code' => 'Demo444',
-        'product_garage'=>'A',
-        'product_store' => 5,
-        'product_track' => 10,
-        'selling_price' => 700,
-        ]);
-        Product::create([
-        'id' => 5,
-        'product_name' => 'Premier Coffee',
-        'category_id' => 5,
-        'supplier_id' => 1,
-        'product_code' => 'Demo555',
-        'product_garage'=>'A',
-        'product_store' => 300,
-        'product_track' => 10,
-        'selling_price' => 250,
-        ]);
-        Product::create([
-        'id' => 6,
-        'product_name' => 'ရေသန့်',
-        'category_id' => 1,
-        'supplier_id' => 1,
-        'product_code' => 'Demo666',
-        'product_garage'=>'A',
-        'product_store' => 500,
-        'product_track' => 50,
-        'selling_price' => 250,
-        ]);
-        Product::create([
-        'id' => 7,
-        'product_name' => 'PEP နို့မှုန့်',
-        'category_id' => 5,
-        'supplier_id' => 2,
-        'product_code' => 'Demo777',
-        'product_garage'=>'A',
-        'product_store' => 100,
-        'product_track' => 10,
-        'selling_price' => 300,
-        ]);
-        Product::create([
-        'id' => 8,
-        'product_name' => 'Jack Daniel',
-        'category_id' => 1,
-        'supplier_id' => 1,
-        'product_code' => 'Demo888',
-        'product_garage'=>'A',
-        'product_store' => 20,
-        'product_track' => 2,
-        'selling_price' => 50000,
-        ]);
-        Product::create([
-        'id' => 9,
-        'product_name' => 'ပါရာကပ်',
-        'category_id' => 3,
-        'supplier_id' => 1,
-        'product_code' => 'Demo999',
-        'product_garage'=>'A',
-        'product_store' => 100,
-        'product_track' => 5,
-        'selling_price' => 500,
-        ]);
-        Product::create([
-        'id' => 10,
-        'product_name' => 'Nivea Roll on',
-        'category_id' => 6,
-        'supplier_id' => 1,
-        'product_code' => 'Demo000',
-        'product_garage'=>'A',
-        'product_store' => 20,
-        'product_track' => 3,
-        'selling_price' => 50000,
-        ]);*/
+        $faker = Faker::create();
 
-        Product::create([
-            'id' => 1,
-            'product_name' => 'RR မီးကြိုး (4 mm)',
-            'category_id' => 1,
-            'supplier_id' => 1,
-            'product_code' => 'Demo123',
-            'product_garage' => 'A',
-            'product_store' => 30,
-            'product_track' => 5,
-            'buy_price' => 80000,
-            'selling_price' => 95000,
-        ]);
-        Product::create([
-            'id' => 2,
-            'product_name' => 'Pussy',
-            'category_id' => 2,
-            'supplier_id' => 2,
-            'product_code' => 'Demo222',
-            'product_garage' => 'B',
-            'product_store' => 20,
-            'product_track' => 5,
-            'buy_price' => 80000,
-            'selling_price' => 3000,
-        ]);
-        Product::create([
-            'id' => 3,
-            'product_name' => 'မားမား',
-            'category_id' => 4,
-            'supplier_id' => 1,
-            'product_code' => 'Demo333',
-            'product_garage' => 'c',
-            'product_store' => 100,
-            'product_track' => 10,
-            'selling_price' => 500,
-        ]);
-        Product::create([
-            'id' => 4,
-            'product_name' => 'ဆား',
-            'category_id' => 4,
-            'supplier_id' => 2,
-            'product_code' => 'Demo444',
-            'product_garage' => 'A',
-            'product_store' => 5,
-            'product_track' => 10,
-            'selling_price' => 700,
-        ]);
-        Product::create([
-            'id' => 5,
-            'product_name' => 'Premier Coffee',
-            'category_id' => 5,
-            'supplier_id' => 1,
-            'product_code' => 'Demo555',
-            'product_garage' => 'A',
-            'product_store' => 300,
-            'product_track' => 10,
-            'selling_price' => 250,
-        ]);
-        Product::create([
-            'id' => 6,
-            'product_name' => 'ရေသန့်',
-            'category_id' => 1,
-            'supplier_id' => 1,
-            'product_code' => 'Demo666',
-            'product_garage' => 'A',
-            'product_store' => 500,
-            'product_track' => 50,
-            'selling_price' => 250,
-        ]);
-        Product::create([
-            'id' => 7,
-            'product_name' => 'PEP နို့မှုန့်',
-            'category_id' => 5,
-            'supplier_id' => 2,
-            'product_code' => 'Demo777',
-            'product_garage' => 'A',
-            'product_store' => 100,
-            'product_track' => 10,
-            'selling_price' => 300,
-        ]);
-        Product::create([
-            'id' => 8,
-            'product_name' => 'Jack Daniel',
-            'category_id' => 1,
-            'supplier_id' => 1,
-            'product_code' => 'Demo888',
-            'product_garage' => 'A',
-            'product_store' => 20,
-            'product_track' => 2,
-            'selling_price' => 50000,
-        ]);
-        Product::create([
-            'id' => 9,
-            'product_name' => 'ပါရာကပ်',
-            'category_id' => 3,
-            'supplier_id' => 1,
-            'product_code' => 'Demo999',
-            'product_garage' => 'A',
-            'product_store' => 100,
-            'product_track' => 5,
-            'selling_price' => 500,
-        ]);
-        Product::create([
-            'id' => 10,
-            'product_name' => 'Nivea Roll on',
-            'category_id' => 6,
-            'supplier_id' => 1,
-            'product_code' => 'Demo000',
-            'product_garage' => 'A',
-            'product_store' => 20,
-            'product_track' => 3,
-            'selling_price' => 50000,
-        ]);
+        // Assuming you have the following categories and suppliers
+        $categories = [1, 2, 3, 4, 5]; // Example category IDs
+        $suppliers = [1, 2]; // Example supplier IDs
+        $garages = ['A', 'B', 'C']; // Example garages
+        // Get current date
+        $currentDate = now();
+
+        // Add two years to the current date
+        $expireDate = $currentDate->copy()->addYears(2);
+
+        $fakeProductNames = [
+            'CozyNest Comforter', 'AquaGlide Shower Curtain', 'FreshBreeze Air Purifier',
+            'Lumina Glow Lamp', 'SilentWhisper Ceiling Fan', 'PureWave Water Filter',
+            'HarmonyTone Bluetooth Speaker', 'ComfortCloud Mattress Topper',
+            'SwiftSweep Robot Vacuum', 'EcoGuard Recycling Bin', 'LuxeSilk Bed Sheets',
+            'GentleDry Towels', 'SparkleShine Window Cleaner', 'WarmHaven Electric Blanket',
+            'EcoFlow Faucet Aerator', 'BreezeCool Tower Fan', 'SoftTouch Pillows',
+            'SparkClean Dishwasher Pods', 'FreshBliss Reed Diffuser', 'CozyHug Throw Blanket',
+            'BrightBeam LED Bulbs', 'PureBreeze Humidifier', 'SereneSounds White Noise Machine',
+            'AquaShield Shower Mat', 'VelvetFeel Duvet Cover', 'EasyFold Laundry Basket',
+            'BlissMorn Coffee Maker', 'QuietGuard Door Seal', 'CleanSweep Broom Set',
+            'EcoLite Solar Lantern', 'ScentWave Wax Warmer', 'DreamZone Sleep Mask',
+            'QuickDry Bath Mat', 'ChillEase Cooling Pad', 'SoftGlow Night Light',
+            'RapidHeat Microwaveable Heating Pad', 'AquaLux Bathrobe', 'CozyCradle Baby Bassinet',
+            'SmoothMove Furniture Sliders', 'PureMist Essential Oil Diffuser',
+            'Sunbeam Garden Lights', 'WhisperSoft Air Conditioner', 'UltraSeal Food Storage Containers',
+            'FreshWave Odor Eliminator', 'SnugRest Pet Bed', 'AquaFrost Ice Maker',
+            'FlexClean Mop System', 'GentleGrip Hangers', 'DreamComfort Recliner',
+            'CozyNest Floor Cushion',
+        ];
+
+        foreach ($fakeProductNames as $index => $productName) {
+            Product::create([
+                'id' => $index + 1,
+                'product_name' => $productName,
+                'category_id' => $faker->randomElement($categories),
+                'supplier_id' => $faker->randomElement($suppliers),
+                'product_code' => $faker->bothify('Demo###'),
+                'product_garage' => $faker->randomElement($garages),
+                'product_store' => $faker->numberBetween(10, 500),
+                'product_track' => $faker->numberBetween(1, 20),
+                'buying_date' => $faker->date(),
+                'expire_date' => $expireDate->format('Y-m-d'),
+                'buy_price' => $faker->numberBetween(100, 1000) * 100,
+                'selling_price' => $faker->numberBetween(150, 1500) * 100,
+                // Omit 'product_image' and 'unit'
+            ]);
+        }
     }
 }

@@ -332,6 +332,10 @@ Route::controller(TransportController::class)->group(function () {
     Route::get('edit/transport/{id}', 'EditTransport')->name('edit.transport'); // edit transport route
     Route::post('update/transport', 'UpdateTransport')->name('update.transport'); // update transport route
     Route::get('delete/transport/{id}', 'DeleteTransport')->name('delete.transport'); // delete transport route
+
+    // Transport History
+    Route::get('detail/transport', 'Transport')->name('detail.transport'); // All transport history
+    Route::get('delete/detail/tranport/{id}', 'DeleteDetailTransport')->name('delete.detail'); // Delete transport history
 });
 
 require __DIR__ . '/auth.php';

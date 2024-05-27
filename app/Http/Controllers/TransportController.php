@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transport;
+use App\Models\TransportCharge;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -72,5 +73,25 @@ class TransportController extends Controller
             'alert-type' => 'success',
         ];
         return redirect()->route('all.transport')->with($noti);
+    }
+
+    // Transport Details Method
+    public function Transport()
+    {
+        $transports = TransportCharge::latest()->get();
+        return view('backend.transport.transport', compact('transports'));
+    }
+
+    // Delete Detail Transport
+    public function DeleteDetailTransport($id)
+    {
+
+        TransportCharge::findOrFail($id)->delete();
+
+        $noti = [
+            'message' => 'Transport Delete Successfully',
+            'alert-type' => 'success',
+        ];
+        return redirect()->route('detail.transport')->with($noti);
     }
 }

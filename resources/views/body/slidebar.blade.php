@@ -38,7 +38,7 @@
 
 
 
-                <li class="menu-title mt-2">Apps</li>
+                <li class="menu-title mt-2">Shop Manage</li>
                 {{-- @if (Auth::user()->can('employee.menu'))
                     <li>
                         <a href="#employee" data-bs-toggle="collapse">
@@ -134,28 +134,6 @@
                     </div>
                 </li>
 
-                <li class="my-1">
-                    <a href="#transport" data-bs-toggle="collapse">
-                        <i class="fas fa-truck"></i>
-                        <span> Transport Manage </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="transport">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="{{ route('all.transport') }}">All Transport</a>
-                            </li>
-
-
-                            <li>
-                                <a href="{{ route('add.transport') }}">Add Transport</a>
-                            </li>
-
-
-
-                        </ul>
-                    </div>
-                </li>
 
                 {{-- @if (Auth::user()->can('salary.menu'))
                     <li>
@@ -259,36 +237,7 @@
                     </li>
                 @endif
 
-                @if (Auth::user()->can('warehouse.menu'))
-                    <li>
-                        <a href="#inventory" data-bs-toggle="collapse">
-                            <i class="fas fa-boxes"></i>
-                            <span> စတို စီမံခန့်ခွဲခြင်း </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="inventory">
-                            <ul class="nav-second-level">
-                                @if (Auth::user()->can('warehouse.all'))
-                                    <li>
-                                        <a href="{{ route('search.inventory') }}">ကုန်ပစ္စည်းရှာခြင်း </a>
-                                    </li>
-                                @endif
-                                @if (Auth::user()->can('warhouse.add'))
-                                    <li>
-                                        <a href="{{ route('all.inventory') }}">All Inventory</a>
-                                    </li>
-                                @endif
-                                @if (Auth::user()->can('warhouse.add'))
-                                    <li>
-                                        <a href="{{ route('all.transfer.record') }}">All Tranfers</a>
-                                    </li>
-                                @endif
 
-
-                            </ul>
-                        </div>
-                    </li>
-                @endif
                 {{-- @if (Auth::user()->can('order.menu'))
                     <li>
                         <a href="#orders" data-bs-toggle="collapse">
@@ -339,6 +288,37 @@
                         </ul>
                     </div>
                 </li>
+                <li class="menu-title mt-2">Store Management</li>
+                @if (Auth::user()->can('warehouse.menu'))
+                    <li>
+                        <a href="#inventory" data-bs-toggle="collapse">
+                            <i class="fas fa-boxes"></i>
+                            <span> စတို စီမံခန့်ခွဲခြင်း </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="inventory">
+                            <ul class="nav-second-level">
+                                @if (Auth::user()->can('warehouse.all'))
+                                    <li>
+                                        <a href="{{ route('search.inventory') }}">ကုန်ပစ္စည်းရှာခြင်း </a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->can('warhouse.add'))
+                                    <li>
+                                        <a href="{{ route('all.inventory') }}">All Inventory</a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->can('warhouse.add'))
+                                    <li>
+                                        <a href="{{ route('all.transfer.record') }}">All Tranfers</a>
+                                    </li>
+                                @endif
+
+
+                            </ul>
+                        </div>
+                    </li>
+                @endif
                 <li class="my-1">
                     <a href="#stock" data-bs-toggle="collapse">
                         <i class=" fas fa-book-open"></i>
@@ -364,31 +344,12 @@
                         </ul>
                     </div>
                 </li>
-                @if (Auth::user()->can('role&permission.menu'))
-                    <li class="my-1">
-                        <a href="#permission" data-bs-toggle="collapse">
-                            <i class="fas fa-user-shield"></i>
-                            <span> Role & Permission </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="permission">
-                            <ul class="nav-second-level">
-                                <li>
-                                    <a href="{{ route('all#permission') }}">All Permission</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('all#roles') }}">All Roles</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('add#rolepermission') }}">Roles In Permission</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('all#rolepermission') }}">All Roles In Permission</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                @endif
+
+
+
+
+
+                <li class="menu-title mt-2">Admin Manage</li>
                 @if (Auth::user()->can('role&permission.menu'))
                     <li class="my-1">
                         <a href="#admin" data-bs-toggle="collapse">
@@ -414,9 +375,58 @@
                     </li>
                 @endif
 
+                @if (Auth::user()->can('role&permission.menu'))
+                    <li class="my-1">
+                        <a href="#permission" data-bs-toggle="collapse">
+                            <i class="fas fa-user-shield"></i>
+                            <span> Role & Permission </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="permission">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="{{ route('all#permission') }}">All Permission</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('all#roles') }}">All Roles</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('add#rolepermission') }}">Roles In Permission</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('all#rolepermission') }}">All Roles In Permission</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
+                @if (Auth::user()->can('admin.manage'))
+                    <li class="my-1">
+                        <a href="#transport" data-bs-toggle="collapse">
+                            <i class="fas fa-truck"></i>
+                            <span> Transport Manage </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="transport">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="{{ route('all.transport') }}">All Transport</a>
+                                </li>
 
 
-                <li class="menu-title mt-2">Custom</li>
+                                <li>
+                                    <a href="{{ route('add.transport') }}">Add Transport</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ route('detail.transport') }}">Transport Detail</a>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+                @endif
 
                 <li class="my-1">
                     <a href="#addexpense" data-bs-toggle="collapse">

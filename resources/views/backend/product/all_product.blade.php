@@ -62,7 +62,7 @@
                                         <td><img src="{{ asset($item->product_image ?: 'upload/no_image.jpg') }}"
                                                 style="width:50px;height:40px;" alt=""></td>
                                         <td>{{ $item->product_name }}</td>
-                                        <td>{{ $item['category']['category_name'] }}</td>
+                                        <td>{{ $item->category->category_name }}</td>
                                         <td>{{ $item['supplier']['name'] }}</td>
                                         <td>{{ $item->product_code }}</td>
                                         <td>{{ $item->selling_price }}</td>

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use File;
-use Artisan;
 use App\Models\User;
+use Artisan;
+use File;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
@@ -146,17 +146,19 @@ class AdminController extends Controller
             'alert-type' => 'success',
         ];
         return redirect()->route('all#admin')->with($noti);
-    }// End Method
+    } // End Method
 
     // Edit Admin Method
-    public function EditAdmin($id){
+    public function EditAdmin($id)
+    {
         $roles = Role::all();
         $adminUser = User::findOrFail($id);
-        return view('backend.admin.edit_admin',compact('roles','adminUser'));
+        return view('backend.admin.edit_admin', compact('roles', 'adminUser'));
     } // End Method
 
     // Update Admin Method
-    public function UpdateAdmin(Request $request){
+    public function UpdateAdmin(Request $request)
+    {
         $adminId = $request->id;
 
         $user = User::findOrFail($adminId);
@@ -179,10 +181,11 @@ class AdminController extends Controller
     } // End Method
 
     // Delete Admin Method
-    public function DeleteAdmin ($id){
+    public function DeleteAdmin($id)
+    {
 
         $user = User::findOrFail($id);
-        if(!is_null($user)){
+        if (!is_null($user)) {
             $user->delete();
         }
         $noti = [
@@ -190,17 +193,17 @@ class AdminController extends Controller
             'alert-type' => 'success',
         ];
         return redirect()->back()->with($noti);
-    }// End Method
-
-
+    } // End Method
 
     //////////////////////Database Backup Method//////////////////////////
-    public function DatabaseBackup(){
-        return view('admin.db_backup')->with('files',File::allFiles(storage_path('/app/Pencil_POS')));
+    public function DatabaseBackup()
+    {
+        return view('admin.db_backup')->with('files', File::allFiles(storage_path('/app/Pencil_POS')));
     } // End Method
 
     // Backup Now Method
-    public function BackupNow(){
+    public function BackupNow()
+    {
         Artisan::call('backup:run');
 
         $noti = [
@@ -212,19 +215,40 @@ class AdminController extends Controller
     } // End Method
 
     // Download Db
-    public function DownloadDb($getFilename){
+    public function DownloadDb($getFilename)
+    {
+        // Ensure the file exists before attempting to download
+        $path = storage_path('app/Pencil_POS/' . $getFilename);
+        if (!file_exists($path)) {
+            $noti = [
+                'message' => 'File not found.',
+                'alert-type' => 'error',
+            ];
+            return redirect()->back()->with($noti);
+        }
 
-        $path = storage_path('app/Pencil_POS/'.$getFilename);
         return response()->download($path);
-    } // End Method
+    }
+    // Delete Database
+    public function DeleteDb($getFilename)
+    {
+        // Ensure the file exists before attempting to delete
+        $filePath = 'Pencil_POS/' . $getFilename;
+        if (!Storage::exists($filePath)) {
+            $noti = [
+                'message' => 'File not found.',
+                'alert-type' => 'error',
+            ];
+            return redirect()->back()->with($noti);
+        }
 
-    // Delete Databasde
-    public function DeleteDb ($getFilename){
-        Storage::delete('Pencil_POS/'.$getFilename);
+        Storage::delete($filePath);
+
         $noti = [
             'message' => 'Database Deleted Successfully',
             'alert-type' => 'success',
         ];
+
         return redirect()->back()->with($noti);
-    } // End Method
+    }
 }
