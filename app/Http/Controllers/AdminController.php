@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Artisan;
 use File;
-use Illuminate\Http\RedirectResponse;
+use Artisan;
+use App\Models\Shop;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
@@ -123,8 +124,9 @@ class AdminController extends Controller
     public function AddAdmin()
     {
         $roles = Role::all();
+        $shops = Shop::all();
 
-        return view('backend.admin.add_admin', compact('roles'));
+        return view('backend.admin.add_admin', compact('roles','shops'));
     } // End Method
 
     // Store Admin Method
@@ -134,6 +136,7 @@ class AdminController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
+        $user->shop_id = $request->shopId;
         $user->password = Hash::make($request->password);
         $user->save();
 
@@ -151,20 +154,23 @@ class AdminController extends Controller
     // Edit Admin Method
     public function EditAdmin($id)
     {
+        $shops = Shop::all();
         $roles = Role::all();
         $adminUser = User::findOrFail($id);
-        return view('backend.admin.edit_admin', compact('roles', 'adminUser'));
+        return view('backend.admin.edit_admin', compact('roles', 'adminUser','shops'));
     } // End Method
 
     // Update Admin Method
     public function UpdateAdmin(Request $request)
     {
+
         $adminId = $request->id;
 
         $user = User::findOrFail($adminId);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
+        $user->shop_id = $request->shopId;
         $user->save();
 
         $user->roles()->detach(); // previous role detach

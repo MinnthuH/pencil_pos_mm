@@ -55,11 +55,9 @@
 
                         <table class="table table-bordered border-dark mb-0">
                             <thead>
-                                <tr>
+                                <tr class="bg-secondary text-white">
                                     <th>Name</th>
                                     <th>QTY</th>
-                                    <th>Price</th>
-                                    <th>SubTotal</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -72,7 +70,7 @@
 
                                         <td>{{ $cart->name }}</td>
                                         <td>
-                                            <form action="{{ url('/cart_update/' . $cart->rowId) }}" method="post">
+                                            <form action="{{ url('/stock/cart_update/' . $cart->rowId) }}" method="post">
                                                 @csrf
                                                 <input type="number" name="qty" style="width:40px;" min="1"
                                                     value="{{ $cart->qty }}">
@@ -82,7 +80,7 @@
                                         </td>
                                         <td>{{ $cart->price }}</td>
                                         <td>{{ $cart->price * $cart->qty }}</td>
-                                        <td><a href="{{ url('/cart_remove/' . $cart->rowId) }}"
+                                        <td><a href="{{ url('/stock/cart_remove/' . $cart->rowId) }}"
                                                 style="margin-top:-2px;"><i class="fas fa-trash-alt"
                                                     style="color:rgb(25, 7, 187)"></i></a>
                                         </td>
@@ -90,35 +88,23 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="bg-dark">
+                        {{-- <div class="bg-dark">
                             <br>
                             <p style="font-size:18px; color:#fff ">Quantity : {{ Cart::count() }} Pcs</p>
-                            <p style="font-size:18px; color:#fff ">SubTotal : {{ Cart::subtotal() }} Ks</p>
-                            {{-- <p style="font-size:18px; color:#fff ">Tax : {{Cart::tax()}}</p> --}}
-                            <p>
-                            <h2 class="text-white">Total :</h2>
-                            <h1 class="text-white">{{ Cart::total() }}</h1>
-                            </p>
+
                             <br>
-                        </div>
+                        </div> --}}
                     </div>
-                    <form action="{{ url('create-invoice') }}" id="myForm" method="post">
+                    <form action="{{ url('/create-transfer/order') }}" id="myForm" method="post">
                         @csrf
 
                         <div class="form-group mb-3">
-{{--
-                            <select name="transportId" class="form-select mt-3" id="example-select">
-                                <option selected disabled>Transport ရွေးချယ်ပါ...</option>
-                                @foreach ($transports as $transport)
-                                    <option value="{{ $transport->id }}">{{ $transport->transport_type }}
-                                    </option>
-                                @endforeach
-                            </select> --}}
 
-                            <select name="customerId" class="form-select mt-3" id="example-select">
-                                <option selected disabled>ဖေါက်သည် ရွေးချယ်ပါ...</option>
-                                @foreach ($customers as $cust)
-                                    <option value="{{ $cust->id }}">{{ $cust->name }}
+
+                            <select name="shopId" class="form-select mt-3" id="example-select">
+                                <option selected disabled>Please Select Shop</option>
+                                @foreach ($shops as $shop)
+                                    <option value="{{ $shop->id }}">{{ $shop->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -160,7 +146,7 @@
                     <div class="row" id="product-list-container">
                         @foreach ($products as $key => $item)
                             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
-                                <form action="{{ url('/add-cart') }}" method="post">
+                                <form action="{{ url('stocks/add-cart') }}" method="post">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $item->id }}">
                                     <input type="hidden" name="porductName" value="{{ $item->product_name }}">
@@ -189,7 +175,7 @@
                                                 </div>
                                                 <!-- Use position-absolute, top-0, and end-0 classes to position the selling price badge -->
                                                 <span
-                                                    class="badge bg-primary position-absolute top-0 end-0">{{ $item->quantity }}
+                                                    class="badge bg-primary position-absolute top-0 end-0">{{ $item->product_store }}
                                                 </span>
                                                 <!-- Use position-absolute, top-0, and start-0 classes to position the product store badge -->
                                             </div>
@@ -229,13 +215,13 @@
     $(document).ready(function() {
         $('#myForm').validate({
             rules: {
-                customerId: {
+                shopId: {
                     required: true,
                 },
             },
             messages: {
-                customerId: {
-                    required: 'ဖေါက်သည် ရွေးချယ်ပေးရန် လိုအပ်ပါသည်',
+                shopId: {
+                    required: 'ဆိုင်ရွေးချယ်ပေးရန် လိုအပ်ပါသည်',
                 },
 
             },
@@ -273,7 +259,7 @@
                 // Create HTML for each product card
                 productListHtml += `
                 <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
-                <form action="{{ url('/add-cart') }}" method="post">
+                <form action="{{ url('stocks/add-cart') }}" method="post">
                     @csrf
                     <input type="hidden" name="id" value="${product.id}">
                     <input type="hidden" name="porductName" value="${product.product_name}">
@@ -290,7 +276,7 @@
                                 <span class="badge bg-dark">${product.selling_price}&nbsp;ks</span>
                             </div>
 
-                            <span class="badge bg-primary position-absolute top-0 end-0">${product.quantity}</span>
+                            <span class="badge bg-primary position-absolute top-0 end-0">${product.product_store}</span>
                         </div>
                     </button>
                 </form>

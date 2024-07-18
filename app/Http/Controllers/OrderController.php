@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\Product;
+use Carbon\Carbon;
 use App\Models\Sale;
 use App\Models\Shop;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Customer;
 use App\Models\Transport;
+use App\Models\OrderDetail;
+use App\Models\ShopProduct;
+use Illuminate\Http\Request;
 use App\Models\TransportCharge;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class OrderController extends Controller
 {
@@ -31,9 +33,11 @@ class OrderController extends Controller
             $rtotal = $request->total;
             $rpay = $request->payNow;
             $invoiceNo = $this->generateInvoiceNumber();
+            $shopId = Auth::user()->shop_id;
 
             $result = Sale::insertGetId([
                 'user_id' => $request->userId,
+                'shop_id'=>$shopId,
                 'customer_id' => $request->customerId,
                 'deli_id' => $request->deliId,
                 'invoice_date' => Carbon::now(),
@@ -68,20 +72,6 @@ class OrderController extends Controller
             $order_id = Order::insertGetId($data);
             $contents = Cart::content();
 
-            if (!is_null($request->transportId)) {
-                $transport = Transport::where('id', $request->transportId)->first();
-                $transportCharge = $transport->transport_chagre;
-                $staff_amount = $transportCharge * (1 / 3); // calculate for staff 1:3 ratio
-                $owner_amount = $transportCharge * (2 / 3); // calculate for owner 2:3 ratio
-
-                TransportCharge::insert([
-                    'sale_id' => $sale_id,
-                    'transport_id' => $request->transportId,
-                    'staff_amount' => $staff_amount,
-                    'owner_amount' => $owner_amount,
-                    'created_at' => Carbon::now(),
-                ]);
-            }
 
             $pdata = array();
             foreach ($contents as $content) {
@@ -98,10 +88,25 @@ class OrderController extends Controller
 
             } // end foreach
 
-            $noti = [
-                'message' => 'Order Complete Successfully',
-                'alert-type' => 'success',
-            ];
+            foreach ($contents as $content) {
+                // Retrieve ShopProduct record for the current product
+                $shopProduct = ShopProduct::where('shop_id', $shopId)
+                    ->where('product_id', $content->id)
+                    ->first();
+
+                if ($shopProduct) {
+                    // Calculate the new quantity after subtracting sold quantity
+                    $newQuantity = $shopProduct->quantity - $content->qty;
+
+                    // Update the quantity in ShopProduct
+                    $shopProduct->update(['quantity' => $newQuantity]);
+                } else {
+                    // Handle case where ShopProduct record doesn't exist (optional)
+                    // This might occur if the product was not found in ShopProduct
+                    // You can choose to log this or handle it based on your application logic
+                    // For example, create a new ShopProduct record for the product
+                }
+            }
             // Commit the transaction if everything is successful
             DB::commit();
             // Additional code or redirect to a success page
@@ -109,12 +114,11 @@ class OrderController extends Controller
             $returnChange = $request->returnChange;
             $customerId = $request->customerId;
             $customer = Customer::where('id', $customerId)->first();
-            $transportId = $request->transportId;
-            $transport = Transport::where('id', $transportId)->first();
-            $sale = Sale::latest()->firstOrFail();
-            $shop = Shop::first();
+            $shop=Shop::Where('id',$shopId)->first();
 
-            return view('backend.invoice.print_invoice_80mm', compact('sale', 'customer', 'rpay', 'returnChange', 'contents', 'shop', 'transport'));
+            $sale = Sale::latest()->firstOrFail();
+
+            return view('backend.invoice.print_invoice_80mm', compact('sale', 'customer', 'rpay', 'returnChange', 'contents', 'shop'));
             // return view('backend.invoice.print_invoice_A5', compact('sale','customer','rpay','returnChange','contents','shop',''transport''));
             // return view('backend.invoice.print_invoice', compact('sale','customer','rpay','returnChange','contents','shop',''transport''));
 

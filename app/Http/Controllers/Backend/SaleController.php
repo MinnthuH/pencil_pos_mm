@@ -15,12 +15,27 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
 {
-    // All Sale Method
-    public function allSale()
-    {
-        $sales = Sale::orderBy('id', 'DESC')->get();
-        return view('backend.sale.all_sale', compact('sales'));
-    } // End Method
+   // All Sale Method
+   public function allSale($id)
+   {
+       $sales = Sale::where('shop_id', $id)->orderBy('id', 'DESC')->get();
+
+       // Get total sales amount by day
+       $dailyTotals = Sale::selectRaw('DATE(created_at) as date, SUM(total) as total')
+                           ->where('shop_id', $id)
+                           ->groupBy('date')
+                           ->orderBy('date', 'DESC')
+                           ->get();
+
+       // Calculate today's total sales
+       $todayTotal = Sale::where('shop_id', $id)
+                         ->whereDate('created_at', Carbon::today())
+                         ->sum('total');
+
+       return view('backend.sale.all_sale', compact('sales', 'id', 'dailyTotals', 'todayTotal'));
+   } // End Method
+   // End Method
+
 
     // Delete Sale Method
     public function DeleteSale($id){
@@ -29,7 +44,7 @@ class SaleController extends Controller
             'message' => 'အရောင်းစာရင်း ပယ်ဖျက်ခြင်း အောင်မြင်ပါသည်',
             'alert-type' => 'success',
         ];
-        return redirect()->route('all#sale')->with($noti);
+        return redirect()->back()->with($noti);
       }// End Method
 
     // Trash Sale Method
@@ -56,8 +71,10 @@ class SaleController extends Controller
     // Detail Sale
     public function detailSale($id)
     {
-        $shop = Shop::first();
+
         $sale = Sale::where('id', $id)->first();
+        $shop = Shop::find($sale->shop_id);
+
         $saleItem = OrderDetail::with('product')->where('sale_id', $id)->orderBy('id', 'DESC')->get();
         return view('backend.sale.sale_reprint_80mm', compact('sale', 'saleItem','shop'));
         // return view('backend.sale.sale_reprint_A5', compact('sale', 'saleItem','shop'));
@@ -69,41 +86,41 @@ class SaleController extends Controller
     public function stockProduct($id)
     {
 
-        $product = OrderDetail::where('sale_id', $id)->get();
-        foreach ($product as $item) {
-            Product::where('id', $item->product_id)
-                ->update(['product_store' => DB::raw('product_store-' . $item->quantity)]);
-        }
+        // $product = OrderDetail::where('sale_id', $id)->get();
+        // foreach ($product as $item) {
+        //     Product::where('id', $item->product_id)
+        //         ->update(['product_store' => DB::raw('product_store-' . $item->quantity)]);
+        // }
         return redirect()->route('pos');
 
     } // End Method
 
-    public function exportDailySales()
+    public function exportDailySales($id)
     {
         $currentDate = Carbon::now()->format('Y-m-d');
-        $sales = Sale::with('user', 'customer') // Eager load the user and customer relationships.
+        $sales = Sale::where('shop_id',$id)->with('user', 'customer') // Eager load the user and customer relationships.
             ->whereDate('invoice_date', $currentDate)
             ->get();
 
         return Excel::download(new SalesExport($sales), 'daily_sales.xlsx');
     }
 
-    public function exportWeeklySales()
+    public function exportWeeklySales($id)
 {
     $startDate = Carbon::now()->startOfWeek()->format('Y-m-d');
     $endDate = Carbon::now()->endOfWeek()->format('Y-m-d');
-    $sales = Sale::with('user', 'customer') // Eager load the user and customer relationships.
+    $sales = Sale::where('shop_id',$id)->with('user', 'customer') // Eager load the user and customer relationships.
         ->whereBetween('invoice_date', [$startDate, $endDate])
         ->get();
 
     return Excel::download(new SalesExport($sales), 'weekly_sales.xlsx');
 }
 
-public function exportMonthlySales()
+public function exportMonthlySales($id)
 {
     $currentMonth = Carbon::now()->format('m');
     $currentYear = Carbon::now()->format('Y');
-    $sales = Sale::with('user', 'customer') // Eager load the user and customer relationships.
+    $sales = Sale::where('shop_id',$id)->with('user', 'customer') // Eager load the user and customer relationships.
         ->whereMonth('invoice_date', $currentMonth)
         ->whereYear('invoice_date', $currentYear)
         ->get();

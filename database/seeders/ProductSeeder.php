@@ -26,24 +26,7 @@ class ProductSeeder extends Seeder
         $expireDate = $currentDate->copy()->addYears(2);
 
         $fakeProductNames = [
-            'CozyNest Comforter', 'AquaGlide Shower Curtain', 'FreshBreeze Air Purifier',
-            'Lumina Glow Lamp', 'SilentWhisper Ceiling Fan', 'PureWave Water Filter',
-            'HarmonyTone Bluetooth Speaker', 'ComfortCloud Mattress Topper',
-            'SwiftSweep Robot Vacuum', 'EcoGuard Recycling Bin', 'LuxeSilk Bed Sheets',
-            'GentleDry Towels', 'SparkleShine Window Cleaner', 'WarmHaven Electric Blanket',
-            'EcoFlow Faucet Aerator', 'BreezeCool Tower Fan', 'SoftTouch Pillows',
-            'SparkClean Dishwasher Pods', 'FreshBliss Reed Diffuser', 'CozyHug Throw Blanket',
-            'BrightBeam LED Bulbs', 'PureBreeze Humidifier', 'SereneSounds White Noise Machine',
-            'AquaShield Shower Mat', 'VelvetFeel Duvet Cover', 'EasyFold Laundry Basket',
-            'BlissMorn Coffee Maker', 'QuietGuard Door Seal', 'CleanSweep Broom Set',
-            'EcoLite Solar Lantern', 'ScentWave Wax Warmer', 'DreamZone Sleep Mask',
-            'QuickDry Bath Mat', 'ChillEase Cooling Pad', 'SoftGlow Night Light',
-            'RapidHeat Microwaveable Heating Pad', 'AquaLux Bathrobe', 'CozyCradle Baby Bassinet',
-            'SmoothMove Furniture Sliders', 'PureMist Essential Oil Diffuser',
-            'Sunbeam Garden Lights', 'WhisperSoft Air Conditioner', 'UltraSeal Food Storage Containers',
-            'FreshWave Odor Eliminator', 'SnugRest Pet Bed', 'AquaFrost Ice Maker',
-            'FlexClean Mop System', 'GentleGrip Hangers', 'DreamComfort Recliner',
-            'CozyNest Floor Cushion',
+            'Pucci','Oreo','Shark','Water','coffee candy'
         ];
 
         foreach ($fakeProductNames as $index => $productName) {

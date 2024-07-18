@@ -5,33 +5,63 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\ShopProduct;
 use App\Models\Transport;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PosController extends Controller
 {
-    // POS Dashboard Method
     public function Pos()
     {
-        $products = Product::where('expire_date', '>', Carbon::now())
-            ->whereColumn('product_store', '>=', 'product_track')
+        $shopId = Auth::user()->shop_id;
+
+        // Get the product IDs and their quantities for the given shop
+        $shopProducts = ShopProduct::where('shop_id', $shopId)
+            ->where('quantity', '>=', 3)
+            ->get()
+            ->keyBy('product_id');
+
+        $shopProductIds = $shopProducts->keys()->toArray();
+
+        // Get the products with the filtered product IDs
+        $products = Product::whereIn('id', $shopProductIds)
+            ->where('expire_date', '>', Carbon::now())
             ->latest()
             ->paginate(10); // Change the number '10' to the desired number of products per page
-        // dd($products);
 
+        // Add quantity to each product
+        foreach ($products as $product) {
+            $product->quantity = $shopProducts->get($product->id)->quantity ?? 0;
+        }
+
+        // Fetch other data
         $customers = Customer::latest()->get();
         $categories = Category::latest()->get();
         $transports = Transport::latest()->get();
 
-        return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'transports'));
+        return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'transports', 'shopProducts'));
     }
 
+    // End Method
+
+    // Search by Category/name/code
     public function GetProductsByCategory(Request $request, $categoryId)
     {
+        $shopId = Auth::user()->shop_id;
+
+        // Get the product IDs and their quantities for the given shop and category
+        $shopProducts = ShopProduct::where('shop_id', $shopId)
+            ->where('quantity', '>=', 3)
+            ->get()
+            ->keyBy('product_id');
+
+        $shopProductIds = $shopProducts->keys()->toArray();
+
         $query = Product::where('category_id', $categoryId)
-            ->whereColumn('product_store', '>=', 'product_track')
+            ->whereIn('id', $shopProductIds)
             ->where('expire_date', '>', Carbon::now())
             ->latest();
 
@@ -43,7 +73,13 @@ class PosController extends Controller
                     ->orWhere('product_code', 'like', '%' . $searchTerm . '%');
             });
         }
-        $products = $query->paginate(20); // Change the number '10' to the desired number of products per page
+
+        $products = $query->paginate(20); // Change the number '20' to the desired number of products per page
+
+        // Add quantity to each product
+        foreach ($products as $product) {
+            $product->quantity = $shopProducts->get($product->id)->quantity ?? 0;
+        }
 
         return response()->json($products);
     }
@@ -67,6 +103,7 @@ class PosController extends Controller
         ];
         return redirect()->back()->with($noti);
     } // End Method
+
 
     // Update Cart Method
     public function UpdateCart(Request $request, $rowId)
@@ -102,8 +139,6 @@ class PosController extends Controller
 
         $cartItem = Cart::content();
         $customerId = $request->customerId;
-        $transportId = $request->transportId;
-        $tranport = Transport::where('id', $transportId)->first();
         $customer = Customer::where('id', $customerId)->first();
         $Capital = Cart::content();
         $totalBuyPrice = 0; // Initialize totalBuyPrice to zero
@@ -114,7 +149,7 @@ class PosController extends Controller
 
         // dd($cartItem->toArray());
 
-        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice', 'tranport'));
+        return view('backend.invoice.product_invoice', compact('cartItem', 'customer', 'totalBuyPrice'));
     } // End Method
 
 }

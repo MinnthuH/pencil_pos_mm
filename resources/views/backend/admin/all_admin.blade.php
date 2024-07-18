@@ -39,6 +39,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Role</th>
+                                    <th>Shop</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -57,6 +58,7 @@
                                                 <span class="badge badge-pill bg-danger">{{ $role->name }}</span>
                                             @endforeach
                                         </td>
+                                        <td>{{ $item->shop ? $item->shop->name : 'No Shop Assigned' }}</td>
                                         <td>
                                             <a href="{{ route('edit#admin', $item->id) }}" class="btn btn-info sm"
                                                 title="Edit Data"><i class="far fa-edit"></i></a>

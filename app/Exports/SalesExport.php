@@ -21,20 +21,18 @@ class SalesExport implements FromCollection, WithHeadings
         return collect($this->salesData)->map(function ($sale) {
             $cashierName = $sale->user->name ?? '';
             $customerName = $sale->customer->name ?? '';
-            $deliName = $sale->deli->name ?? '';
+            $shop = $sale->shop->name ?? '';
 
             return [
                 $cashierName,
                 $customerName,
-                $deliName,
+                $shop,
                 $sale->invoice_date,
                 $sale->invoice_no,
                 $sale->payment_type,
                 $sale->sub_total,
-                $sale->discount,
                 $sale->total,
                 $sale->accepted_ammount,
-                $sale->due,
                 $sale->return_change,
             ];
         });
@@ -45,15 +43,13 @@ class SalesExport implements FromCollection, WithHeadings
         return [
             'Cashier Name',
             'Customer Name',
-            'Deli Name',
+            'Shop Name',
             'Invoice Date',
             'Invoice No',
             'Payment Type',
             'Sub Total',
-            'Discount',
             'Total',
             'Pay',
-            'Due',
             'Return Change',
         ];
     }

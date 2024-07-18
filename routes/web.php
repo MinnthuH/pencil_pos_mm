@@ -72,8 +72,16 @@ Route::middleware(['auth'])->group(function () {
 
 // All Shop Route
 Route::controller(ShopController::class)->group(function () {
-    Route::get('/shop-info', 'ShopInfo')->name('shop#info'); // shop info page
+    Route::get('/all/shop', 'AllShop')->name('all#shop'); // all shop list page
+    Route::get('/add/shop', 'AddShop')->name('add#shop'); // add shop page
+    Route::post('/store/shop', 'StoreShop')->name('store#shop'); // store shop data
+
+    Route::get('/shop-info/{id}', 'ShopInfo')->name('shop#info'); // shop info page
     Route::post('/shopinfo/update', 'ShopInfoUpdate')->name('shop#infoUpdate'); // shop info page
+    Route::get('/shop/delete/{id}', 'ShopDelete')->name('shop#delete'); // shop delete
+
+    Route::get('/shop/stock/{id}', 'ShopStock')->name('shop.stock'); // shop stock
+    Route::post('/stock/transfer', 'StockTransfer')->name('stock.transfer'); //stock transfer to shop from shop stock list
 });
 
 // Employee All Route
@@ -232,15 +240,15 @@ Route::controller(OrderController::class)->group(function () {
 
 // Sale All Route
 Route::controller(SaleController::class)->group(function () {
-    Route::get('/all/sale', 'allSale')->name('all#sale'); // All Sale
+    Route::get('/all/sale/{id}', 'allSale')->name('all#sale'); // All Sale
     Route::get('/sale/delete/{id}', 'DeleteSale')->name('delete.sale'); // Delete Sale
     Route::get('/trash/sale', 'TrashSale')->name('trash.sale'); // Trash Sale
     Route::get('/sale/force-delete/{id}', 'ForceDeleteSale')->name('force.delete.sale'); // Force Delete Sale
     Route::get('/sale/detail/{id}', 'detailSale')->name('detail#sale'); // Detail Sale
     Route::get('/stock/product/{id}', 'stockProduct')->name('stock#product'); // prodct stock - from pordcut_store from prodcuts
-    Route::get('sales/export/daily', 'exportDailySales')->name('sales.export.daily');
-    Route::get('sales/export/weekly', 'exportWeeklySales')->name('sales.export.weekly');
-    Route::get('sales/export/monthly', 'exportMonthlySales')->name('sales.export.monthly');
+    Route::get('sales/export/daily/{id}', 'exportDailySales')->name('sales.export.daily');
+    Route::get('sales/export/weekly/{id}', 'exportWeeklySales')->name('sales.export.weekly');
+    Route::get('sales/export/monthly/{id}', 'exportMonthlySales')->name('sales.export.monthly');
 
     Route::get('/due', 'PendingDue')->name('pending.due'); // Pending Due
     Route::get('/sale/due/{id}', 'SaleDueAjax'); // Pending Due
@@ -319,8 +327,28 @@ Route::controller(WarehouseInventory::class)->group(function () {
 
     Route::get('stock/inventory', 'StockInventory')->name('stock.inventory'); // stock inventory route
     Route::post('transfer-stock', 'TransferStock')->name('transfer.stock'); // transfer stock
+
+    Route::get('stock/mass_transfer', 'MassTransfer')->name('mass.transfer'); // stock mass transfer to shop
+    Route::post('stocks/add-cart', 'StockAddCart'); // Add card stock
+    Route::post('stock/cart_update/{rowId}', 'StockUpdateCart'); // Update Cart stock
+    Route::get('stock/cart_remove/{rowId}', 'StockRemoveCart'); // Remove Item stock
+    Route::post('/create-transfer/order', 'CraeateTransferOrder'); // Create Transfer Stock Order
+    Route::post('add/transfer', 'AddTransferStock')->name('add.transfer'); // Add Transfer
+
+    Route::post('/stock/transfer/import', 'ImportStockTransfer')->name('stock.transfer.import');
+
+    Route::get('stock/import', 'StockImport')->name('stock.import'); // stock import route
+
+    Route::get('export/stock', 'ExportStock')->name('export.stock'); // Export Stock to Warehouse with file
+    Route::post('import/stock', 'ImportStock')->name('import.stock'); // Import Stock to Warehouse with file
+
     Route::get('all/transfer-record', 'AllTransferRecord')->name('all.transfer.record'); // all transfer record
-    Route::get('delete/transfer-record/{id}', 'DeleteTransferRecord')->name('delete.transfer.record'); // Delete transfer record
+    Route::post('/delete-transfer-record', 'deleteRecord')->name('delete.transfer.record');
+
+    Route::get('/export/daily-transfer', 'exportDaily')->name('export.daily.transfer');
+    Route::get('/export/weekly-transfer', 'exportWeekly')->name('export.weekly.transfer');
+
+    // Route::get('delete/transfer-record/{id}', 'DeleteTransferRecord')->name('delete.transfer.record'); // Delete transfer record
 
 });
 

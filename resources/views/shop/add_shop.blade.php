@@ -2,7 +2,7 @@
 
 @section('admin')
 @section('title')
-    Shop Info | Pencil POS System
+    Add Shop | Pencil POS System
 @endsection
 {{-- jquery link  --}}
 <script src="{{ asset('backend/assets/jquery.js') }}"></script>
@@ -13,25 +13,25 @@
 
         <!-- start page title -->
         <div class="row">
-            <div class="col-12">
+            <div class="col-10">
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Shop Info</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Add Shop</a></li>
 
                         </ol>
                     </div>
-                    <h4 class="page-title">Shop Info</h4>
+                    <h4 class="page-title">Add Shop</h4>
                 </div>
             </div>
         </div>
         <!-- end page title -->
 
         <div class="row">
-            <div class="col-lg-4 col-xl-4">
+            {{-- <div class="col-lg-4 col-xl-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <img src="{{ asset($shopInfo->logo ?: 'upload/no_image.jpg') }}"
+                        <img src="{{ !empty($shopInfo->logo) ? url('upload/shop_logo/' . $shopInfo->logo) : url('upload/no_image.jpg') }}"
                             class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
 
                         <h4 class="mb-0">{{ $shopInfo->name }}</h4>
@@ -85,52 +85,50 @@
                 </div> <!-- end card -->
 
 
-            </div> <!-- end col-->
+            </div> <!-- end col--> --}}
 
-            <div class="col-lg-8 col-xl-8">
+            <div class="col-lg-10 col-xl-12">
                 <div class="card">
                     <div class="card-body">
 
 
                         <div class="tab-pane" id="settings">
-                            <form id="myForm" method="post" action="{{ route('shop#infoUpdate') }}" enctype="multipart/form-data">
+                            <form id="myForm" method="post" action="{{ route('store#shop') }}" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="id" value="{{ $shopInfo->id }}">
                                 <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Shop
                                     Info</h5>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="firstname" class="form-label">First Name</label>
-                                            <input type="text" name="name" class="form-control" id="firstname"
-                                                value="{{ $shopInfo->name }}" >
+                                            <label for="firstname" class="form-label">Shop Name</label>
+                                            <input type="text" name="name" class="form-control" >                                              >
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="lastname" class="form-label">Email</label>
                                             <input type="email" name="email" class="form-control" id="lastname"
-                                                value="{{ $shopInfo->email }}">
+                                                >
                                         </div>
                                     </div> <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="lastname" class="form-label">Phone</label>
                                             <input type="number" name="phone" class="form-control" id="lastname"
-                                                value="{{ $shopInfo->phone }}" >
+                                                 >
                                         </div>
                                     </div> <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="lastname" class="form-label">Address</label>
                                             <input type="text" name="address" class="form-control" id="lastname"
-                                                value="{{ $shopInfo->address }}" >
+                                                 >
                                         </div>
                                     </div> <!-- end col -->
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="lastname" class="form-label">Description</label>
-                                            <textarea class="form-control" name="descripton"  cols="30" rows="10">{{ $shopInfo->description }}</textarea>
+                                            <textarea class="form-control" name="descripton"  cols="30" rows="10"></textarea>
                                         </div>
                                     </div> <!-- end col -->
                                     <div class="col-md-12">
@@ -140,19 +138,19 @@
                                                 class="form-control">
                                         </div>
                                     </div> <!-- end col -->
-                                    <div class="col-md-12">
+                                    {{-- <div class="col-md-12">
                                         <div class="mb-3">
                                             <img id="showImage"
-                                                src="{{ asset($shopInfo->logo ?: 'upload/no_image.jpg') }}"
+                                                src="{{ !empty($shopInfo->logo) ? url('upload/shop_logo/' . $shopInfo->logo) : url('upload/no_image.jpg') }}"
                                                 class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
                                         </div>
-                                    </div> <!-- end col -->
+                                    </div> <!-- end col --> --}}
 
                                 </div> <!-- end row -->
 
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-success waves-effect waves-light mt-2"><i
-                                            class="mdi mdi-content-save"></i> Update</button>
+                                            class="mdi mdi-content-save"></i> Add</button>
                                 </div>
                             </form>
                         </div>

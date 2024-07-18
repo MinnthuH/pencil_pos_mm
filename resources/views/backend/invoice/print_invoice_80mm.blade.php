@@ -111,7 +111,7 @@
             <p>Invoice No :<strong>{{ $sale->invoice_no }}</strong></p>
             <p>Payment Type :<strong>{{ $sale->payment_type }}</strong></p>
             <p>Cashier :<strong>{{ Auth::user()->name }}</strong></p>
-            <p>Deli Services :<strong>{{ $sale['deli']['name'] ?? '' }}</strong></p>
+
 
         </div>
         <div id="receipt-body">
@@ -144,13 +144,6 @@
             </table>
             <table class="tb-sale-total">
                 <tbody>
-                    @if (!is_null($transport) && !is_null($transport->transport_chagre))
-                        <tr>
-                            <td colspan="2">Transport Charge</td>
-                            <td colspan="2" class="text-end">
-                                {{ number_format($transport->transport_chagre) }}&nbsp;Ks</td>
-                        </tr>
-                    @endif
 
                     <tr>
                         <td>Total Qty</td>

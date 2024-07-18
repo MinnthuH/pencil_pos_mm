@@ -36,9 +36,55 @@
                     </li>
                 @endif
 
+                <li class="menu-title mt-2">Sales Manage</li>
+                <li class="my-1">
+                    <a href="#sales" data-bs-toggle="collapse">
+                        <i class=" fas fa-hand-holding-usd"></i>
+                        <span>ဆိုင်ခွဲအရောင်းစာရင်း </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sales">
+                        <ul class="nav-second-level">
+                            @if (Auth::user()->can('admin.manage'))
+                                @php
+                                    $shops = App\Models\Shop::latest()->get();
+                                @endphp
+
+                                @foreach ($shops as $item)
+                                    <li>
+                                        <a href="{{ route('all#sale', $item->id) }}">{{ $item->name }}</a>
+                                    </li>
+                                @endforeach
+
+                                <li>
+                                    <a href="{{ route('refurn.all') }}">All Refurn</a>
+                                </li>
+
+                                {{-- <li>
+                                    <a href="{{ route('all#sale') }}">အရောင်းစာရင်းများ</a>
+                                </li> --}}
+                                <li>
+                                    <a href="{{ route('trash.sale') }}">ပယ်ဖျက်အရောင်းစာရင်းများ</a>
+                                </li>
+                            @else
+                                @php
+                                    $userShop = App\Models\Shop::find(Auth::user()->shop_id);
+                                @endphp
+
+                                @if ($userShop)
+                                    <li>
+                                        <a href="{{ route('all#sale', $userShop->id) }}">{{ $userShop->name }}</a>
+                                    </li>
+                                @endif
+                            @endif
 
 
-                <li class="menu-title mt-2">Shop Manage</li>
+                        </ul>
+                    </div>
+
+                </li>
+
+
                 {{-- @if (Auth::user()->can('employee.menu'))
                     <li>
                         <a href="#employee" data-bs-toggle="collapse">
@@ -64,56 +110,62 @@
                     </li>
                 @endif --}}
 
-                @if (Auth::user()->can('customer.menu'))
+                @if (Auth::user()->can('warehouse.menu'))
+                    <li class="menu-title mt-2">Warehouse Manage</li>
                     <li class="my-1">
-                        <a href="#customer" data-bs-toggle="collapse">
-                            <i class="fas fa-users"></i>
-                            <span> ဖေါက်သည် စီမံခန့်ခွဲခြင်း</span>
+                        <a href="#stock" data-bs-toggle="collapse">
+                            <i class=" fas fa-book-open"></i>
+                            <span> စတို စာရင်းများ </span>
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="customer">
+                        <div class="collapse" id="stock">
                             <ul class="nav-second-level">
-                                @if (Auth::user()->can('customer.all'))
+                                @if (Auth::user()->can('warehouse.edit'))
                                     <li>
-                                        <a href="{{ route('all#customer') }}">ဖေါက်သည် စာရင်းများ</a>
+                                        <a href="{{ route('stock.inventory') }}">စတို လက်ကျန်စာရင်း</a>
                                     </li>
                                 @endif
-                                @if (Auth::user()->can('customer.add'))
-                                    <li>
-                                        <a href="{{ route('add#customer') }}">ဖေါက်သည် အသစ်ထည့်ရန်</a>
-                                    </li>
-                                @endif
+                                {{-- <li>
+                                    <a href="{{ route('manage#stock') }}">ဆိုင်လက်ကျန်စာရင်း</a>
+                                </li> --}}
+                                <li>
+                                    <a href="{{ route('noti.stock') }}">သတိပေးပစ္စည်းစာရင်း</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('noti.expire') }}">Expired သတိပေး</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
-                @endif
 
-                @if (Auth::user()->can('supplier.menu'))
                     <li class="my-1">
-                        <a href="#supplier" data-bs-toggle="collapse">
-                            <i class="fas fa-truck"></i>
-                            <span> တင်သွင်းသူ စီမံခန့်ခွဲခြင်း </span>
+                        <a href="#transfer" data-bs-toggle="collapse">
+                            <i class=" fas fa-book-open"></i>
+                            <span> Stock Transfer စာရင်းများ </span>
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="supplier">
+                        <div class="collapse" id="transfer">
                             <ul class="nav-second-level">
-                                @if (Auth::user()->can('supplier.all'))
+                                @if (Auth::user()->can('warehouse.edit'))
                                     <li>
-                                        <a href="{{ route('all#supplier') }}">တင်သွင်းသူ စာရင်းများ</a>
+                                        <a href="{{ route('all.transfer.record') }}">All Transfer</a>
                                     </li>
                                 @endif
-
-                                @if (Auth::user()->can('supplier.add'))
-                                    <li>
-                                        <a href="{{ route('add#supplier') }}">တင်သွင်းသူအသစ်ထည့်ရန်</a>
-                                    </li>
-                                @endif
-
+                                <li>
+                                    <a href="{{ route('noti.stock') }}">သတိပေးပစ္စည်းစာရင်း</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('noti.expire') }}">Expired သတိပေး</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
+
+
                 @endif
-                <li class="my-1">
+
+
+                {{-- <li class="my-1">
                     <a href="#deli" data-bs-toggle="collapse">
                         <i class="fas fa-truck"></i>
                         <span> Deli စီမံခန့်ခွဲခြင်း </span>
@@ -132,7 +184,7 @@
 
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
 
                 {{-- @if (Auth::user()->can('salary.menu'))
@@ -190,7 +242,10 @@
                         </div>
                     </li>
                 @endif --}}
+
+
                 @if (Auth::user()->can('category.menu'))
+                    <li class="menu-title mt-2">Product Manage</li>
                     <li class="my-1">
                         <a href="#category" data-bs-toggle="collapse">
                             <i class="fas fa-box"></i>
@@ -261,96 +316,85 @@
                         </div>
                     </li>
                 @endif --}}
-                <li class="my-1">
-                    <a href="#sales" data-bs-toggle="collapse">
-                        <i class=" fas fa-hand-holding-usd"></i>
-                        <span> အရောင်းစာရင်း </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="sales">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="{{ route('all#sale') }}">အရောင်းစာရင်းများ</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('pending.due') }}">ကြွေးကျန်စာရင်းများ</a>
-                            </li>
-                            @if (Auth::user()->can('admin.manage'))
-                                <li>
-                                    <a href="{{ route('trash.sale') }}">ပယ်ဖျက်အရောင်းစာရင်းများ</a>
-                                </li>
-                            @endif
-                            @if (Auth::user()->can('admin.manage'))
-                                <li>
-                                    <a href="{{ route('refurn.all') }}">All Refurn</a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                </li>
-                <li class="menu-title mt-2">Store Management</li>
-                @if (Auth::user()->can('warehouse.menu'))
-                    <li>
-                        <a href="#inventory" data-bs-toggle="collapse">
-                            <i class="fas fa-boxes"></i>
-                            <span> စတို စီမံခန့်ခွဲခြင်း </span>
+
+
+
+
+                @if (Auth::user()->can('admin.manage'))
+
+                <li class="menu-title mt-2">Shop Management</li>
+                    <li class="my-1">
+                        <a href="#shopinfo" data-bs-toggle="collapse">
+                            <i class=" fab fa-shopify"></i>
+                            <span> ဆိုင်ခွဲများ </span>
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="inventory">
+                        <div class="collapse" id="shopinfo">
                             <ul class="nav-second-level">
-                                @if (Auth::user()->can('warehouse.all'))
+                                <li>
+                                    <a href="{{ route('all#shop') }}">All Shop </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('add#shop') }}">Add Shop </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
+
+                @if (Auth::user()->can('customer.menu'))
+                    <li class="my-1">
+                        <a href="#customer" data-bs-toggle="collapse">
+                            <i class="fas fa-users"></i>
+                            <span> Customer စီမံခန့်ခွဲခြင်း</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="customer">
+                            <ul class="nav-second-level">
+                                @if (Auth::user()->can('customer.all'))
                                     <li>
-                                        <a href="{{ route('search.inventory') }}">ကုန်ပစ္စည်းရှာခြင်း </a>
+                                        <a href="{{ route('all#customer') }}">customer စာရင်းများ</a>
                                     </li>
                                 @endif
-                                @if (Auth::user()->can('warhouse.add'))
+                                @if (Auth::user()->can('customer.add'))
                                     <li>
-                                        <a href="{{ route('all.inventory') }}">All Inventory</a>
+                                        <a href="{{ route('add#customer') }}">customer အသစ်ထည့်ရန်</a>
                                     </li>
                                 @endif
-                                @if (Auth::user()->can('warhouse.add'))
+                            </ul>
+                        </div>
+                    </li>
+                @endif
+
+                @if (Auth::user()->can('supplier.menu'))
+                    <li class="my-1">
+                        <a href="#supplier" data-bs-toggle="collapse">
+                            <i class="fas fa-truck"></i>
+                            <span> တင်သွင်းသူ စီမံခန့်ခွဲခြင်း </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="supplier">
+                            <ul class="nav-second-level">
+                                @if (Auth::user()->can('supplier.all'))
                                     <li>
-                                        <a href="{{ route('all.transfer.record') }}">All Tranfers</a>
+                                        <a href="{{ route('all#supplier') }}">တင်သွင်းသူ စာရင်းများ</a>
                                     </li>
                                 @endif
 
+                                @if (Auth::user()->can('supplier.add'))
+                                    <li>
+                                        <a href="{{ route('add#supplier') }}">တင်သွင်းသူအသစ်ထည့်ရန်</a>
+                                    </li>
+                                @endif
 
                             </ul>
                         </div>
                     </li>
                 @endif
-                <li class="my-1">
-                    <a href="#stock" data-bs-toggle="collapse">
-                        <i class=" fas fa-book-open"></i>
-                        <span> ကုန်ပစ္စည်းစာရင်း </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="stock">
-                        <ul class="nav-second-level">
-                            @if (Auth::user()->can('warehouse.edit'))
-                                <li>
-                                    <a href="{{ route('stock.inventory') }}">စတို လက်ကျန်စာရင်း</a>
-                                </li>
-                            @endif
-                            <li>
-                                <a href="{{ route('manage#stock') }}">ဆိုင်လက်ကျန်စာရင်း</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('noti.stock') }}">သတိပေးပစ္စည်းစာရင်း</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('noti.expire') }}">Expired သတိပေး</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
 
 
-
-
-
-                <li class="menu-title mt-2">Admin Manage</li>
                 @if (Auth::user()->can('role&permission.menu'))
+                <li class="menu-title mt-2">Admin Manage</li>
                     <li class="my-1">
                         <a href="#admin" data-bs-toggle="collapse">
                             <i class="fas fa-user-cog"></i>
@@ -428,6 +472,7 @@
                     </li>
                 @endif
 
+                @if (Auth::user()->can('admin.manage'))
                 <li class="my-1">
                     <a href="#addexpense" data-bs-toggle="collapse">
                         <i class="fas fa-coins"></i>
@@ -451,21 +496,6 @@
                         </ul>
                     </div>
                 </li>
-                @if (Auth::user()->can('admin.manage'))
-                    <li class="my-1">
-                        <a href="#shopinfo" data-bs-toggle="collapse">
-                            <i class=" fab fa-shopify"></i>
-                            <span> ဆိုင်အချက်အလက် </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="shopinfo">
-                            <ul class="nav-second-level">
-                                <li>
-                                    <a href="{{ route('shop#info') }}">Shop info </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
                 @endif
                 {{-- @if (Auth::user()->can('admin.manage'))
                     <li class="my-1">

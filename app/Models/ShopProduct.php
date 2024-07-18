@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use App\Models\Shop;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TransferStock extends Model
+class ShopProduct extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
         'shop_id',
@@ -18,8 +17,6 @@ class TransferStock extends Model
         'quantity',
         'created_at',
     ];
-
-    protected $dates = ['deleted_at'];
 
     public function product()
     {

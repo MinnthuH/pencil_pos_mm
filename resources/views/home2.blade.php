@@ -67,7 +67,12 @@
                 </a>
             </div>
             <div class="d-flex flex-grow-1 justify-content-center align-items-center">
-                <h2 class="text-light d-none d-lg-block mb-0">Welcome Pencil Pos</h2>
+                @if (Auth::user()->shop)
+                    <h2 class="text-light d-none d-lg-block mb-0">Welcome {{ Auth::user()->shop->name }}<span></span>
+                        Shop</h2>
+                @else
+                    <h2 class="text-light d-none d-lg-block mb-0">Welcome</h2>
+                @endif
             </div>
             <div class="d-flex">
                 @if (Auth::check())
@@ -107,7 +112,7 @@
             </div>
             <div class="col">
                 <div class="card rounded-card bg-secondary">
-                    <a href="{{ route('all#sale') }}" style="text-decoration: none">
+                    <a href="{{ route('all#sale', Auth::user()->shop_id) }}" style="text-decoration: none">
                         <div class="card-body">
                             <img src="{{ asset('backend/assets/icons/monitor.png') }}" alt="image"
                                 class="card-img-top" style="width: 8rem">
@@ -129,17 +134,19 @@
                     </div>
                 </div>
             @endif
-            <div class="col">
-                <div class="card rounded-card bg-secondary">
-                    <a href="{{ route('all#product') }}" style="text-decoration: none">
-                        <div class="card-body">
-                            <img src="{{ asset('backend/assets/icons/dairy-products.png') }}" alt="image"
-                                class="card-img-top" style="width: 8rem">
-                            <h5 class="card-title text-white font-18">ကုန်ပစ္စည်းအချက်အလက်များ</h5>
-                        </div>
-                    </a>
+            @if (Auth::user()->can('admin.manage'))
+                <div class="col">
+                    <div class="card rounded-card bg-secondary">
+                        <a href="{{ route('all#product') }}" style="text-decoration: none">
+                            <div class="card-body">
+                                <img src="{{ asset('backend/assets/icons/dairy-products.png') }}" alt="image"
+                                    class="card-img-top" style="width: 8rem">
+                                <h5 class="card-title text-white font-18">ကုန်ပစ္စည်းအချက်အလက်များ</h5>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endif
             @if (Auth::user()->can('admin.manage'))
                 <div class="col">
                     <div class="card rounded-card bg-secondary">
@@ -155,7 +162,7 @@
             @endif
             <div class="col">
                 <div class="card rounded-card bg-secondary">
-                    <a href="{{ route('manage#stock') }}" style="text-decoration: none">
+                    <a href="{{ route('shop.stock', Auth::user()->shop_id) }}" style="text-decoration: none">
                         <div class="card-body">
                             <img src="{{ asset('backend/assets/icons/warehouse.png') }}" alt="image"
                                 class="card-img-top" style="width: 8rem">

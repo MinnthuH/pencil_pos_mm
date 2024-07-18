@@ -2,37 +2,18 @@
 
 @section('admin')
 @section('title')
-    Stock Inventory | Pencil POS System
+    Shop Stock | Pencil POS System
 @endsection
 
-<script type="text/javascript" src="{{ asset('backend/assets/jquery.js') }}"></script>
 <div class="content">
-    <!-- Start Content-->
     <div class="container-fluid">
-        <!-- start page title -->
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            @if (Auth::user()->can('admin.manage'))
-                                <a href="{{ route('stock.import') }}"
-                                    class="btn btn-blue rounded-pill waves-effect waves-light ms-2"> Stock Import</a>
-
-                                <a href="{{ route('mass.transfer') }}"
-                                class="btn btn-blue rounded-pill waves-effect waves-light ms-2">Many Transfer</a>
-
-                                <a href="{{ route('export.stock') }}"
-                                    class="btn btn-blue rounded-pill waves-effect waves-light ms-2"> Export</a>
-                                &nbsp;
-                            @endif
-                        </ol>
-                    </div>
-                    <h4 class="page-title">စတိုကုန်ပစ္စည်း လက်ကျန် စာရင်း</h4>
+                    <h4 class="page-title">Shop Stock for {{ $shop->name }}</h4>
                 </div>
             </div>
         </div>
-        <!-- end page title -->
 
         <div class="row">
             <div class="col-12">
@@ -47,19 +28,21 @@
                                     <th>အမျိုးအစား</th>
                                     <th>Code</th>
                                     <th>လက်ကျန်</th>
+                                    @if (Auth::user()->can('warehouse.edit'))
                                     <th>ဆိုင်သို့လွှဲရန်</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($inventory as $key => $item)
+                                @foreach ($stocks as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td><img src="{{ asset($item->product_image ?: 'upload/no_image.jpg') }}" style="width:50px;height:40px;" alt=""></td>
-                                        <td>{{ $item->product_name }}</td>
-                                        <td>{{ $item->category->category_name }}</td>
-                                        <td>{{ $item->product_code }}</td>
+                                        <td><img src="{{ asset($item->product->product_image ?: 'upload/no_image.jpg') }}" style="width:50px;height:40px;" alt=""></td>
+                                        <td>{{ $item->product->product_name }}</td>
+                                        <td>{{ $item->product->category->category_name }}</td>
+                                        <td>{{ $item->product->product_code }}</td>
                                         <td>
-                                            <button class="btn btn-warning waves-effect waves-light">{{ $item->product_store }}</button>
+                                            <button class="btn btn-warning waves-effect waves-light">{{ $item->quantity }}</button>
                                         </td>
                                         <td>
                                             @if (Auth::user()->can('warehouse.edit'))
@@ -67,6 +50,7 @@
                                                     <i class="fas fa-chart-line"></i>
                                                 </a>
                                             @endif
+                                            <input type="hidden" name="shopId" data-shopid="{{ $shop->id }}">
                                         </td>
                                     </tr>
                                 @endforeach
@@ -85,15 +69,7 @@
                         <form class="px-3" action="{{ route('transfer.stock') }}" method="post">
                             @csrf
                             <input type="hidden" name="productId" id="product-id-input">
-                            <div class="mb-3">
-                                <label for="shopId" class="form-label">ဆိုင်အမည်</label>
-                                <select name="shopId" class="form-select" id="shopId">
-                                    <option selected disabled>ဆိုင်အမည် အရွေးချယ်ပါ</option>
-                                    @foreach ($shops as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <input type="hidden" name="shopId" id="shop-id-input">
                             <div class="mb-3">
                                 <label for="transferStock" class="form-label">လွှဲပြောင်းမည့် ကုန်ပစ္စည်း အရေအတွက်</label>
                                 <input class="form-control" type="number" id="transferStock" name="transferStock" placeholder="လွှဲေပြာင်းမည့် ကုန်ပစ္စည်း အရေအတွက်ထည့်ပါ" required min="1">
@@ -114,8 +90,9 @@
         $('#signup-modal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
             var productId = button.data('productid'); // Extract product ID from data attribute
-            console.log('Product ID:', productId); // Debugging log
+            var shopId = button.data('shopid'); // Extract shop ID from data attribute
             $('#product-id-input').val(productId); // Set the value in the hidden input field
+            $('#shop-id-input').val(shopId); // Set the value in the hidden input field
         });
     });
 </script>

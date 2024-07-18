@@ -76,6 +76,21 @@
                                         </div>
                                     </div>
                                     <!-- end col -->
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="firstname" class="form-label">Asign Shop</label>
+                                            <select name="shopId" class="form-select" id="example-select">
+                                                <option selected disabled>Select Shop</option>
+                                                @foreach ($shops as $item)
+                                                <option value="{{ $item->id }}" {{ $adminUser->shop_id == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->name }}
+                                                </option>
+                                                @endforeach
+
+                                            </select>
+
+                                        </div>
+                                    </div>
 
                                 </div> <!-- end row -->
 
