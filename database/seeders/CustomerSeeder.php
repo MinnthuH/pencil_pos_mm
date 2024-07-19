@@ -13,16 +13,14 @@ class CustomerSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
 
-        for ($i = 1; $i <= 5; $i++) {
             Customer::create([
-                'name' => $faker->name,
-                'email' => $faker->unique()->safeEmail,
-                'phone' => $faker->phoneNumber,
-                'address' => $faker->address,
-                'shopname' => 'Shop ' . $i,
+                'name' => 'customer1',
+                'email' => 'customer1@gmail.com',
+                'phone' => '0977886655',
+                'address' => 'Yangon',
+                'shopname' => 'Mingalar',
             ]);
-        }
+
     }
 }

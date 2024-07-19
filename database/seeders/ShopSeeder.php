@@ -17,8 +17,16 @@ class ShopSeeder extends Seeder
         //
         Shop::create ([
             'id' => 1,
-            'name' => 'Pencil',
-            'email' => 'pencil@gmail.com',
+            'name' => 'Warehouse',
+            'email' => 'warehouse@gmail.com',
+            'phone' => '0987654321',
+            'address' => 'Yangon,Myanmar',
+            'created_at' => Carbon::now(),
+        ]);
+        Shop::create ([
+            'id' => 2,
+            'name' => 'Thamada Snack',
+            'email' => 'thamada@gmail.com',
             'phone' => '0987654321',
             'address' => 'Yangon,Myanmar',
             'created_at' => Carbon::now(),

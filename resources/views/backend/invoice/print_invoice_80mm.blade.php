@@ -100,7 +100,7 @@
     <div id="wrapper">
         <div id="receipt-header">
             <div class="logo">
-                <img src="{{ !empty($shop->logo) ? url('upload/shop_logo/' . $shop->logo) : url('upload/no_image.jpg') }}"
+                <img src="{{ asset($shop->logo ?: 'upload/no_image.jpg') }}"
                     width="70px" height="70px" alt="">
             </div>
             <h3 id="shop-name" class="text-center">{{ $shop->name }}</h3>

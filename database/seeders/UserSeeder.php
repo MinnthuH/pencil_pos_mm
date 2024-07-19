@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'email' => 'superadmin@gmail.com',
             'phone' => '0987654321',
             'password' => Hash::make('12345678'),
+            'shop_id' => 1,
 
         ]);
         User::create ([
@@ -28,6 +29,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'phone' => '0987654321',
             'password' => Hash::make('12345678'),
+            'shop_id' => 1,
 
         ]);
         User::create ([
@@ -36,6 +38,7 @@ class UserSeeder extends Seeder
             'email' => 'cashier@gmail.com',
             'phone' => '0987654321',
             'password' => Hash::make('12345678'),
+            'shop_id' => 2,
 
         ]);
 

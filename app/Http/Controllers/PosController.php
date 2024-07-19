@@ -42,7 +42,12 @@ class PosController extends Controller
         $categories = Category::latest()->get();
         $transports = Transport::latest()->get();
 
-        return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'transports', 'shopProducts'));
+        // pos page without QR
+        // return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'transports'));
+
+
+        // pos page with QR
+        return view('backend.pos.pos_page_with_qr', compact('products', 'customers', 'categories', 'transports', 'shopProducts'));
     }
 
     // End Method
@@ -138,7 +143,8 @@ class PosController extends Controller
     {
 
         $cartItem = Cart::content();
-        $customerId = $request->customerId;
+        $customerId = $request->customerId ?? 1;
+
         $customer = Customer::where('id', $customerId)->first();
         $Capital = Cart::content();
         $totalBuyPrice = 0; // Initialize totalBuyPrice to zero

@@ -28,7 +28,7 @@
                             </ol>
                         @endif
                     </div>
-                    <h4 class="page-title">အရောင်းစာရင်း</h4>
+                    <h4 class="page-title">{{$shopName}}&nbsp;&nbsp;အရောင်းစာရင်း</h4>
                     <h4>Today's Total Sales: {{ number_format($todayTotal, 2) }} <span></span>Ks</h4>
                 </div>
             </div>

@@ -202,6 +202,12 @@ class RoleTableSeeder extends Seeder
         ]);
 
         Permission::create([
+            'name' => 'shop.cashier',
+            'guard_name' => 'web',
+            'group_name' => 'order',
+        ]);
+
+        Permission::create([
             'name' => 'warehouse.menu',
             'guard_name' => 'web',
             'group_name' => 'warehouse',

@@ -12,7 +12,7 @@
         $currentDate = Carbon::now()->format('Y-m-d');
         $todayPaid = Sale::whereDate('invoice_date', $currentDate)->sum('total');
         $todayCapital = Sale::whereDate('invoice_date', $currentDate)->sum('capital');
-        $todaySale = Sale::whereDate('invoice_date', $currentDate)->get();
+        // $todaySale = Sale::whereDate('invoice_date', $currentDate)->get();
 
         $todayTotalbyShop = Sale::where('shop_id', $shopId)->whereDate('created_at', Carbon::today())->sum('total');
         $profit = $todayPaid - $todayCapital;
@@ -47,7 +47,7 @@
 
         $totalDue = Sale::sum('due');
 
-        $sales = Sale::orderBy('id', 'DESC')->get();
+        $sales = Sale::where('shop_id', $shopId)->orderBy('id', 'DESC')->get();
     @endphp
 
     <div class="content">
@@ -93,21 +93,16 @@
                                     <i class="fe-heart font-22 avatar-title text-white"></i>
                                 </div>
                             </div>
-                            @if (Auth::user()->can('admin.manage'))
+
+
+                            @if (Auth::user()->can('shop.cashier'))
                                 <div class="col-6">
                                     <div class="text-end">
                                         <h3 class="text-dark mt-1"><span
-                                                data-plugin="counterup">{{ number_format($todayPaid) }}</span>&nbsp;Ks
+                                                data-plugin="counterup">{{ number_format($todayTotalbyShop) }}</span>&nbsp;Ks
                                         </h3>
                                         <p class="text-muted mb-1 text-truncate">ယနေ့ ရောင်းရငွေ</p>
                                     </div>
-                                </div>
-                            @elseif (Auth::user()->can('shop.cashier'))
-                                <div class="text-end">
-                                    <h3 class="text-dark mt-1"><span
-                                            data-plugin="counterup">{{ number_format($todayTotalbyShop) }}</span>&nbsp;Ks
-                                    </h3>
-                                    <p class="text-muted mb-1 text-truncate">ယနေ့ ရောင်းရငွေ</p>
                                 </div>
                             @endif
 
@@ -130,14 +125,8 @@
                                 </div>
                             </div>
                             <div class="col-6">
-                                @if (Auth::user()->can('admin.manage'))
-                                    <div class="text-end">
-                                        <h3 class="text-dark mt-1"><span
-                                                data-plugin="counterup">{{ number_format($weeklyPaid) }}</span>&nbsp;Ks
-                                        </h3>
-                                        <p class="text-muted mb-1 text-truncate">ယခုအပတ် ရောင်းရငွေ</p>
-                                    </div>
-                                @elseif (Auth::user()->can('shop.cashier'))
+
+                                @if (Auth::user()->can('shop.cashier'))
                                     <div class="text-end">
                                         <h3 class="text-dark mt-1"><span
                                                 data-plugin="counterup">{{ number_format($weeklyTotalbyShop) }}</span>&nbsp;Ks
@@ -198,75 +187,13 @@
         <!-- end row-->
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="dropdown float-end">
-                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <i class="mdi mdi-dots-vertical"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                            </div>
-                        </div>
 
-                        <h4 class="header-title mb-0">Total Revenue</h4>
-
-                        <div class="widget-chart text-center" dir="ltr">
-
-                            {{-- <div id="total-revenue" class="mt-0"  data-colors="#f1556c"></div> --}}
-
-                            <h5 class="text-muted mt-0">ယနေ့ အမြတ်ငွေ</h5>
-                            <h2>{{ number_format($profit) }}&nbsp;Ks</h2>
-
-                            <p class="text-muted w-75 mx-auto sp-line-2"></p>
-
-                            <div class="row mt-3">
-                                <div class="col-4">
-                                    <p class="text-muted font-15 mb-1 text-truncate">ယခုအပတ် အမြတ်ငွေ</p>
-                                    <h4>{{ number_format($weeklyProfit) }}&nbsp;Ks</h4>
-                                </div>
-                                <div class="col-4">
-                                    <p class="text-muted font-15 mb-1 text-truncate">ယခုလ အမြတ်ငွေ</p>
-                                    <h4>{{ number_format($monthlyProfit) }} Ks</h4>
-                                </div>
-                                <div class="col-4">
-                                    <p class="text-muted font-15 mb-1 text-truncate">ယခုနှစ် အမြတ်ငွေ</p>
-                                    <h4>{{ number_format($yearlyProfit) }} ks</h4>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div> <!-- end card -->
-            </div> <!-- end col-->
 
 
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="dropdown float-end">
-                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <i class="mdi mdi-dots-vertical"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Edit Report</a>
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                            </div>
-                        </div>
+
 
                         <h3 class="header-title mb-3">အရောင်းစာရင်းများ</h3>
 
@@ -306,9 +233,8 @@
                                             <td class="text-end">{{ number_format($item->accepted_ammount) }}</td>
                                             <td class="text-end">{{ number_format($item->return_change) }}</td>
                                             <td>
-                                                <a href="{{ route('detail#sale', $item->id) }}"
-                                                    class="btn btn-info sm" title="Detail Data"><i
-                                                        class="far fa-eye"></i></a>
+                                                <a href="{{ route('detail#sale', $item->id) }}" class="btn btn-info sm"
+                                                    title="Detail Data"><i class="far fa-eye"></i></a>
 
                                             </td>
                                         </tr>

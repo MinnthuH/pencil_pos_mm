@@ -27,71 +27,69 @@
         <!-- end page title -->
 
         <div class="row">
-
             <div class="col-lg-8 col-xl-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="tab-pane" id="settings">
-
-
-                            <h5 class="mb-4 text-uppercase"><i class="fas fa-barcode me-1"></i> Barcode Product
-                            </h5>
-                            {{-- <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="firstname" class="form-label">Product Barcode</label>
-                                        <h3>{{ $product->product_code }}</h3>
-                                    </div>
-                                </div> --}}
-                                <!-- end col -->
-{{--
-                                @php
-
-                                    $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-                                @endphp --}}
-
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="firstname" class="form-label">{{$product->product_name}}| {{$product->selling_price}} Ks</label>
-                                        {{-- <h3>{!! $generator->getBarcode($product->product_code,$generator::TYPE_CODE_128) !!}</h3> --}}
-                                       <h3> <img src="data:image/png;base64,{{ $barcodeImage }}" alt="Barcode"></h3>
-                                       <p>{{ $product->product_code }}</p>
-                                    </div>
+                            <h5 class="mb-4 text-uppercase"><i class="fas fa-barcode me-1"></i> Barcode Product</h5>
+                            <div class="barcode-container">
+                                <div class="barcode-item">
+                                    <label class="form-label">{{ $product->product_name }} | {{ $product->selling_price }} Ks</label>
+                                    <img id="barcodeImage" src="data:image/png;base64,{{ $barcodeImage }}" alt="Barcode">
+                                    <p>{{ $product->product_code }}</p>
                                 </div>
-                                <!-- end col -->
-                                <div class="text-end">
-                                    <a href="#" id="printButton" class="btn btn-blue waves-effect waves-light"><i class="mdi mdi-printer me-1"></i></a>
-
+                                <div class="barcode-item">
+                                    <label class="form-label">{{ $product->product_name }} | {{ $product->selling_price }} Ks</label>
+                                    <img id="barcodeImage" src="data:image/png;base64,{{ $barcodeImage }}" alt="Barcode">
+                                    <p>{{ $product->product_code }}</p>
                                 </div>
-                            </div> <!-- end row -->
-
-
-
-                        </div>
-                        <!-- end settings content-->
-
+                            </div>
+                            <div class="text-end">
+                                <a href="#" id="printButton" class="btn btn-blue waves-effect waves-light"><i class="mdi mdi-printer me-1"></i></a>
+                            </div>
+                        </div> <!-- end row -->
                     </div>
                 </div> <!-- end card-->
-
             </div> <!-- end col -->
         </div>
         <!-- end row-->
-
     </div> <!-- container -->
-
 </div> <!-- content -->
 
-<script>
-    const printButton = document.getElementById('printButton');
+<style>
+    @media print {
+        .barcode-container {
+            display: flex;
+            flex-wrap: wrap;
+            width: 80mm; /* Ensure the container fits the paper width */
+        }
+        .barcode-item {
+            width: 1.5in;
+            height: auto;
+            margin: 0;
+            padding: 0.2in; /* Optional: Add padding between items */
+            box-sizing: border-box;
+        }
+        .barcode-item img {
+            width: 100%;
+            height: auto;
+        }
+        /* Ensure the entire page is printed at the correct width */
+        @page {
+            size: 80mm;
+            margin: 0; /* Remove default margins */
+        }
+        body {
+            margin: 0; /* Remove default margins */
+        }
+    }
+</style>
 
-    printButton.addEventListener('click', () => {
+<script>
+    document.getElementById('printButton').addEventListener('click', (e) => {
+        e.preventDefault();
         window.print();
     });
 </script>
 
-
 @endsection
-
-
-
-

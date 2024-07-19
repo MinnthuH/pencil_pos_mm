@@ -45,6 +45,11 @@ Route::get('/admin/manage/', function () {
     return view('index');
 })->middleware(['auth', 'verified'])->name('admin.manage')->middleware('permission:admin.manage');
 
+Route::get('/cashier/dashboard/', function () {
+    return view('cashier_dashboard');
+})->middleware(['auth', 'verified'])->name('shop.cashier')->middleware('permission:shop.cashier');
+
+
 // Route::get('/dashboard', function () {
 //     return view('index');
 // })->middleware(['auth', 'verified'])->name('dashboard');

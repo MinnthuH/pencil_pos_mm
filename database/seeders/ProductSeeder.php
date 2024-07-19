@@ -26,7 +26,7 @@ class ProductSeeder extends Seeder
         $expireDate = $currentDate->copy()->addYears(2);
 
         $fakeProductNames = [
-            'Pucci','Oreo','Shark','Water','coffee candy'
+            'Popcorn','Candy','Chocolate Bars','Ice Cream','Chicken Tenders','French Fries', 'Energy Drinks','Water','Fruit Juice'
         ];
 
         foreach ($fakeProductNames as $index => $productName) {
@@ -41,7 +41,7 @@ class ProductSeeder extends Seeder
                 'product_track' => $faker->numberBetween(1, 20),
                 'buying_date' => $faker->date(),
                 'expire_date' => $expireDate->format('Y-m-d'),
-                'buy_price' => $faker->numberBetween(100, 1000) * 100,
+                'buy_price' => $faker->numberBetween(500, 1000) * 100,
                 'selling_price' => $faker->numberBetween(150, 1500) * 100,
                 // Omit 'product_image' and 'unit'
             ]);

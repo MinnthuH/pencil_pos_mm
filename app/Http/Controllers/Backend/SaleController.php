@@ -32,9 +32,12 @@ class SaleController extends Controller
                          ->whereDate('created_at', Carbon::today())
                          ->sum('total');
 
-       return view('backend.sale.all_sale', compact('sales', 'id', 'dailyTotals', 'todayTotal'));
+                          // Get the shop name from the first sale
+    $shopName = $sales->isNotEmpty() ? $sales->first()->shop->name : 'Shop Name Not Found';
+
+       return view('backend.sale.all_sale', compact('sales', 'id', 'dailyTotals', 'todayTotal','shopName'));
    } // End Method
-   // End Method
+
 
 
     // Delete Sale Method

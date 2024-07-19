@@ -26,6 +26,15 @@
                     </li>
                 @endif
 
+                @if (Auth::user()->can('shop.cashier'))
+                <li>
+                    <a href="{{ route('shop.cashier') }}">
+                        <i class="mdi mdi-view-dashboard-outline"></i>
+                        <span>Cashier Dashboard </span>
+                    </a>
+                </li>
+            @endif
+
                 @if (Auth::user()->can('pos.menu'))
                     <li>
                         <a href="{{ route('pos') }}">
@@ -319,10 +328,9 @@
 
 
 
-
+                <li class="menu-title mt-2">Shop Management</li>
                 @if (Auth::user()->can('admin.manage'))
 
-                <li class="menu-title mt-2">Shop Management</li>
                     <li class="my-1">
                         <a href="#shopinfo" data-bs-toggle="collapse">
                             <i class=" fab fa-shopify"></i>
@@ -340,6 +348,30 @@
                             </ul>
                         </div>
                     </li>
+                @else
+                    @php
+                        $userShop = App\Models\Shop::find(Auth::user()->shop_id);
+                    @endphp
+
+                    @if ($userShop)
+                        <li class="my-1">
+                            <a href="#shopinfo" data-bs-toggle="collapse">
+                                <i class=" fab fa-shopify"></i>
+                                <span> Stock </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="shopinfo">
+                                <ul class="nav-second-level">
+
+                                    <li>
+                                        <a href="{{ route('shop.stock', $userShop->id) }}">{{ $userShop->name }} Stock
+                                            List</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    @endif
+
                 @endif
 
                 @if (Auth::user()->can('customer.menu'))
@@ -394,7 +426,7 @@
 
 
                 @if (Auth::user()->can('role&permission.menu'))
-                <li class="menu-title mt-2">Admin Manage</li>
+                    <li class="menu-title mt-2">Admin Manage</li>
                     <li class="my-1">
                         <a href="#admin" data-bs-toggle="collapse">
                             <i class="fas fa-user-cog"></i>
@@ -444,7 +476,7 @@
                         </div>
                     </li>
                 @endif
-                @if (Auth::user()->can('admin.manage'))
+                {{-- @if (Auth::user()->can('admin.manage'))
                     <li class="my-1">
                         <a href="#transport" data-bs-toggle="collapse">
                             <i class="fas fa-truck"></i>
@@ -470,32 +502,32 @@
                             </ul>
                         </div>
                     </li>
-                @endif
+                @endif --}}
 
                 @if (Auth::user()->can('admin.manage'))
-                <li class="my-1">
-                    <a href="#addexpense" data-bs-toggle="collapse">
-                        <i class="fas fa-coins"></i>
-                        <span> အသုံးစာရင်း </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="addexpense">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="{{ route('add#expense') }}">အသုံးစာရင်း ထည့်သွင်းခြင်း</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('today#expense') }}">ယနေ့အသုံးစာရင်း</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('month#expense') }}">လစဉ်အသုံးစာရင်း</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('year#expense') }}">နှစ်စဉ် အသုံးစာရင်း</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                    <li class="my-1">
+                        <a href="#addexpense" data-bs-toggle="collapse">
+                            <i class="fas fa-coins"></i>
+                            <span> အသုံးစာရင်း </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="addexpense">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="{{ route('add#expense') }}">အသုံးစာရင်း ထည့်သွင်းခြင်း</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('today#expense') }}">ယနေ့အသုံးစာရင်း</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('month#expense') }}">လစဉ်အသုံးစာရင်း</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('year#expense') }}">နှစ်စဉ် အသုံးစာရင်း</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                 @endif
                 {{-- @if (Auth::user()->can('admin.manage'))
                     <li class="my-1">
