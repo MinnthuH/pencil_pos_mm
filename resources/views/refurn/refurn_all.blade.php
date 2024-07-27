@@ -43,41 +43,37 @@
                                 <tr>
                                     <th>စဉ်</th>
                                     <th>Date</th>
+                                    <th>Shop Name</th>
                                     <th>Invoice No</th>
                                     <th>Product Name</th>
                                     <th>Quantity</th>
-                                    <th>Refurn Amout</th>
+                                    <th>Refurn Amount</th>
                                     {{-- <th>Action</th> --}}
                                 </tr>
                             </thead>
-
 
                             <tbody>
                                 @foreach ($refurnAll as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $item->created_at }}</td>
-                                        <td>{{ $item['sale']['invoice_no'] }}</td>
-                                        <td>{{ $item['saleitem']['product']['product_name'] }}</td>
+                                        <td>{{ $item->shop ? $item->shop->name : 'N/A' }}</td>
+                                        <td>{{ $item->sale ? $item->sale->invoice_no : 'N/A' }}</td>
+                                        <td>{{ $item->saleitem && $item->saleitem->product ? $item->saleitem->product->product_name : 'N/A' }}</td>
                                         <td>{{ $item->refurnqty }}</td>
                                         <td>{{ $item->refurn_amout }}</td>
 
                                         {{-- <td>
-                                            <a href="{{ route('code#product', $item->id) }}" class="btn btn-warning sm"
-                                                title="barcode"><i class="fas fa-barcode"></i></a>
+                                            <a href="{{ route('code#product', $item->id) }}" class="btn btn-warning sm" title="barcode"><i class="fas fa-barcode"></i></a>
                                             @if (Auth::user()->can('product.edit'))
-                                                <a href="{{ route('edit#product', $item->id) }}" class="btn btn-info sm"
-                                                    title="Edit Data"><i class="far fa-edit"></i></a>
+                                                <a href="{{ route('edit#product', $item->id) }}" class="btn btn-info sm" title="Edit Data"><i class="far fa-edit"></i></a>
                                             @endif
                                             @if (Auth::user()->can('product.delete'))
-                                                <a href="{{ route('delete#porduct', $item->id) }}"
-                                                    class="btn btn-danger sm" title="Delete Data" id="delete"><i
-                                                        class="fas fa-trash-alt"></i></a>
+                                                <a href="{{ route('delete#product', $item->id) }}" class="btn btn-danger sm" title="Delete Data" id="delete"><i class="fas fa-trash-alt"></i></a>
                                             @endif
                                         </td> --}}
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
 

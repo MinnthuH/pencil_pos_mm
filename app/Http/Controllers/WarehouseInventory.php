@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\Shop;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Warehouse;
-use App\Models\ShopProduct;
-use Illuminate\Http\Request;
-use App\Models\TransferStock;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Exports\DailyTransferExport;
-use App\Imports\StockTransferImport;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\WarehouseStockExport;
 use App\Exports\WeeklyTransferExport;
+use App\Imports\StockTransferImport;
 use App\Imports\WarehouseStockImport;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Shop;
+use App\Models\ShopProduct;
+use App\Models\TransferStock;
+use App\Models\Warehouse;
+use Carbon\Carbon;
+use Exception;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WarehouseInventory extends Controller
 {
@@ -172,30 +172,40 @@ class WarehouseInventory extends Controller
         return view('backend.warehouse.all_transfer_record', compact('transfer'));
     } // End Method
 
-
+    // Delete Transfer Record
     public function deleteRecord(Request $request)
-{
-    $shopId = $request->shop_id;
-    $productId = $request->product_id;
-    $date = $request->date;
+    {
 
-    // Parse the date to the start and end of the day
-    $startDate = Carbon::parse($date)->startOfDay();
-    $endDate = Carbon::parse($date)->endOfDay();
+        // Debugging statement
+        \Log::info('Delete request received', $request->all());
 
-    // Delete the records that match the criteria
-    TransferStock::where('shop_id', $shopId)
-        ->where('product_id', $productId)
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->delete();
+        $shopId = $request->shop_id;
+        $productId = $request->product_id;
+        $date = $request->date;
 
-    $noti = [
-        'message' => 'Transfer record deleted successfully.',
-        'alert-type' => 'success',
-    ];
+        $startDate = Carbon::parse($date)->startOfDay();
+        $endDate = Carbon::parse($date)->endOfDay();
 
-    return redirect()->back()->with($noti);
-}
+        // Delete the records
+        $deleted = TransferStock::where('shop_id', $shopId)
+            ->where('product_id', $productId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->delete();
+
+        if ($deleted) {
+            $noti = [
+                'message' => 'Transfer record deleted successfully.',
+                'alert-type' => 'success',
+            ];
+        } else {
+            $noti = [
+                'message' => 'No record found to delete.',
+                'alert-type' => 'warning',
+            ];
+        }
+
+        return redirect()->route('all.transfer.record')->with($noti);
+    }
 
     // Delete Transfer Record Method
     public function DeleteTransferRecord($id)
@@ -395,12 +405,12 @@ class WarehouseInventory extends Controller
         return redirect()->route('mass.transfer')->with($noti);
     } // End Method
 
- // Trasnfer Record export daily
+    // Trasnfer Record export daily
     public function exportDaily()
     {
         return Excel::download(new DailyTransferExport, 'daily_transfer.xlsx');
     }
- // Trasnfer Record export weekly
+    // Trasnfer Record export weekly
 
     public function exportWeekly()
     {

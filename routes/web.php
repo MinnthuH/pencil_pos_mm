@@ -49,7 +49,6 @@ Route::get('/cashier/dashboard/', function () {
     return view('cashier_dashboard');
 })->middleware(['auth', 'verified'])->name('shop.cashier')->middleware('permission:shop.cashier');
 
-
 // Route::get('/dashboard', function () {
 //     return view('index');
 // })->middleware(['auth', 'verified'])->name('dashboard');
@@ -349,6 +348,8 @@ Route::controller(WarehouseInventory::class)->group(function () {
 
     Route::get('all/transfer-record', 'AllTransferRecord')->name('all.transfer.record'); // all transfer record
     Route::post('/delete-transfer-record', 'deleteRecord')->name('delete.transfer.record');
+
+    // Route::post('/delete-transfer-record', 'deleteRecord')->name('delete.transfer.record');
 
     Route::get('/export/daily-transfer', 'exportDaily')->name('export.daily.transfer');
     Route::get('/export/weekly-transfer', 'exportWeekly')->name('export.weekly.transfer');

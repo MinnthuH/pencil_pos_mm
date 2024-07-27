@@ -74,7 +74,7 @@
                                                     <input type="hidden" name="shop_id" value="{{ $item->shop_id }}">
                                                     <input type="hidden" name="product_id" value="{{ $item->product_id }}">
                                                     <input type="hidden" name="date" value="{{ $item->date }}">
-                                                    <button type="submit" class="btn btn-danger sm" title="Delete Data" id="delete">
+                                                    <button type="submit" class="btn btn-danger sm" title="Delete Data" >
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>

@@ -159,7 +159,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group mb-3">
-                                            <img id="showImage" src="{{ asset($product->product_image) }}"
+                                            <img id="showImage" src="{{ asset($product->product_image ?: 'upload/no_image.jpg') }}"
                                                 class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
                                         </div>
                                     </div> <!-- end col -->
@@ -229,12 +229,8 @@
                 sellingPrice: {
                     required : true,
                 },
-                productImage: {
-                    required : true,
-                },
-                unit: {
-                    required : true,
-                },
+
+
             },
             messages :{
                 productName: {
@@ -264,12 +260,7 @@
                 sellingPrice: {
                     required : 'ကုန်ပစ္စည်းရောင်းဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
-                productImage: {
-                    required : 'ကုန်ပစ္စည်းဓါတ်ပုံ ဖြည့်ရန် လိုအပ်ပါသည်',
-                },
-                unit: {
-                    required: 'ကုန်ပစ္စည်းရေတွက်ပုံ ဖြည့်ရန် လိုအပ်ပါသည်',
-                },
+
 
 
             },

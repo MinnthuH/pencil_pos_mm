@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderDetail;
-use App\Models\Product;
-use App\Models\Refurn;
-use App\Models\Sale;
 use Carbon\Carbon;
+use App\Models\Sale;
+use App\Models\Refurn;
+use App\Models\Product;
+use App\Models\OrderDetail;
+use App\Models\ShopProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,44 +16,51 @@ class RefurnController extends Controller
     // Refurn Route
     public function RefurnSale($id)
     {
+        // Get the sale record
         $sale = Sale::where('id', $id)->first();
-        $saleItem = OrderDetail::with('product')->where('sale_id', $id)->orderBy('id', 'DESC')->get();
+
+        // Get sale items with product details, and filter out items where the quantity is less than 1
+        $saleItem = OrderDetail::with('product')
+            ->where('sale_id', $id)
+            ->where('quantity', '>=', 1)
+            ->orderBy('id', 'DESC')
+            ->get();
 
         return view('refurn.refurn_sale', compact('sale', 'saleItem'));
-
-    } // End Method
+    }
+     // End Method
 
     // Refurn Sale Method
     public function RefurnStore(Request $request)
     {
-        // dd($request->all());
-
         try {
-
             DB::beginTransaction();
 
             $saleItemId = $request->saleItemId;
-            $retrunqty = $request->refurnqty;
+            $returnQty = $request->refurnqty;
             $refurnAmount = $request->refurn_amout;
 
-            $sale = Sale::findOrFail($request->sale_id); // get sale record
+            // get sale record
+            $sale = Sale::findOrFail($request->sale_id);
 
-            $saleItem = OrderDetail::where('id', $saleItemId)->first(); // get sale detail
+            // get sale detail
+            $saleItem = OrderDetail::where('id', $saleItemId)->firstOrFail();
+            $productId = $saleItem->product_id; // assuming there is a product_id in OrderDetail
 
-            $product = Product::where('id', $saleItem->product_id)->first(); // get product record
+            // get the shop product record using shop_id and product_id
+            $shopProduct = ShopProduct::where('shop_id', $sale->shop_id)
+                                        ->where('product_id', $productId)
+                                        ->firstOrFail();
 
-            $updateQty = $product->product_store + $retrunqty;
-
-            $saleItemQty = $saleItem->quantity - $retrunqty; // for reduce qty in Orderdetail table
-
-            $saleTotal = $sale->total - $refurnAmount; // for reduce total in Sale table
-
-            $updateReturnChange = $sale->return_change + $refurnAmount; // for increase return charge in sale table
+            $saleItemQty = $saleItem->quantity - $returnQty; // reduce qty in Orderdetail table
+            $saleTotal = $sale->total - $refurnAmount; // reduce total in Sale table
+            $updateReturnChange = $sale->return_change + $refurnAmount; // increase return charge in sale table
+            $shopProductQty = $shopProduct->quantity + $returnQty; // add return qty to ShopProduct
 
             // update sale detail
             $saleItem->update([
                 'quantity' => $saleItemQty,
-                'total' => $saleTotal,
+                'total' => $saleItem->total - ($saleItem->unit_price * $returnQty),
             ]);
 
             // update return charge sale
@@ -62,35 +70,38 @@ class RefurnController extends Controller
                 'return_change' => $updateReturnChange,
             ]);
 
-            // update product qty in product table
-            $product->update([
-                'product_store' => $updateQty,
+            // update quantity in shop_products table
+            $shopProduct->update([
+                'quantity' => $shopProductQty,
             ]);
 
-            Refurn::insert([
+            // insert return record
+            Refurn::create([
                 'sale_id' => $request->sale_id,
+                'shop_id' => $sale->shop_id,
                 'sale_item_id' => $saleItemId,
-                'refurnqty' => $retrunqty,
+                'refurnqty' => $returnQty,
                 'refurn_amout' => $refurnAmount,
                 'created_at' => Carbon::now(),
             ]);
 
             DB::commit();
+
             $noti = [
-                'message' => 'Refurn  Successfully',
+                'message' => 'Refurn Product Successful',
                 'alert-type' => 'success',
             ];
-            return redirect()->route('all#sale')->with('noti');
+            return redirect()->route('refurn.all')->with($noti);
+
 
         } catch (\Exception $e) {
-            //throw $th;
-
             DB::rollback();
+            // Log the error or handle it appropriately
+            return back()->with('error', 'An error occurred during the refund process.');
         }
+    } // End Method
 
-        // dd($sale);
 
-    }
 
     // All Refurn Method
     public function RefurnAll()

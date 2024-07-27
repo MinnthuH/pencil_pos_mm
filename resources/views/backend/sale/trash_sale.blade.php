@@ -30,13 +30,12 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th class="text-wrap">အရောင်းတာဝန်ခံ</th>
+                                    <th>ဆိုင်အမည်</th>
                                     <th>ဘောင်ချာ နေစွဲ</th>
                                     <th>ဘောင်ချာနံပါတ်</th>
                                     <th>ငွေပေးချေမှု ပုံစံ</th>
                                     <th>ကျသင့်ငွေ</th>
-                                    <th>Discount</th>
                                     <th>ပေးငွေ</th>
-                                    <th>ကျန်ငွေ</th>
                                     <th>ပြန်အမ်းငွေ</th>
                                     <th>Action</th>
                                 </tr>
@@ -48,6 +47,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $item['user']['name'] }}</td>
+                                        <td>{{ $item->shop->name }}</td>
                                         <td>{{ $item->invoice_date }}</td>
                                         <td>{{ $item->invoice_no }}</td>
                                         <td> <span
@@ -55,9 +55,7 @@
                                                 {{ $item->payment_type }}
                                             </span></td>
                                         <td class="text-end">{{ number_format($item->sub_total) }}</td>
-                                        <td class="text-end">{{ number_format($item->discount) }}</td>
                                         <td class="text-end">{{ number_format($item->accepted_ammount) }}</td>
-                                        <td class="text-end">{{ number_format($item->due) }}</td>
                                         <td class="text-end">{{ number_format($item->return_change) }}</td>
                                         <td>
                                             @if (Auth::user()->can('admin.manage'))

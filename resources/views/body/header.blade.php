@@ -175,7 +175,7 @@
 
 
             <li>
-                <h2 class="text-light d-none d-lg-block ms-4">Welcome {{ Auth::user()->shop->name }}<span></span> Shop</h2>
+                <h2 class="text-light d-none d-lg-block ms-4">Welcome {{ Auth::user()->shop->name }}</h2>
                 <button class="button-menu-mobile waves-effect waves-light">
                     <i class="fe-menu"></i>
                 </button>

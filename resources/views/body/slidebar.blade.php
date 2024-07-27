@@ -27,15 +27,15 @@
                 @endif
 
                 @if (Auth::user()->can('shop.cashier'))
-                <li>
-                    <a href="{{ route('shop.cashier') }}">
-                        <i class="mdi mdi-view-dashboard-outline"></i>
-                        <span>Cashier Dashboard </span>
-                    </a>
-                </li>
-            @endif
+                    <li>
+                        <a href="{{ route('shop.cashier') }}">
+                            <i class="mdi mdi-view-dashboard-outline"></i>
+                            <span>Cashier Dashboard </span>
+                        </a>
+                    </li>
+                @endif
 
-                @if (Auth::user()->can('pos.menu'))
+                @if (Auth::user()->can('shop.cashier'))
                     <li>
                         <a href="{{ route('pos') }}">
                             <span class="badge bg-pink float-end">Hot</span>
@@ -56,7 +56,11 @@
                         <ul class="nav-second-level">
                             @if (Auth::user()->can('admin.manage'))
                                 @php
-                                    $shops = App\Models\Shop::latest()->get();
+                                    $shops = App\Models\Shop::latest()
+                                        ->get()
+                                        ->filter(function ($shop) {
+                                            return $shop->id !== 1;
+                                        });
                                 @endphp
 
                                 @foreach ($shops as $item)
@@ -93,31 +97,6 @@
 
                 </li>
 
-
-                {{-- @if (Auth::user()->can('employee.menu'))
-                    <li>
-                        <a href="#employee" data-bs-toggle="collapse">
-                            <i class="mdi mdi-account-multiple-outline"></i>
-                            <span> Employee Manage</span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="employee">
-                            <ul class="nav-second-level">
-                                @if (Auth::user()->can('employee.all'))
-                                    <li>
-                                        <a href="{{ route('all#employee') }}">All Employee</a>
-                                    </li>
-                                @endif
-
-                                @if (Auth::user()->can('employee.add'))
-                                    <li>
-                                        <a href="{{ route('add#employee') }}">Add Employee</a>
-                                    </li>
-                                @endif
-                            </ul>
-                        </div>
-                    </li>
-                @endif --}}
 
                 @if (Auth::user()->can('warehouse.menu'))
                     <li class="menu-title mt-2">Warehouse Manage</li>
@@ -230,27 +209,7 @@
                     </li>
                 @endif --}}
 
-                {{-- @if (Auth::user()->can('attendence.menu'))
-                    <li>
-                        <a href="#attendance" data-bs-toggle="collapse">
-                            <i class="fas fa-clock"></i>
-                            <span> Employee Attendance </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="attendance">
-                            <ul class="nav-second-level">
-                                <li>
-                                    <a href="{{ route('add#attendance') }}">Add Employee Attendance</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('employee#attendance') }}">Employee Attendance List</a>
-                                </li>
 
-
-                            </ul>
-                        </div>
-                    </li>
-                @endif --}}
 
 
                 @if (Auth::user()->can('category.menu'))
@@ -503,6 +462,55 @@
                         </div>
                     </li>
                 @endif --}}
+
+
+                {{-- @if (Auth::user()->can('employee.menu'))
+                    <li>
+                        <a href="#employee" data-bs-toggle="collapse">
+                            <i class="mdi mdi-account-multiple-outline"></i>
+                            <span> Employee Manage</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="employee">
+                            <ul class="nav-second-level">
+                                @if (Auth::user()->can('employee.all'))
+                                    <li>
+                                        <a href="{{ route('all#employee') }}">All Employee</a>
+                                    </li>
+                                @endif
+
+                                @if (Auth::user()->can('employee.add'))
+                                    <li>
+                                        <a href="{{ route('add#employee') }}">Add Employee</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
+                @endif --}}
+
+                {{-- @if (Auth::user()->can('attendence.menu'))
+                <li>
+                    <a href="#attendance" data-bs-toggle="collapse">
+                        <i class="fas fa-clock"></i>
+                        <span> Employee Attendance </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="attendance">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('add#attendance') }}">Add Employee Attendance</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('employee#attendance') }}">Employee Attendance List</a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </li>
+            @endif --}}
+
 
                 @if (Auth::user()->can('admin.manage'))
                     <li class="my-1">
