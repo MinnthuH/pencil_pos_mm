@@ -159,7 +159,8 @@
                                                     alt="Product Image" class="img-fluid">
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ $item->product_name }}</h5>
-                                                    <span class="badge bg-dark">{{ $item->selling_price }}&nbsp;ks</span>
+                                                    <span
+                                                        class="badge bg-dark">{{ $item->selling_price }}&nbsp;ks</span>
                                                 </div>
                                                 <span class="badge bg-primary position-absolute top-0 end-0">
                                                     {{ $item->quantity }}
@@ -196,18 +197,19 @@
             $.each(productsData, function(index, product) {
                 productListHtml += `
                 <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
-                    <form action="{{ url('/add-cart') }}" method="post">
+                    <form action="{{ url('/add-cart') }}" method="post" class="product-form">
                         @csrf
                         <input type="hidden" name="id" value="${product.id}">
                         <input type="hidden" name="porductName" value="${product.product_name}">
                         <input type="hidden" name="buyPrice" value="${product.buy_price}">
                         <input type="hidden" name="qty" value="1">
                         <input type="hidden" name="price" value="${product.selling_price}">
-                        <button type="submit" class="btn btn-link">
+                        <button type="submit" class="btn btn-link categor_submit">
                             <div class="card" style="width: 8.5rem;">
                                 <img src="${product.product_image ? product.product_image : '{{ asset('upload/no_image.jpg') }}'}" id="em_photo" class="card-img-top">
                                 <div class="card-body">
                                     <h5 class="card-title">${product.product_name}</h5>
+                                    <h5 class="card-title" style="display: none">${product.product_code}</h5>
                                     <span class="badge bg-dark">${product.selling_price}&nbsp;ks</span>
                                 </div>
                                 <span class="badge bg-primary position-absolute top-0 end-0">${product.quantity}</span>
@@ -255,6 +257,14 @@
             });
 
             displayProducts(filteredProducts);
+
+            // Check if the search term matches any product code and submit the form if it does
+            products.forEach(function(product) {
+                if (searchTerm === product.product_code.toLowerCase()) {
+                    $('input[value="' + product.id + '"]').closest('form').find(
+                        '.categor_submit').click();
+                }
+            });
         });
 
         $('#searchInput').on('input', function() {
@@ -271,7 +281,8 @@
                     displayProducts([product]);
                 } else {
                     $('#product-list-container').empty();
-                    $('#product-list-container').html('<p>No product found for the scanned barcode.</p>');
+                    $('#product-list-container').html(
+                        '<p>No product found for the scanned barcode.</p>');
                 }
             } else {
                 var filteredProducts = products.filter(function(product) {
@@ -311,5 +322,8 @@
         // });
     });
 </script>
+<input type="text" class="form-control" id="searchInput" placeholder="Search products by name, code, or scan barcode"
+    autofocus>
+
 
 @endsection

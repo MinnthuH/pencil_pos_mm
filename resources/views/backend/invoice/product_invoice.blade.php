@@ -188,7 +188,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="username" class="form-label">Discount</label>
-                        <input class="form-control" type="number" id="discount" name="discount">
+                        <input class="form-control" type="number" id="discount" name="discount" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="username" class="form-label">Payment</label>
