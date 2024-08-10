@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transfer_stocks', function (Blueprint $table) {
+        Schema::create('stock_ins', function (Blueprint $table) {
             $table->id();
-            $table->integer('from_shop_id');
-            $table->integer('to_shop_id');
+            $table->string('invoice_no');
+            $table->integer('shop_id');
             $table->integer('product_id');
             $table->integer('quantity');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transfer_stocks');
+        Schema::dropIfExists('stock_ins');
     }
 };

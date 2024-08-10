@@ -86,6 +86,10 @@ Route::controller(ShopController::class)->group(function () {
 
     Route::get('/shop/stock/{id}', 'ShopStock')->name('shop.stock'); // shop stock
     Route::post('/stock/transfer', 'StockTransfer')->name('stock.transfer'); //stock transfer to shop from shop stock list
+
+    Route::get('/stock/adjust/{id}','StockAdjust')->name('stock.adjust'); // stock adjustment
+    Route::post('create/adjust','CreateAdjust')->name('create.adjust'); // stock adjust create
+    Route::post('/add/trasnfer/stock','AddTransferStock')->name('add.transfer.stock'); // Transfer Stock
 });
 
 // Employee All Route
@@ -343,16 +347,33 @@ Route::controller(WarehouseInventory::class)->group(function () {
 
     Route::get('stock/import', 'StockImport')->name('stock.import'); // stock import route
 
+    Route::post('/stockin-shop/order','StockInOrder'); // shop stock import order route
+
+    Route::post('/create-import/order','ImportOrder'); // warehouse stock import order route
+
+    Route::post('add/stock/','AddStock')->name('add.stock'); // Add stock to warehouse method
+
     Route::get('export/stock', 'ExportStock')->name('export.stock'); // Export Stock to Warehouse with file
     Route::post('import/stock', 'ImportStock')->name('import.stock'); // Import Stock to Warehouse with file
+    Route::post('add/stockin-shop','AddStockInShop')->name('add.stockin.shop'); // Add stock to shop method
 
     Route::get('all/transfer-record', 'AllTransferRecord')->name('all.transfer.record'); // all transfer record
+
+    Route::get('all/stockin','AllStockIn')->name('all.stockin'); // all stock in route
+    Route::get('shop/stockin','ShopStockIn')->name('shop.stockin'); // shop stock in route
+
+
+    Route::get('delete/stockin/{id}','DeleteStockin')->name('delete.stockin'); // stock in delete
+
     Route::post('/delete-transfer-record', 'deleteRecord')->name('delete.transfer.record');
 
     // Route::post('/delete-transfer-record', 'deleteRecord')->name('delete.transfer.record');
 
     Route::get('/export/daily-transfer', 'exportDaily')->name('export.daily.transfer');
     Route::get('/export/weekly-transfer', 'exportWeekly')->name('export.weekly.transfer');
+
+    Route::get('/export/daily-stockin', 'StockinDaily')->name('export.daily.stockin');
+    Route::get('/export/weekly-stockin', 'StockinWeekly')->name('export.weekly.stockin');
 
     // Route::get('delete/transfer-record/{id}', 'DeleteTransferRecord')->name('delete.transfer.record'); // Delete transfer record
 

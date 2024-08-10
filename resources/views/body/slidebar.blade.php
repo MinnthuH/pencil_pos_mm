@@ -113,6 +113,11 @@
                                         <a href="{{ route('stock.inventory') }}">စတို လက်ကျန်စာရင်း</a>
                                     </li>
                                 @endif
+                                @if (Auth::user()->can('warehouse.edit'))
+                                <li>
+                                    <a href="{{ route('mass.transfer') }}">Many Transfer</a>
+                                </li>
+                            @endif
                                 {{-- <li>
                                     <a href="{{ route('manage#stock') }}">ဆိုင်လက်ကျန်စာရင်း</a>
                                 </li> --}}
@@ -129,7 +134,7 @@
                     <li class="my-1">
                         <a href="#transfer" data-bs-toggle="collapse">
                             <i class=" fas fa-book-open"></i>
-                            <span> Stock Transfer စာရင်းများ </span>
+                            <span> Stock Manage </span>
                             <span class="menu-arrow"></span>
                         </a>
                         <div class="collapse" id="transfer">
@@ -139,12 +144,17 @@
                                         <a href="{{ route('all.transfer.record') }}">All Transfer</a>
                                     </li>
                                 @endif
+                                @if (Auth::user()->can('warehouse.edit'))
+                                    <li>
+                                        <a href="{{ route('all.stockin') }}">Stock In Lists</a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->can('warehouse.edit'))
                                 <li>
-                                    <a href="{{ route('noti.stock') }}">သတိပေးပစ္စည်းစာရင်း</a>
+                                    <a href="{{ route('shop.stockin') }}">Shop Stock In</a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('noti.expire') }}">Expired သတိပေး</a>
-                                </li>
+                            @endif
+
                             </ul>
                         </div>
                     </li>

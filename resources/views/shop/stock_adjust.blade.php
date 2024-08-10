@@ -2,11 +2,10 @@
 
 @section('admin')
 @section('title')
-    Mass Trasnfer | Pencil POS System
+    Stock Adjust | Pencil POS System
 @endsection
 {{-- jquery link  --}}
 <script src="{{ asset('backend/assets/jquery.js') }}"></script>
-
 
 <style type="text/css">
     /* CSS for the search input field */
@@ -46,13 +45,19 @@
 </style>
 
 <div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
 
+                <h4 class="page-title ms-5">{{$shop->name}}Stock Adjustment</h4>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-4 fixed-col">
             <div class="card">
                 <div class="card text-center">
                     <div class="card-body">
-
                         <table class="table table-bordered border-dark mb-0">
                             <thead>
                                 <tr class="bg-secondary text-white">
@@ -72,7 +77,7 @@
                                         <td>
                                             <form action="{{ url('/stock/cart_update/' . $cart->rowId) }}" method="post">
                                                 @csrf
-                                                <input type="number" name="qty" style="width:70px;" min="1"
+                                                <input type="number" name="qty" style="width:40px;" min="1"
                                                     value="{{ $cart->qty }}">
                                                 <button type="submit" class="btn btn-sm btn-success"
                                                     style="margin-top:-2px;"><i class="fas fa-check"></i></button>
@@ -87,36 +92,26 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{-- <div class="bg-dark">
-                            <br>
-                            <p style="font-size:18px; color:#fff ">Quantity : {{ Cart::count() }} Pcs</p>
 
-                            <br>
-                        </div> --}}
                     </div>
-                    <form action="{{ url('/create-transfer/order') }}" id="myForm" method="post">
+                    <form action="{{ url('create/adjust') }}" id="myForm" method="post">
                         @csrf
 
+                        <input type="hidden" value="{{$shop->id}}" name="originalShop" >
                         <div class="form-group m-2">
-                            <input type="hidden" value="{{$shopId}}" name="originalShop" >
-                            <div class="form-group m-2">
-                                <select name="shopId" class="form-select mt-3" id="example-select">
-                                    <option selected disabled>Please Choose Shop</option>
-                                    @foreach ($shops as $shop)
-                                        <option value="{{ $shop->id }}">{{ $shop->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
+                            <select name="shopId" class="form-select mt-3" id="example-select">
+                                <option selected disabled>Please Choose Shop</option>
+                                @foreach ($shops as $shop)
+                                    <option value="{{ $shop->id }}">{{ $shop->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <!-- end col -->
                         <button class="btn btn-dark waves-effect waves-light mb-3">အော်ဒါ အတည်ပြုရန်</button>
                     </form>
-
-                </div> <!-- end card -->
-            </div> <!-- end card -->
-        </div> <!-- end col-->
+                </div>
+            </div>
+        </div>
 
         <div class="col-lg-8 scrollable-col">
             <div class="card">
@@ -134,19 +129,17 @@
                                     data-category-id="{{ $cat->id }}">{{ $cat->category_name }}</a>
                             @endforeach
                         </div>
-
                     </div>
                     <div class="mb-3">
                         <input type="text" class="form-control" id="searchInput"
                             placeholder="Search products by name, code, or scan barcode" autofocus>
-
                     </div>
                     <h4 class="header-title mb-0">ကုန်ပစ္စည်းများ</h4>
 
                     <div class="row" id="product-list-container">
                         @foreach ($products as $key => $item)
                             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
-                                <form action="{{ url('stocks/add-cart') }}" method="post">
+                                <form action="{{ url('/add-cart') }}" method="post">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $item->id }}">
                                     <input type="hidden" name="porductName" value="{{ $item->product_name }}">
@@ -157,33 +150,17 @@
                                     <button type="submit" class="btn btn-link">
                                         <div class="card" style="width: 8.5rem;">
                                             <div class="position-relative">
-
                                                 <img src="{{ asset($item->product_image ?: 'upload/no_image.jpg') }}"
                                                     alt="Product Image" class="img-fluid">
-                                                <!-- Add position-relative class to the card container -->
-                                                {{-- @if (!empty($item->product_image))
-                                                    <img src="{{ asset($item->product_image) }}" id="em_photo"
-                                                        class="card-img-top">
-                                                @else
-                                                    <img src="{{ asset('upload/no_image.jpg') }}" id="em_photo"
-                                                        class="card-img-top">
-                                                @endif --}}
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ $item->product_name }}</h5>
-                                                    {{-- <span
-                                                        class="badge bg-dark">{{ $item->selling_price }}&nbsp;ks</span> --}}
+
                                                 </div>
-                                                <!-- Use position-absolute, top-0, and end-0 classes to position the selling price badge -->
-                                                <span
-                                                    class="badge bg-primary position-absolute top-0 end-0">{{ $item->product_store }}
+                                                <span class="badge bg-primary position-absolute top-0 end-0">
+                                                    {{ $item->quantity }}
                                                 </span>
-                                                <!-- Use position-absolute, top-0, and start-0 classes to position the product store badge -->
                                             </div>
                                         </div>
-                                        <!-- Example: Display product_image value for debugging -->
-                                        <p>Product Image Path: {{ $item->product_image }}</p>
-
-
                                     </button>
                                 </form>
                             </div>
@@ -194,111 +171,58 @@
                         <div class="col-lg-8">
                             <div id="pagination-container">
                                 {{ $products->links('vendor.pagination.custom_peginate') }}
-                            </div> <!-- end col-->
+                            </div>
                         </div>
                     </div>
-                    <!-- end row-->
-
                 </div>
-            </div> <!-- end card -->
-        </div> <!-- end col-->
-
+            </div>
+        </div>
     </div>
-    <!-- end row -->
-
-
-
-</div> <!-- content -->
-
+</div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#myForm').validate({
-            rules: {
-                shopId: {
-                    required: true,
-                },
-            },
-            messages: {
-                shopId: {
-                    required: 'ဆိုင်ရွေးချယ်ပေးရန် လိုအပ်ပါသည်',
-                },
-
-            },
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-            },
-        });
-    });
-</script>
-
-
-
-
-{{-- update script  --}}
-
-<script>
-    $(document).ready(function() {
-        // Define variables to hold products and pagination data
         var products = [];
-        var currentPage = 1; // Initialize with the default page number
-        var lastPage = 1; // Initialize with the default last page number
+        var currentPage = 1;
+        var lastPage = 1;
 
-        // Function to display products based on the provided data
         function displayProducts(productsData) {
             var productListHtml = '';
             $.each(productsData, function(index, product) {
-                // Create HTML for each product card
                 productListHtml += `
                 <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
-                <form action="{{ url('stocks/add-cart') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="id" value="${product.id}">
-                    <input type="hidden" name="porductName" value="${product.product_name}">
-                    <input type="hidden" name="buyPrice" value="${product.buy_price}">
-                    <input type="hidden" name="qty" value="1">
-                    <input type="hidden" name="price" value="${product.selling_price}">
-                    <button type="submit" class="btn btn-link">
-                        <div class="card" style="width: 8.5rem;">
+                    <form action="{{ url('/add-cart') }}" method="post" class="product-form">
+                        @csrf
+                        <input type="hidden" name="id" value="${product.id}">
+                        <input type="hidden" name="porductName" value="${product.product_name}">
+                        <input type="hidden" name="buyPrice" value="${product.buy_price}">
+                        <input type="hidden" name="qty" value="1">
+                        <input type="hidden" name="price" value="${product.selling_price}">
+                        <button type="submit" class="btn btn-link categor_submit">
+                            <div class="card" style="width: 8.5rem;">
+                                <img src="${product.product_image ? product.product_image : '{{ asset('upload/no_image.jpg') }}'}" id="em_photo" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.product_name}</h5>
+                                    <h5 class="card-title" style="display: none">${product.product_code}</h5>
 
-
-                            <img src="${product.product_image ? product.product_image : '{{ asset('upload/no_image.jpg') }}'}" id="em_photo" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">${product.product_name}</h5>
-
+                                </div>
+                                <span class="badge bg-primary position-absolute top-0 end-0">${product.quantity}</span>
                             </div>
-
-                            <span class="badge bg-primary position-absolute top-0 end-0">${product.product_store}</span>
-                        </div>
-                    </button>
-                </form>
-            </div>
+                        </button>
+                    </form>
+                </div>
                 `;
             });
-
             $('#product-list-container').html(productListHtml);
         }
 
-
-        // Function to update products and pagination data
         function updateProductsAndPagination(data) {
-            products = data.data; // Update products with data
+            products = data.data;
             currentPage = data.current_page;
             lastPage = data.last_page;
-
-            // Display products
             displayProducts(products);
         }
 
-        // Initial display of products on page load
         updateProductsAndPagination(@json($products));
 
         $('.category-link').on('click', function(event) {
@@ -309,7 +233,6 @@
                 url: "{{ url('get-products-by-category') }}" + "/" + categoryId,
                 type: "GET",
                 success: function(response) {
-                    // Update products and pagination data
                     updateProductsAndPagination(response);
                 },
                 error: function(xhr) {
@@ -327,65 +250,74 @@
                 );
             });
 
-            // Display filtered products
             displayProducts(filteredProducts);
+
+            // Check if the search term matches any product code and submit the form if it does
+            products.forEach(function(product) {
+                if (searchTerm === product.product_code.toLowerCase()) {
+                    $('input[value="' + product.id + '"]').closest('form').find(
+                        '.categor_submit').click();
+                }
+            });
         });
 
-        // Your pagination logic here
+        $('#searchInput').on('input', function() {
+            var searchTerm = $(this).val().trim().toLowerCase();
 
+            if (searchTerm.length === 12 && !isNaN(searchTerm)) {
+                var barcode = searchTerm;
+                var product = products.find(function(product) {
+                    return product.product_code === barcode;
+                });
+
+                if (product) {
+                    $('#product-list-container').empty();
+                    displayProducts([product]);
+                } else {
+                    $('#product-list-container').empty();
+                    $('#product-list-container').html(
+                        '<p>No product found for the scanned barcode.</p>');
+                }
+            } else {
+                var filteredProducts = products.filter(function(product) {
+                    return (
+                        product.product_name.toLowerCase().includes(searchTerm) ||
+                        product.product_code.toLowerCase().includes(searchTerm)
+                    );
+                });
+
+                $('#product-list-container').empty();
+                displayProducts(filteredProducts);
+            }
+        });
+
+        $('#myForm').validate({
+             rules: {
+                shopId: {
+                     required: true,
+                 },
+             },
+             messages: {
+                shopId: {
+                     required: 'လွှဲပြောင်းမည့်ဆိုင် ရွေးချယ်ပေးရန် လိုအပ်ပါသည်',
+                 },
+             },
+             errorElement: 'span',
+             errorPlacement: function(error, element) {
+                 error.addClass('invalid-feedback');
+                 element.closest('.form-group').append(error);
+             },
+             highlight: function(element, errorClass, validClass) {
+                 $(element).addClass('is-invalid');
+             },
+             unhighlight: function(element, errorClass, validClass) {
+                 $(element).removeClass('is-invalid');
+            },
+         });
     });
 </script>
-
-
-{{-- barcode scanner  --}}
-
-{{-- <script>
-$(document).ready(function() {
-    // ... Your existing code ...
-
-    // Function to handle barcode scanning
-    $('#searchInput').on('input', function() {
-        var searchTerm = $(this).val().trim().toLowerCase();
-
-        // Check if the input matches a barcode pattern (adjust as needed)
-        if (searchTerm.length === 12 && !isNaN(searchTerm)) {
-            // Assuming barcode is 12 digits long and consists only of numbers
-            // Perform a barcode search using the captured barcode value
-            var barcode = searchTerm;
-            var product = products.find(function(product) {
-                return product.product_code === barcode;
-            });
-
-            if (product) {
-                // Clear previous products and display the matched product
-                $('#product-list-container').empty();
-                displayProducts([product]);
-            } else {
-                // No product found for the scanned barcode
-                $('#product-list-container').empty();
-                // Display a message indicating that no product was found
-                $('#product-list-container').html('<p>No product found for the scanned barcode.</p>');
-            }
-        } else {
-            // Regular text search logic
-            var filteredProducts = products.filter(function(product) {
-                return (
-                    product.product_name.toLowerCase().includes(searchTerm) ||
-                    product.product_code.toLowerCase().includes(searchTerm)
-                );
-            });
-
-            // Display filtered products
-            $('#product-list-container').empty();
-            displayProducts(filteredProducts);
-        }
-    });
-
-    // ... Rest of your existing code ...
-});
-</script> --}}
-{{-- barcode scanner  --}}
-
+<input type="text" class="form-control" id="searchInput" placeholder="Search products by name, code, or scan barcode"
+    autofocus>
 
 
 @endsection

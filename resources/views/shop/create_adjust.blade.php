@@ -3,7 +3,7 @@
 
 @section('admin')
 @section('title')
-    Storck Transfer Order | Pencil POS System
+    Stock Import Order | Pencil POS System
 @endsection
 <div class="content">
 
@@ -16,13 +16,13 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <a href="{{ url('stock/mass_transfer') }}"
+                            <a href="{{ url('/all/shop') }}"
                                 class="btn btn-blue  waves-effect waves-light ">Cancel</a>
                             <span class="ms-2"></span><span></span>
-                            <form action="{{ route('add.transfer') }}" method="post">
+                            <form action="{{ route('add.transfer.stock') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="shopId" value="{{ $shop->id }}">
-                                <input type="hidden" name="originalShop" value="{{ Auth::user()->shop_id }}">
+                                <input type="hidden" name="orgShopId" value="{{ $orgShopName->id }}">
                                 <button class="btn btn-blue waves-effect waves-light " type="submit">Transfer</button>
                             </form>
 
@@ -31,7 +31,7 @@
 
 
                     </div>
-                    <h4 class="page-title">{{ $shop->name }}<span></span>သို့ လွှဲပြောင်းမည့် ကုန်ပစ္စည်းစာရင်း</h4>
+                    <h4 class="page-title">{{ $orgShopName->name ?? 'Unknown' }}<span> မှ </span>{{ $shop->name ?? 'Unknown' }} သို့  လွှဲပြောင်းမည့် ကုန်ပစ္စည်းစာရင်း</h4>
                 </div>
                 @php
                     $totalItems = count($cartItem); // Count the total number of items

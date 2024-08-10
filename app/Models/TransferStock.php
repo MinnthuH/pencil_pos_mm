@@ -13,7 +13,8 @@ class TransferStock extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'shop_id',
+        'from_shop_id',
+        'to_shop_id',
         'product_id',
         'quantity',
         'created_at',
@@ -26,8 +27,13 @@ class TransferStock extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function shop()
+    public function toshop()
     {
-        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+        return $this->belongsTo(Shop::class, 'to_shop_id', 'id');
+    }
+
+    public function fromshop()
+    {
+        return $this->belongsTo(Shop::class, 'from_shop_id', 'id');
     }
 }

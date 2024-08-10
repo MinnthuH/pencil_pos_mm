@@ -3,7 +3,7 @@
 
 @section('admin')
 @section('title')
-    Storck Transfer Order | Pencil POS System
+    Stock Import Order | Pencil POS System
 @endsection
 <div class="content">
 
@@ -13,17 +13,16 @@
         <!-- start page title -->
         <div class="row">
             <div class="col-12">
-                <div class="page-title-box">
+                <div class="page-title-box mb-2">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <a href="{{ url('stock/mass_transfer') }}"
+                            <a href="{{ url('stock/import') }}"
                                 class="btn btn-blue  waves-effect waves-light ">Cancel</a>
                             <span class="ms-2"></span><span></span>
-                            <form action="{{ route('add.transfer') }}" method="post">
+                            <form action="{{ route('add.stock') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="shopId" value="{{ $shop->id }}">
-                                <input type="hidden" name="originalShop" value="{{ Auth::user()->shop_id }}">
-                                <button class="btn btn-blue waves-effect waves-light " type="submit">Transfer</button>
+                                <button class="btn btn-blue waves-effect waves-light " type="submit">Import</button>
                             </form>
 
                             <span class="ms-2"></span><span></span>
@@ -31,12 +30,15 @@
 
 
                     </div>
-                    <h4 class="page-title">{{ $shop->name }}<span></span>သို့ လွှဲပြောင်းမည့် ကုန်ပစ္စည်းစာရင်း</h4>
-                </div>
-                @php
+                    {{-- <h4 class="page-title">{{ $orgShopName->name ?? 'Unknown' }}<span> မှ </span>{{ $shop->name ?? 'Unknown' }} သို့  လွှဲပြောင်းမည့် ကုန်ပစ္စည်းစာရင်း</h4> --}}
+
+                    @php
                     $totalItems = count($cartItem); // Count the total number of items
                 @endphp
-                <h4>Total Prodcuts: {{ $totalItems }}</h4>
+                <h4 class="page-title ms-5">Total Prodcuts: {{ $totalItems }}</h4>
+
+                </div>
+
             </div>
         </div>
         <!-- end page title -->

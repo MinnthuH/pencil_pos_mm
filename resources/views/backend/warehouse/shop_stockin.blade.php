@@ -2,32 +2,24 @@
 
 @section('admin')
 @section('title')
-    Mass Trasnfer | Pencil POS System
+    Stock Import to Shop | Pencil POS System
 @endsection
 {{-- jquery link  --}}
 <script src="{{ asset('backend/assets/jquery.js') }}"></script>
 
 
 <style type="text/css">
-    /* CSS for the search input field */
     #searchInput {
         width: 100%;
         max-width: 400px;
         margin: 0 auto;
     }
 
-    /* CSS for the product cards */
-    .col-lg-3.col-md-3.col-sm-6.col-6.mt-3 {
-        /* Adjust the card styling as per your design */
-    }
-
-    /* CSS for the right column (scrollable area) */
     .scrollable-col {
         height: calc(100vh - 130px);
         overflow-y: auto;
     }
 
-    /* CSS for the left column (fixed position) */
     .fixed-col {
         position: sticky;
         top: 20px;
@@ -43,9 +35,55 @@
     .image-card {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-</style>
 
+    /* Responsive cart table */
+    .table thead th {
+        font-size: 1rem;
+    }
+
+    .table tbody td {
+        font-size: 0.875rem;
+        vertical-align: middle;
+    }
+
+    .btn-update {
+        padding: 4px 8px;
+        font-size: 0.875rem;
+    }
+
+    .btn-remove {
+        font-size: 1rem;
+        color: #ff4d4d;
+    }
+
+    /* Custom styling for small screens */
+    @media (max-width: 576px) {
+        .table-responsive {
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            background-color: transparent;
+        }
+
+        .table th,
+        .table td {
+            white-space: nowrap;
+        }
+    }
+</style>
 <div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h2 class="page-title ms-2">Direct Stock Into Shops</h2>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-lg-4 fixed-col">
@@ -67,21 +105,20 @@
                             <tbody>
                                 @foreach ($allcart as $cart)
                                     <tr>
-
                                         <td>{{ $cart->name }}</td>
                                         <td>
                                             <form action="{{ url('/stock/cart_update/' . $cart->rowId) }}" method="post">
                                                 @csrf
-                                                <input type="number" name="qty" style="width:70px;" min="1"
-                                                    value="{{ $cart->qty }}">
-                                                <button type="submit" class="btn btn-sm btn-success"
-                                                    style="margin-top:-2px;"><i class="fas fa-check"></i></button>
+                                                <input type="number" name="qty" style="width:50px;" min="1" value="{{ $cart->qty }}">
+                                                <button type="submit" class="btn btn-sm btn-success btn-update">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
                                             </form>
                                         </td>
-
-                                        <td><a href="{{ url('/stock/cart_remove/' . $cart->rowId) }}"
-                                                style="margin-top:-2px;"><i class="fas fa-trash-alt"
-                                                    style="color:rgb(25, 7, 187)"></i></a>
+                                        <td>
+                                            <a href="{{ url('/stock/cart_remove/' . $cart->rowId) }}" class="btn-remove">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -94,24 +131,19 @@
                             <br>
                         </div> --}}
                     </div>
-                    <form action="{{ url('/create-transfer/order') }}" id="myForm" method="post">
+                    <form action="{{ url('/stockin-shop/order') }}" id="myForm" method="post">
                         @csrf
+                        <div class="form-group mb-3 m-2">
 
-                        <div class="form-group m-2">
-                            <input type="hidden" value="{{$shopId}}" name="originalShop" >
-                            <div class="form-group m-2">
-                                <select name="shopId" class="form-select mt-3" id="example-select">
-                                    <option selected disabled>Please Choose Shop</option>
-                                    @foreach ($shops as $shop)
-                                        <option value="{{ $shop->id }}">{{ $shop->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
+                            <select name="shopId" class="form-select mt-3" id="example-select">
+                                <option selected disabled>Please Select Shop</option>
+                                @foreach ($shops as $shop)
+                                    <option value="{{ $shop->id }}">{{ $shop->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <!-- end col -->
-                        <button class="btn btn-dark waves-effect waves-light mb-3">အော်ဒါ အတည်ပြုရန်</button>
+                        <button class="btn btn-dark waves-effect waves-light mb-3">Confirm Order</button>
                     </form>
 
                 </div> <!-- end card -->
@@ -173,11 +205,7 @@
                                                     {{-- <span
                                                         class="badge bg-dark">{{ $item->selling_price }}&nbsp;ks</span> --}}
                                                 </div>
-                                                <!-- Use position-absolute, top-0, and end-0 classes to position the selling price badge -->
-                                                <span
-                                                    class="badge bg-primary position-absolute top-0 end-0">{{ $item->product_store }}
-                                                </span>
-                                                <!-- Use position-absolute, top-0, and start-0 classes to position the product store badge -->
+
                                             </div>
                                         </div>
                                         <!-- Example: Display product_image value for debugging -->
@@ -276,7 +304,6 @@
 
                             </div>
 
-                            <span class="badge bg-primary position-absolute top-0 end-0">${product.product_store}</span>
                         </div>
                     </button>
                 </form>
@@ -335,57 +362,6 @@
 
     });
 </script>
-
-
-{{-- barcode scanner  --}}
-
-{{-- <script>
-$(document).ready(function() {
-    // ... Your existing code ...
-
-    // Function to handle barcode scanning
-    $('#searchInput').on('input', function() {
-        var searchTerm = $(this).val().trim().toLowerCase();
-
-        // Check if the input matches a barcode pattern (adjust as needed)
-        if (searchTerm.length === 12 && !isNaN(searchTerm)) {
-            // Assuming barcode is 12 digits long and consists only of numbers
-            // Perform a barcode search using the captured barcode value
-            var barcode = searchTerm;
-            var product = products.find(function(product) {
-                return product.product_code === barcode;
-            });
-
-            if (product) {
-                // Clear previous products and display the matched product
-                $('#product-list-container').empty();
-                displayProducts([product]);
-            } else {
-                // No product found for the scanned barcode
-                $('#product-list-container').empty();
-                // Display a message indicating that no product was found
-                $('#product-list-container').html('<p>No product found for the scanned barcode.</p>');
-            }
-        } else {
-            // Regular text search logic
-            var filteredProducts = products.filter(function(product) {
-                return (
-                    product.product_name.toLowerCase().includes(searchTerm) ||
-                    product.product_code.toLowerCase().includes(searchTerm)
-                );
-            });
-
-            // Display filtered products
-            $('#product-list-container').empty();
-            displayProducts(filteredProducts);
-        }
-    });
-
-    // ... Rest of your existing code ...
-});
-</script> --}}
-{{-- barcode scanner  --}}
-
 
 
 @endsection

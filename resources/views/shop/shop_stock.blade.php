@@ -29,7 +29,6 @@
                                     <th>Code</th>
                                     <th>လက်ကျန်</th>
                                     @if (Auth::user()->can('warehouse.edit'))
-                                    <th>ဆိုင်သို့လွှဲရန်</th>
                                     @endif
                                 </tr>
                             </thead>
@@ -43,14 +42,6 @@
                                         <td>{{ $item->product->product_code }}</td>
                                         <td>
                                             <button class="btn btn-warning waves-effect waves-light">{{ $item->quantity }}</button>
-                                        </td>
-                                        <td>
-                                            @if (Auth::user()->can('warehouse.edit'))
-                                                <a href="#" class="btn btn-info sm" data-bs-toggle="modal" data-bs-target="#signup-modal" data-productid="{{ $item->id }}" title="Transfer">
-                                                    <i class="fas fa-chart-line"></i>
-                                                </a>
-                                            @endif
-                                            <input type="hidden" name="shopId" data-shopid="{{ $shop->id }}">
                                         </td>
                                     </tr>
                                 @endforeach

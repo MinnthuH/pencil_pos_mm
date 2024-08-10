@@ -11,12 +11,13 @@ class DailyTransferExport implements FromCollection, WithHeadings
     public function collection()
     {
         return TransferStock::whereDate('created_at', Carbon::today())
-            ->with('shop', 'product')
+            ->with('fromshop', 'toshop', 'product')
             ->get()
             ->map(function($item) {
                 return [
-                    'Shop Name' => $item->shop->name,
-                    'Product Name' => $item->product->product_name,
+                    'From Shop Name' => $item->fromshop->name ?? 'N/A',
+                    'To Shop Name' => $item->toshop->name ?? 'N/A',
+                    'Product Name' => $item->product->product_name ?? 'N/A',
                     'Transfer Date' => $item->created_at->format('Y-m-d'),
                     'Transfer Quantity' => $item->quantity,
                 ];
@@ -26,7 +27,8 @@ class DailyTransferExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Shop Name',
+            'From Shop Name',
+            'To Shop Name',
             'Product Name',
             'Transfer Date',
             'Transfer Quantity',

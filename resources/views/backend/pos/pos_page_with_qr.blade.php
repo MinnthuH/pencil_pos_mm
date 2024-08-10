@@ -103,7 +103,7 @@
                     <form action="{{ url('create-invoice') }}" id="myForm" method="post">
                         @csrf
 
-                        <div class="form-group mb-3">
+                        <div class="form-group m-2">
                             <select name="customerId" class="form-select mt-3" id="example-select">
                                 <option selected disabled>ဖေါက်သည် ရွေးချယ်ပါ...</option>
                                 @foreach ($customers as $cust)

@@ -38,7 +38,7 @@
                                     <th>Shop Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Address</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
 
@@ -52,17 +52,17 @@
                                         <td>{{ $item->phone }}</td>
                                         <td>
 
-                                            <a href="{{ route('shop.stock', $item->id) }}"
-                                                class="btn btn-primary sm" title="Shop Stock"><i
-                                                    class="fas fa-chart-line"></i></a>
+                                            <a href="{{ route('stock.adjust', $item->id) }}" class="btn btn-primary sm"
+                                                title="Stock Adjust"><i class="fas fa-exchange-alt"></i></a>
 
-                                                <a href="{{ route('shop#info', $item->id) }}"
-                                                    class="btn btn-info sm" title="Edit Data"><i
-                                                        class="far fa-edit"></i></a>
+                                            <a href="{{ route('shop.stock', $item->id) }}" class="btn btn-secondary sm"
+                                                title="Shop Stock"><i class="fas fa-chart-line"></i></a>
 
-                                                <a href="{{ route('shop#delete', $item->id) }}"
-                                                    class="btn btn-danger sm" title="Delete Data" id="delete"><i
-                                                        class="fas fa-trash-alt"></i></a>
+                                            <a href="{{ route('shop#info', $item->id) }}" class="btn btn-info sm"
+                                                title="Edit Data"><i class="far fa-edit"></i></a>
+
+                                            <a href="{{ route('shop#delete', $item->id) }}" class="btn btn-danger sm"
+                                                title="Delete Data" id="delete"><i class="fas fa-trash-alt"></i></a>
 
                                         </td>
                                     </tr>
