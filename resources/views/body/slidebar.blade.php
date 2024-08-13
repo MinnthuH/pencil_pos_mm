@@ -146,7 +146,7 @@
                                 @endif
                                 @if (Auth::user()->can('warehouse.edit'))
                                     <li>
-                                        <a href="{{ route('all.stockin') }}">Stock In Lists</a>
+                                        <a href="{{ route('all.stockin') }}">All Stock In</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->can('warehouse.edit'))

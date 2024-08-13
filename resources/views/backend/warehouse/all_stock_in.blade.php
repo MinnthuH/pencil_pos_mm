@@ -43,9 +43,7 @@
                                     <th>စဉ်</th>
                                     <th>Invoice No</th>
                                     <th>Shop Name</th>
-                                    <th>ကုန်ပစ္စည်း အမည်</th>
                                     <th>Date</th>
-                                    <th>Qty</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -56,20 +54,24 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $item->invoice_no }}</td>
                                         <td>{{ $item->shop->name }}</td>
-                                        <td>{{ $item->product->product_name }}</td>
-                                        <td>{{ $item->created_at }}</td>
-                                        <td>{{ $item->quantity }}</td>
+                                        <td>{{ $item->date }}</td> <!-- Display the formatted date -->
+
                                         <td>
                                             {{-- @if (Auth::user()->can('warehouse.edit'))
                                                 <a href="{{ route('edit.inventory', $item->id) }}" class="btn btn-info sm" title="Edit Inventory"><i class="far fa-edit"></i></a>
                                             @endif --}}
-                                            @if (Auth::user()->can('warehouse.edit'))
-                                                <a href="{{ route('delete.stockin', $item->id) }}"
+
+                                            <a href="{{route('detail.stockin',$item->invoice_no)}}"
+                                                class="btn btn-info sm" title="Detail"><i
+                                                    class="fas fa-eye"></i></a>
+
+                                                {{-- <a href="{{ route('delete.stockin', $item->id) }}"
                                                     class="btn btn-danger sm" title="Delete Data" id="delete"><i
-                                                        class="fas fa-trash-alt"></i></a>
-                                            @endif
+                                                        class="fas fa-trash-alt"></i></a> --}}
+
                                         </td>
                                     </tr>
+
                                 @endforeach
                             </tbody>
 

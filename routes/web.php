@@ -358,16 +358,25 @@ Route::controller(WarehouseInventory::class)->group(function () {
     Route::post('add/stockin-shop','AddStockInShop')->name('add.stockin.shop'); // Add stock to shop method
 
     Route::get('all/transfer-record', 'AllTransferRecord')->name('all.transfer.record'); // all transfer record
+    Route::get('detail/transfer/{invoiceNo}','DetailTransfer')->name('detail.transfer'); // detail transfer in
 
     Route::get('all/stockin','AllStockIn')->name('all.stockin'); // all stock in route
+    Route::get('detail/stockin/{invoiceNo}','DetailStockIn')->name('detail.stockin'); // detail stock in
+
     Route::get('shop/stockin','ShopStockIn')->name('shop.stockin'); // shop stock in route
 
 
     Route::get('delete/stockin/{id}','DeleteStockin')->name('delete.stockin'); // stock in delete
 
+    // Route::delete('/delete-transfer-record/{id}', 'DeleteTransferRecord')->name('delete.transfer.record');
+
+
+
+
+    // Route::post('/delete-transfer-record', 'DeleteTransferRecord')->name('delete.transfer.record');
+
     Route::post('/delete-transfer-record', 'deleteRecord')->name('delete.transfer.record');
 
-    // Route::post('/delete-transfer-record', 'deleteRecord')->name('delete.transfer.record');
 
     Route::get('/export/daily-transfer', 'exportDaily')->name('export.daily.transfer');
     Route::get('/export/weekly-transfer', 'exportWeekly')->name('export.weekly.transfer');

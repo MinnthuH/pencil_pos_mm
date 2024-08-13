@@ -42,24 +42,28 @@
                             <thead>
                                 <tr>
                                     <th>စဉ်</th>
+                                    <th>Invoice</th>
                                     <th>From Shop</th>
                                     <th>To Shop</th>
-                                    <th>ကုန်ပစ္စည်း အမည်</th>
                                     <th>Transfer Date</th>
-                                    <th>Transfer Qty</th>
-                                    {{-- <th>Action</th> --}}
+                                    <th>Action</th>
                                 </tr>
                             </thead>
 
                         <tbody>
-                                @foreach ($transfer as $key => $item)
+                                @foreach ($transfers as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $item['fromshop']['name'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['toshop']['name'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['product']['product_name'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['date'] }}</td>
-                                        <td>{{ $item['total_quantity'] }}</td>
+                                        <td>{{ $item->invoice_no }}</td>
+                                        <td>{{ $item->fromShop->name ?? 'N/A' }}</td>
+                                        <td>{{ $item->toShop->name ?? 'N/A' }}</td>
+                                        <td>{{ $item->date }}</td>
+
+                                        <td>
+                                            <a href="{{route('detail.transfer',$item->invoice_no)}}"
+                                                class="btn btn-info sm" title="Detail"><i
+                                                    class="fas fa-eye"></i></a>
+                                        </td>
                                         {{-- <td>
                                             @if (Auth::user()->can('warehouse.delete'))
                                                 <form action="{{ route('delete.transfer.record') }}" method="POST" style="display:inline;">

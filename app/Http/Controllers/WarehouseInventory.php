@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\Shop;
-use App\Models\Product;
-use App\Models\StockIn;
-use App\Models\Category;
-use App\Models\Warehouse;
-use App\Models\ShopProduct;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\TransferStock;
-use Illuminate\Support\Facades\DB;
 use App\Exports\DailyStockinExport;
-use Illuminate\Support\Facades\Log;
 use App\Exports\DailyTransferExport;
-use App\Exports\WeeklyStockinExport;
-use App\Imports\StockTransferImport;
-use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\WarehouseStockExport;
+use App\Exports\WeeklyStockinExport;
 use App\Exports\WeeklyTransferExport;
+use App\Imports\StockTransferImport;
 use App\Imports\WarehouseStockImport;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Shop;
+use App\Models\ShopProduct;
+use App\Models\StockIn;
+use App\Models\TransferStock;
+use App\Models\Warehouse;
+use Carbon\Carbon;
+use Exception;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WarehouseInventory extends Controller
 {
@@ -113,7 +113,7 @@ class WarehouseInventory extends Controller
     {
         $inventory = Product::latest()->get();
 
-        $shops = Shop::where('id','!=',1)->get();
+        $shops = Shop::where('id', '!=', 1)->get();
 
         return view('backend.warehouse.inventory_stock', compact('inventory', 'shops'));
     } // End Method
@@ -126,6 +126,9 @@ class WarehouseInventory extends Controller
         $shopId = $request->shopId;
         $productId = $request->productId;
         $qty = $request->transferStock;
+        $datePart = Carbon::now()->format('Ymd'); // e.g., 20240809
+        $randomPart = strtoupper(Str::random(6)); // e.g., A1B2C3
+        $invoiceNo = 'MGL-' . $datePart . '-' . $randomPart;
 
         $product = Product::findOrFail($productId);
 
@@ -147,6 +150,7 @@ class WarehouseInventory extends Controller
 
         // Insert the transfer stock record
         TransferStock::create([
+            'invoice_no' => $invoiceNo,
             'from_shop_id' => $orgShopId,
             'to_shop_id' => $shopId,
             'product_id' => $productId,
@@ -162,30 +166,85 @@ class WarehouseInventory extends Controller
     }
 
     // All Transfer Stock Record Method
+
     public function AllTransferRecord()
     {
-        $transfer = TransferStock::select(
-            'to_shop_id',
-            'from_shop_id',
-            'product_id',
-            DB::raw('DATE(created_at) as date'),
-            DB::raw('SUM(quantity) as total_quantity')
-        )
+        $transfers = TransferStock::select('invoice_no', 'to_shop_id', 'from_shop_id', DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date'))
+            ->with('fromShop', 'toShop')
+            ->groupBy('invoice_no', 'to_shop_id', 'from_shop_id')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('backend.warehouse.all_transfer_record', compact('transfers'));
+    }
+
+    // public function AllTransferRecord()
+    // {
+    //     $transfer = TransferStock::select(
+    //         'to_shop_id',
+    //         'from_shop_id',
+    //         'product_id',
+    //         DB::raw('DATE(created_at) as date'),
+    //         DB::raw('SUM(quantity) as total_quantity')
+    //     )
+    //         ->with(['fromshop', 'toshop', 'product'])
+    //         ->groupBy('to_shop_id', 'from_shop_id', 'product_id', DB::raw('DATE(created_at)'))
+    //         ->orderBy('date', 'desc')
+    //         ->get();
+
+    //     return view('backend.warehouse.all_transfer_record', compact('transfer'));
+    // } // End Method
+
+    // Detail Transfer Method
+    public function DetailTransfer($invoiceNo)
+    {
+        $transfer = TransferStock::where('invoice_no', $invoiceNo)
+            ->select(
+                'to_shop_id',
+                'from_shop_id',
+                'product_id',
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('SUM(quantity) as total_quantity')
+            )
             ->with(['fromshop', 'toshop', 'product'])
             ->groupBy('to_shop_id', 'from_shop_id', 'product_id', DB::raw('DATE(created_at)'))
             ->orderBy('date', 'desc')
             ->get();
 
-        return view('backend.warehouse.all_transfer_record', compact('transfer'));
+        $transferProducts = count($transfer);
+
+        return view('backend.warehouse.detail_transfer', compact('transfer', 'transferProducts'));
     } // End Method
+
 
 // All Stock IN List Method
     public function AllStockIn()
     {
-        $stockIn = StockIn::orderBy('id', 'desc')->with('product')->get();
+        $stockIn = StockIn::select('invoice_no', 'shop_id', DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date'))
+            ->groupBy('invoice_no', 'shop_id')
+            ->orderBy('id', 'desc')
+            ->get();
 
         return view('backend.warehouse.all_stock_in', compact('stockIn'));
     } // End Method
+
+// Stock Detail Method
+    public function DetailStockIn($invoiceNo)
+    {
+        // Fetch all stock entries with the same invoice number
+        $stockInDetails = StockIn::where('invoice_no', $invoiceNo)
+            ->with('product', 'shop')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $productCount = count($stockInDetails);
+
+        $shopName = $stockInDetails->isNotEmpty() ? $stockInDetails->first()->shop->name : null;
+
+        // Return the view with the stock details and shop name
+        return view('backend.warehouse.detail_stock_in', compact('stockInDetails', 'shopName', 'productCount'));
+    } // End Method
+    // End Method
 
     // Shop Stockin Method
     public function ShopStockIn()
@@ -198,8 +257,8 @@ class WarehouseInventory extends Controller
         return view('backend.warehouse.shop_stockin', compact('products', 'categories', 'shops', ));
     } // End Method
 
-    public function StockInOrder(Request $request){
-
+    public function StockInOrder(Request $request)
+    {
 
         $cartItem = Cart::content();
         $shopId = $request->shopId;
@@ -353,22 +412,24 @@ class WarehouseInventory extends Controller
         return redirect()->route('all.stockin')->with($noti);
     }
 
-    // Delete Transfer Record
+
+    // delete transfer record
     public function deleteRecord(Request $request)
     {
-
-        // Debugging statement
         \Log::info('Delete request received', $request->all());
 
-        $shopId = $request->shop_id;
+        $fromShopId = $request->fromshopid;
+        $toShopId = $request->toshopid;
         $productId = $request->product_id;
         $date = $request->date;
 
         $startDate = Carbon::parse($date)->startOfDay();
         $endDate = Carbon::parse($date)->endOfDay();
 
-        // Delete the records
-        $deleted = TransferStock::where('shop_id', $shopId)
+        $deleted = TransferStock::where(function($query) use ($fromShopId, $toShopId) {
+                $query->where('from_shop_id', $fromShopId)
+                      ->orWhere('to_shop_id', $toShopId);
+            })
             ->where('product_id', $productId)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->delete();
@@ -387,6 +448,8 @@ class WarehouseInventory extends Controller
 
         return redirect()->route('all.transfer.record')->with($noti);
     }
+
+
 
     // Delete Transfer Record Method
     public function DeleteTransferRecord($id)
@@ -416,7 +479,7 @@ class WarehouseInventory extends Controller
 
         $categories = Category::latest()->get();
 
-        return view('backend.warehouse.stocks_tranfer', compact('products', 'categories', 'shops','shopId'));
+        return view('backend.warehouse.stocks_tranfer', compact('products', 'categories', 'shops', 'shopId'));
 
     } // End Method
 
@@ -498,7 +561,7 @@ class WarehouseInventory extends Controller
             // Insert the  stockin record
             StockIn::create([
                 'invoice_no' => $invoiceNo,
-                'shop_id'=>$shopId,
+                'shop_id' => $shopId,
                 'product_id' => $productId,
                 'quantity' => $qty,
                 'created_at' => Carbon::now(),
@@ -609,6 +672,9 @@ class WarehouseInventory extends Controller
         $orgShopId = $request->originalShop;
         $shopId = $request->shopId;
         $cartItems = Cart::content();
+        $datePart = Carbon::now()->format('Ymd'); // e.g., 20240809
+        $randomPart = strtoupper(Str::random(6)); // e.g., A1B2C3
+        $invoiceNo = 'MGL-' . $datePart . '-' . $randomPart;
 
         foreach ($cartItems as $item) {
             $productId = $item->id;
@@ -634,6 +700,7 @@ class WarehouseInventory extends Controller
 
             // Insert the transfer stock record
             TransferStock::create([
+                'invoice_no' => $invoiceNo,
                 'from_shop_id' => $orgShopId,
                 'to_shop_id' => $shopId,
                 'product_id' => $productId,

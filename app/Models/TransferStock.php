@@ -13,6 +13,7 @@ class TransferStock extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'invoice_no',
         'from_shop_id',
         'to_shop_id',
         'product_id',
@@ -27,13 +28,13 @@ class TransferStock extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function toshop()
+    public function fromShop()
     {
-        return $this->belongsTo(Shop::class, 'to_shop_id', 'id');
+        return $this->belongsTo(Shop::class, 'from_shop_id');
     }
 
-    public function fromshop()
+    public function toShop()
     {
-        return $this->belongsTo(Shop::class, 'from_shop_id', 'id');
+        return $this->belongsTo(Shop::class, 'to_shop_id');
     }
 }

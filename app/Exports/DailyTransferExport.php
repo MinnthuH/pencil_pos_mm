@@ -15,6 +15,7 @@ class DailyTransferExport implements FromCollection, WithHeadings
             ->get()
             ->map(function($item) {
                 return [
+                    'Invoice No' => $item->invoice_no,
                     'From Shop Name' => $item->fromshop->name ?? 'N/A',
                     'To Shop Name' => $item->toshop->name ?? 'N/A',
                     'Product Name' => $item->product->product_name ?? 'N/A',
@@ -27,6 +28,7 @@ class DailyTransferExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
+            'Invoice No',
             'From Shop Name',
             'To Shop Name',
             'Product Name',

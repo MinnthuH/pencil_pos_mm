@@ -276,7 +276,7 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>စဉ်</th>
-                                        <th class="text-wrap">အရောင်းဝန်ထမ်း</th>
+                                        <th class="text-wrap">ဆိုင်အမည်</th>
                                         <th class="text-wrap">အရောင်းဝန်ထမ်း</th>
                                         <th>ဘောင်ချာ နေ့စွဲ</th>
                                         <th>ဘောင်ချာ နံပါတ်</th>

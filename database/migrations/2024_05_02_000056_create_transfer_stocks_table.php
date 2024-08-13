@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('transfer_stocks', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_no',100);
             $table->integer('from_shop_id');
             $table->integer('to_shop_id');
             $table->integer('product_id');

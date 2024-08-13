@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Str;
+
 
 class ShopController extends Controller
 {
@@ -229,6 +231,9 @@ public function AddTransferStock(Request $request)
     $shopId = $request->shopId;
     $orgShopId = $request->orgShopId;
     $cartItems = Cart::content();
+    $datePart = Carbon::now()->format('Ymd'); // e.g., 20240809
+    $randomPart = strtoupper(Str::random(6)); // e.g., A1B2C3
+    $invoiceNo = 'MGL-' . $datePart . '-' . $randomPart;
 
     // Start the database transaction
     DB::beginTransaction();
@@ -260,6 +265,7 @@ public function AddTransferStock(Request $request)
 
                 // Insert the transfer stock record
                 TransferStock::create([
+                    'invoice_no' => $invoiceNo,
                     'from_shop_id' => $orgShopId,
                     'to_shop_id' => $shopId,
                     'product_id' => $productId,
@@ -296,6 +302,7 @@ public function AddTransferStock(Request $request)
 
                 // Insert the transfer stock record
                 TransferStock::create([
+                    'invoice_no' => $invoiceNo,
                     'from_shop_id' => $orgShopId,
                     'to_shop_id' => $shopId,
                     'product_id' => $productId,
