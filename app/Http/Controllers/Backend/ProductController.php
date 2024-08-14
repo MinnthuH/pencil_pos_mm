@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Exports\ProductExport;
-use App\Http\Controllers\Controller;
-use App\Imports\ProductImport;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Supplier;
 use Carbon\Carbon;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Supplier;
+// use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
 use Illuminate\Support\Facades\DB;
-use Intervention\Image\Facades\Image;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use Intervention\Image\Facades\Image;
 use Picqer\Barcode\BarcodeGeneratorPNG;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
+
 
 class ProductController extends Controller
 {
@@ -292,5 +294,22 @@ class ProductController extends Controller
         $lessProducts = Product::where('product_store', '<', DB::raw('product_track'))->get();
         return view('backend.stock.less_stock', compact('lessProducts'));
     } // End method
+
+
+ // All Prodcut code print in A4
+    public function printProductBarcodes()
+    {
+        $products = Product::all();
+        $generator = new BarcodeGeneratorPNG();
+
+        // Loop through each product to generate the barcode image
+        foreach ($products as $product) {
+            $barcodeData = $generator->getBarcode($product->product_code, $generator::TYPE_CODE_128);
+            $product->barcode_image = base64_encode($barcodeData);
+        }
+
+        // Pass the products with barcode images to the view
+        return view('print.product_barcodes', compact('products'));
+    }
 
 }

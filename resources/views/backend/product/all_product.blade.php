@@ -17,6 +17,11 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             @if (Auth::user()->can('admin.manage'))
+                            <a href="{{ route('print.productBarcodes') }}" class="btn btn-blue rounded-pill waves-effect waves-light">
+                                Print Product Barcodes
+                            </a>
+
+                                &nbsp;
                                 <a href="{{ route('import#product') }}"
                                     class="btn btn-blue rounded-pill waves-effect waves-light"> Import</a>
                                 &nbsp;

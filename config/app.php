@@ -190,6 +190,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -219,6 +220,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class, //image intervention
         'Excel' => Maatwebsite\Excel\Facades\Excel::class, // Excel
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class, // Shopping Cart
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ])->toArray(),
 
 ];

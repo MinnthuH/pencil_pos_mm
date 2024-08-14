@@ -190,6 +190,10 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('export/product', 'ExportProduct')->name('export#product'); // Exprot product route
     Route::post('import', 'Import')->name('import'); // Import
 
+    Route::get('/print/product-barcodes','printProductBarcodes')->name('print.productBarcodes');
+
+
+
     ////// Add Stock ////
     Route::post('refill/stock', 'refillStock')->name('refill.stock'); // refill stock
     Route::get('noti/expire', 'NotiExpireProduct')->name('noti.expire'); // Noti Expire route
