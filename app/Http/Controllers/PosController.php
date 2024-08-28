@@ -30,7 +30,7 @@ class PosController extends Controller
         $products = Product::whereIn('id', $shopProductIds)
             ->where('expire_date', '>', Carbon::now())
             ->latest()
-            ->paginate(10); // Change the number '10' to the desired number of products per page
+            ->paginate(150); // Change the number '10' to the desired number of products per page
 
         // Add quantity to each product
         foreach ($products as $product) {

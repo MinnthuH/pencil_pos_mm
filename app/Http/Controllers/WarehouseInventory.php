@@ -168,15 +168,21 @@ class WarehouseInventory extends Controller
     // All Transfer Stock Record Method
 
     public function AllTransferRecord()
-    {
-        $transfers = TransferStock::select('invoice_no', 'to_shop_id', 'from_shop_id', DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date'))
-            ->with('fromShop', 'toShop')
-            ->groupBy('invoice_no', 'to_shop_id', 'from_shop_id')
-            ->orderBy('id', 'desc')
-            ->get();
+{
+    $transfers = TransferStock::select(
+            'invoice_no',
+            'to_shop_id',
+            'from_shop_id',
+            DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date')
+        )
+        ->with('fromShop', 'toShop')
+        ->groupBy('invoice_no', 'to_shop_id', 'from_shop_id')
+        ->orderBy(DB::raw('MIN(id)'), 'desc') // Using MIN(id) to order by the earliest record in each group
+        ->get();
 
-        return view('backend.warehouse.all_transfer_record', compact('transfers'));
-    }
+    return view('backend.warehouse.all_transfer_record', compact('transfers'));
+}
+
 
     // public function AllTransferRecord()
     // {
@@ -218,15 +224,16 @@ class WarehouseInventory extends Controller
 
 
 // All Stock IN List Method
-    public function AllStockIn()
-    {
-        $stockIn = StockIn::select('invoice_no', 'shop_id', DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date'))
-            ->groupBy('invoice_no', 'shop_id')
-            ->orderBy('id', 'desc')
-            ->get();
+public function AllStockIn()
+{
+    $stockIn = StockIn::select('invoice_no', 'shop_id', DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date'), DB::raw('MIN(id) as min_id'))
+        ->groupBy('invoice_no', 'shop_id')
+        ->orderBy('min_id', 'desc') // Order by the minimum id of each group
+        ->get();
 
-        return view('backend.warehouse.all_stock_in', compact('stockIn'));
-    } // End Method
+    return view('backend.warehouse.all_stock_in', compact('stockIn'));
+}
+// End Method
 
 // Stock Detail Method
     public function DetailStockIn($invoiceNo)
