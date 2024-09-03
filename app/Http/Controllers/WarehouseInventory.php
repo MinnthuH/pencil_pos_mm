@@ -481,7 +481,7 @@ public function AllStockIn()
         $products = Product::where('expire_date', '>', Carbon::now())
             ->whereColumn('product_store', '>=', 'product_track')
             ->latest()
-            ->paginate(16); // Change the number '10' to the desired number of products per page
+            ->paginate(200); // Change the number '10' to the desired number of products per page
         // dd($products);
 
         $categories = Category::latest()->get();

@@ -204,7 +204,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="discount" class="form-label">Discount</label>
-                        <input class="form-control" type="number" id="discount" name="discount" disabled>
+                        <input class="form-control" type="number" id="discount" name="discount">
                     </div>
                     <div class="mb-3">
                         <label for="paymetnStatus" class="form-label">Payment</label>

@@ -191,7 +191,7 @@ class ShopController extends Controller
         // Retrieve products based on the IDs from shopProducts
         $products = Product::whereIn('id', $shopProductIds)
             ->latest()
-            ->paginate(12);
+            ->paginate(200);
 
         // Add quantity to each product
         foreach ($products as $product) {

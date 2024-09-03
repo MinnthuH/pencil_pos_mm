@@ -20,7 +20,7 @@ class PosController extends Controller
 
         // Get the product IDs and their quantities for the given shop
         $shopProducts = ShopProduct::where('shop_id', $shopId)
-            ->where('quantity', '>=', 3)
+            ->where('quantity', '>', 0)
             ->get()
             ->keyBy('product_id');
 

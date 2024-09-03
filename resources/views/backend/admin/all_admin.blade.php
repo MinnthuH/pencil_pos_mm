@@ -35,8 +35,7 @@
                             <thead>
                                 <tr>
                                     <th>Sl</th>
-                                    <th>Image</th>
-                                    <th>Email</th>
+                                    <th>Name</th>
                                     <th>Phone</th>
                                     <th>Role</th>
                                     <th>Shop</th>
@@ -49,9 +48,8 @@
                                 @foreach ($alladminuser as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td><img src="{{ !empty($item->photo) ? url('upload/admin_images/' . $item->photo) : url('upload/no_image.jpg') }}"
-                                                style="width:50px;height:40px;" alt=""></td>
-                                        <td>{{ $item->email }}</td>
+
+                                        <td>{{ $item->name }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>
                                             @foreach ($item->roles as $role)
