@@ -17,9 +17,10 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             @if (Auth::user()->can('admin.manage'))
-                            <a href="{{ route('print.productBarcodes') }}" class="btn btn-blue rounded-pill waves-effect waves-light">
-                                Print Product Barcodes
-                            </a>
+                                <a href="{{ route('print.productBarcodes') }}"
+                                    class="btn btn-blue rounded-pill waves-effect waves-light">
+                                    Print Product Barcodes
+                                </a>
 
                                 &nbsp;
                                 <a href="{{ route('import#product') }}"
@@ -69,7 +70,22 @@
                                         <td>{{ $item->product_name }}</td>
                                         <td>{{ $item->category->category_name }}</td>
                                         <td>{{ $item['supplier']['name'] }}</td>
-                                        <td>{{ $item->product_code }}</td>
+                                        @php
+                                            $productCodes = json_decode($item->product_code);
+                                        @endphp
+                                        @if (is_array($productCodes))
+                                            <td>
+
+                                                @foreach ($productCodes as $code)
+                                                    {{ $code }} ,
+                                                @endforeach
+
+                                            </td>
+                                        @else
+                                            <td>
+                                                {{ $item->product_code }}
+                                            </td>
+                                        @endif
                                         <td>{{ $item->selling_price }}</td>
                                         <td>
                                             @if ($item->expire_date >= Carbon\Carbon::now()->format('Y-m-d'))

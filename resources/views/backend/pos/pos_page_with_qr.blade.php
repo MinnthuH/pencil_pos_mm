@@ -9,11 +9,11 @@
 
 <style type="text/css">
     /* CSS for the search input field */
-    #searchInput {
+    /* #searchInput {
         width: 100%;
         max-width: 400px;
         margin: 0 auto;
-    }
+    } */
 
     /* CSS for the product cards */
     .col-lg-3.col-md-3.col-sm-6.col-6.mt-3 {
@@ -135,10 +135,11 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="searchInput"
+                    <div class="mb-3 d-flex justify-content-center mt-3">
+                        <input type="text" class="form-control w-50" id="searchInput"
                             placeholder="Search products by name, code, or scan barcode" autofocus>
                     </div>
+
                     <h4 class="header-title mb-0">ကုန်ပစ္စည်းများ</h4>
 
                     <div class="row" id="product-list-container">
@@ -192,35 +193,48 @@
         var currentPage = 1;
         var lastPage = 1;
 
-        function displayProducts(productsData) {
-            var productListHtml = '';
-            $.each(productsData, function(index, product) {
-                productListHtml += `
-                <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
-                    <form action="{{ url('/add-cart') }}" method="post" class="product-form">
-                        @csrf
-                        <input type="hidden" name="id" value="${product.id}">
-                        <input type="hidden" name="porductName" value="${product.product_name}">
-                        <input type="hidden" name="buyPrice" value="${product.buy_price}">
-                        <input type="hidden" name="qty" value="1">
-                        <input type="hidden" name="price" value="${product.selling_price}">
-                        <button type="submit" class="btn btn-link categor_submit">
-                            <div class="card" style="width: 8.5rem;">
-                                <img src="${product.product_image ? product.product_image : '{{ asset('upload/no_image.jpg') }}'}" id="em_photo" class="card-img-top">
-                                <div class="card-body">
-                                    <h5 class="card-title">${product.product_name}</h5>
-                                    <h5 class="card-title" style="display: none">${product.product_code}</h5>
-                                    <span class="badge bg-dark">${product.selling_price}&nbsp;ks</span>
-                                </div>
-                                <span class="badge bg-primary position-absolute top-0 end-0">${product.quantity}</span>
-                            </div>
-                        </button>
-                    </form>
-                </div>
-                `;
-            });
-            $('#product-list-container').html(productListHtml);
-        }
+        // function displayProducts(productsData) {
+        //     var productListHtml = '';
+        //     $.each(productsData, function(index, product) {
+        //         let productCodesHtml = '';
+
+        //         try {
+        //             let productCodes = JSON.parse(product.product_code);
+        //             if (Array.isArray(productCodes)) {
+        //                 productCodesHtml = productCodes.join('<br>');
+        //             } else {
+        //                 productCodesHtml = product.product_code;
+        //             }
+        //         } catch (error) {
+        //             console.error('Error parsing product codes: ', error);
+        //             productCodesHtml = product.product_code;
+        //         }
+        //         productListHtml += `
+        // <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
+        //     <form action="{{ url('/add-cart') }}" method="post" class="product-form">
+        //         @csrf
+        //         <input type="hidden" name="id" value="${product.id}">
+        //         <input type="hidden" name="porductName" value="${product.product_name}">
+        //         <input type="hidden" name="buyPrice" value="${product.buy_price}">
+        //         <input type="hidden" name="qty" value="1">
+        //         <input type="hidden" name="price" value="${product.selling_price}">
+        //         <button type="submit" class="btn btn-link categor_submit">
+        //             <div class="card" style="width: 8.5rem;">
+        //                 <img src="${product.product_image ? product.product_image : '{{ asset('upload/no_image.jpg') }}'}" id="em_photo" class="card-img-top">
+        //                 <div class="card-body">
+        //                     <h5 class="card-title">${product.product_name}</h5>
+        //                     <h5 class="card-title" style="display:">${productCodesHtml}</h5>
+        //                     <span class="badge bg-dark">${product.selling_price}&nbsp;ks</span>
+        //                 </div>
+        //                 <span class="badge bg-primary position-absolute top-0 end-0">${product.quantity}</span>
+        //             </div>
+        //         </button>
+        //     </form>
+        // </div>
+        // `;
+        //     });
+        //     $('#product-list-container').html(productListHtml);
+        // }
 
         function updateProductsAndPagination(data) {
             products = data.data;
@@ -229,8 +243,10 @@
             displayProducts(products);
         }
 
+        // Initial function call to update products and pagination
         updateProductsAndPagination(@json($products));
 
+        // Category link click event to fetch products by category
         $('.category-link').on('click', function(event) {
             event.preventDefault();
             var categoryId = $(this).data('category-id');
@@ -249,53 +265,98 @@
 
         $('#searchInput').on('input', function() {
             var searchTerm = $(this).val().trim().toLowerCase();
+
             var filteredProducts = products.filter(function(product) {
+                let productCodes = [];
+                try {
+                    productCodes = JSON.parse(product.product_code);
+                    if (!Array.isArray(productCodes)) {
+                        productCodes = [productCodes];
+                    }
+                } catch (error) {
+                    console.error('Error parsing product codes: ', error);
+                    productCodes = [product.product_code];
+                }
+
                 return (
                     product.product_name.toLowerCase().includes(searchTerm) ||
-                    product.product_code.toLowerCase().includes(searchTerm)
+                    productCodes.some(code => typeof code === 'string' && code.toLowerCase()
+                        .includes(searchTerm))
                 );
             });
 
             displayProducts(filteredProducts);
 
-            // Check if the search term matches any product code and submit the form if it does
             products.forEach(function(product) {
-                if (searchTerm === product.product_code.toLowerCase()) {
+                let productCodes = [];
+
+                try {
+                    productCodes = JSON.parse(product.product_code);
+
+                    if (!Array.isArray(productCodes)) {
+                        productCodes = [productCodes];
+                    }
+                } catch (error) {
+                    console.error('Error parsing product codes: ', error);
+                    productCodes = [product.product_code];
+                }
+
+                if (productCodes.some(code => typeof code === 'string' && searchTerm === code
+                        .toLowerCase())) {
                     $('input[value="' + product.id + '"]').closest('form').find(
                         '.categor_submit').click();
+                    console.log('hello');
                 }
             });
         });
 
-        $('#searchInput').on('input', function() {
-            var searchTerm = $(this).val().trim().toLowerCase();
+        function displayProducts(productsData) {
+            var productListHtml = '';
 
-            if (searchTerm.length === 12 && !isNaN(searchTerm)) {
-                var barcode = searchTerm;
-                var product = products.find(function(product) {
-                    return product.product_code === barcode;
-                });
+            $.each(productsData, function(index, product) {
+                let productCodesHtml = '';
 
-                if (product) {
-                    $('#product-list-container').empty();
-                    displayProducts([product]);
-                } else {
-                    $('#product-list-container').empty();
-                    $('#product-list-container').html(
-                        '<p>No product found for the scanned barcode.</p>');
+                try {
+                    let productCodes = JSON.parse(product.product_code);
+                    if (Array.isArray(productCodes)) {
+                        productCodesHtml = productCodes.join('<br>');
+                    } else {
+                        productCodesHtml = product.product_code;
+                    }
+                } catch (error) {
+                    console.error('Error parsing product codes: ', error);
+                    productCodesHtml = product.product_code;
                 }
-            } else {
-                var filteredProducts = products.filter(function(product) {
-                    return (
-                        product.product_name.toLowerCase().includes(searchTerm) ||
-                        product.product_code.toLowerCase().includes(searchTerm)
-                    );
-                });
 
-                $('#product-list-container').empty();
-                displayProducts(filteredProducts);
-            }
-        });
+                productListHtml += `
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
+            <form action="{{ url('/add-cart') }}" method="post" class="product-form">
+                @csrf
+                <input type="hidden" name="id" value="${product.id}">
+                <input type="hidden" name="porductName" value="${product.product_name}">
+                <input type="hidden" name="buyPrice" value="${product.buy_price}">
+                <input type="hidden" name="qty" value="1">
+                <input type="hidden" name="price" value="${product.selling_price}">
+              <button type="submit" class="btn btn-link categor_submit">
+    <div class="card" style="width: 8.5rem;">
+        <img src="${product.product_image ? product.product_image : '{{ asset('upload/no_image.jpg') }}'}" class="card-img-top" style="width: 100%; height: 100px;">
+        <div class="card-body">
+            <h5 class="card-title">${product.product_name}</h5>
+            <h5 class="card-title" style="display: none;">${productCodesHtml}</h5>
+            <span class="badge bg-dark">${product.selling_price}&nbsp;ks</span>
+        </div>
+        <span class="badge bg-primary position-absolute top-0 end-0">${product.quantity}</span>
+    </div>
+</button>
+
+            </form>
+        </div>
+        `;
+            });
+
+            $('#product-list-container').html(productListHtml);
+        }
+
 
         // $('#myForm').validate({
         //     rules: {
@@ -322,8 +383,7 @@
         // });
     });
 </script>
-<input type="text" class="form-control" id="searchInput" placeholder="Search products by name, code, or scan barcode"
-    autofocus>
+
 
 
 @endsection

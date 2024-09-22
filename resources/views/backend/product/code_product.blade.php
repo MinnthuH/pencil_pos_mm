@@ -17,7 +17,8 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <a href="{{ route('all#product')}}" class="btn btn-blue rounded-pill waves-effect waves-light">
+                            <a href="{{ route('all#product') }}"
+                                class="btn btn-blue rounded-pill waves-effect waves-light">
                                 <i class="fas fa-arrow-circle-left"></i>
                             </a>
                         </ol>
@@ -36,14 +37,26 @@
                             <h5 class="mb-4 text-uppercase">
                                 <i class="fas fa-barcode me-1"></i> Barcode Product
                             </h5>
-                            <div class="barcode-container">
+                            {{-- <div class="barcode-container">
                                 <div class="barcode-item">
                                     <p>{{ $product->product_name }}</p>
                                     <p>{{ $product->selling_price }} Ks</p>
                                     <img src="data:image/png;base64,{{ $barcodeImage }}" alt="Barcode">
                                     <p>{{ $product->product_code }}</p>
                                 </div>
+                            </div> --}}
+                            <div class="barcode-container" style="display: flex; flex-wrap: wrap;">
+                                @foreach ($barcodes as $barcode)
+                                    <div class="barcode-item mx-5" style="text-align: center;">
+                                        <div>{{ $product->product_name }}</div>
+                                        <div>{{ $product->selling_price }} Ks</div>
+                                        <img src="data:image/png;base64,{{ $barcode['image'] }}"
+                                            alt="Barcode for {{ $barcode['code'] }}">
+                                        <p>{{ $barcode['code'] }}</p>
+                                    </div>
+                                @endforeach
                             </div>
+
                             <div class="text-end">
                                 <a href="#" id="printButton" class="btn btn-blue waves-effect waves-light">
                                     <i class="mdi mdi-printer me-1"></i> Print
@@ -60,46 +73,65 @@
 
 <style>
     @media print {
+
         /* Hide everything except .barcode-item */
         body * {
             visibility: hidden;
         }
-        .barcode-item, .barcode-item * {
+
+        .barcode-item,
+        .barcode-item * {
             visibility: visible;
         }
+
         .barcode-item {
             position: absolute;
             top: 30%;
             left: 50%;
 
-            transform: translate(-50%, -50%); /* Center the item */
-            width: calc(40mm - 6px); /* Adjust width to accommodate padding */
-            height: calc(30mm - 6px); /* Adjust height to accommodate padding */
+            transform: translate(-50%, -50%);
+            /* Center the item */
+            width: calc(40mm - 6px);
+            /* Adjust width to accommodate padding */
+            height: calc(30mm - 6px);
+            /* Adjust height to accommodate padding */
             margin: 0;
-            padding: 3px; /* Add 3px padding */
+            padding: 3px;
+            /* Add 3px padding */
             box-sizing: border-box;
-            text-align: center; /* Center-align text and barcode */
-            font-size: 9px; /* Adjust font size to fit the label */
+            text-align: center;
+            /* Center-align text and barcode */
+            font-size: 9px;
+            /* Adjust font size to fit the label */
             display: flex;
             flex-direction: column;
             /* justify-content: space-between; */
         }
+
         .barcode-item img {
             width: 100%;
             height: 25%;
-            margin: 2mm 0; /* Add some space between the barcode and text */
+            margin: 2mm 0;
+            /* Add some space between the barcode and text */
         }
+
         .barcode-item p {
             margin: 0;
-            line-height: 1.5; /* Adjust line height for better spacing */
+            line-height: 1.5;
+            /* Adjust line height for better spacing */
         }
+
         /* Ensure the entire page is printed at the correct width */
         @page {
-            size: 40mm 30mm; /* Set page size to 40mm by 30mm */
-            margin: 0; /* Remove default margins */
+            size: 40mm 30mm;
+            /* Set page size to 40mm by 30mm */
+            margin: 0;
+            /* Remove default margins */
         }
+
         body {
-            margin: 0; /* Remove default margins */
+            margin: 0;
+            /* Remove default margins */
         }
     }
 </style>

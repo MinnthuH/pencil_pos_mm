@@ -35,7 +35,6 @@ class ProductController extends Controller
         $supplier = Supplier::latest()->get();
 
         return view('backend.product.add_product', compact('product', 'category', 'supplier'));
-
     } //End Method
 
     // Store Product Method
@@ -62,6 +61,7 @@ class ProductController extends Controller
             'expire_date' => $request->expireDate,
             'buy_price' => $request->buyingPrice,
             'selling_price' => $request->sellingPrice,
+            'unit' => $request->unit,
             'created_at' => Carbon::now(),
         ]);
         $noti = [
@@ -69,7 +69,6 @@ class ProductController extends Controller
             'alert-type' => 'success',
         ];
         return redirect()->route('all#product')->with($noti);
-
     } // End Method
 
     // Edit Product Method
@@ -81,7 +80,6 @@ class ProductController extends Controller
         $supplier = Supplier::latest()->get();
 
         return view('backend.product.edit_product', compact('product', 'category', 'supplier'));
-
     } // End Method
 
     // Update Product Method
@@ -108,7 +106,7 @@ class ProductController extends Controller
                 'product_name' => $request->productName,
                 'category_id' => $request->categoryId,
                 'supplier_id' => $request->supplierId,
-                'product_code' => $request->productCode,
+                'product_code' => json_encode($request->productCode),
                 'product_garage' => $request->productGarage,
                 'product_image' => $newImageUrl,
                 'product_store' => $request->productStore,
@@ -125,13 +123,12 @@ class ProductController extends Controller
                 'alert-type' => 'success',
             ];
             return redirect()->route('all#product')->with($noti);
-
         } else {
             Product::findOrFail($productId)->update([
                 'product_name' => $request->productName,
                 'category_id' => $request->categoryId,
                 'supplier_id' => $request->supplierId,
-                'product_code' => $request->productCode,
+                'product_code' => json_encode($request->productCode),
                 'product_garage' => $request->productGarage,
                 'product_store' => $request->productStore,
                 'product_track' => $request->trackStock,
@@ -163,19 +160,56 @@ class ProductController extends Controller
             'alert-type' => 'success',
         ];
         return redirect()->route('all#product')->with($noti);
-
     } // End Method
 
     // Code Product Method
+    // public function CodeProduct($id)
+    // {
+
+    //     $product = Product::findOrFail($id);
+    //     $generator = new BarcodeGeneratorPNG();
+    //     $barcodeData = $generator->getBarcode($product->product_code, $generator::TYPE_CODE_128);
+    //     $barcodeImage = base64_encode($barcodeData);
+    //     return view('backend.product.code_product', compact('product', 'barcodeImage'));
+    // } //End Method
     public function CodeProduct($id)
     {
+        $productCodes = Product::where('id', $id)->select('product_code')->get();
+        $barcodes = [];
+        $product = Product::find($id);
 
-        $product = Product::findOrFail($id);
-        $generator = new BarcodeGeneratorPNG();
-        $barcodeData = $generator->getBarcode($product->product_code, $generator::TYPE_CODE_128);
-        $barcodeImage = base64_encode($barcodeData);
-        return view('backend.product.code_product', compact('product', 'barcodeImage'));
-    } //End Method
+        foreach ($productCodes as $productCode) {
+            $decodedCodes = json_decode($productCode->product_code, true);
+
+            if (is_array($decodedCodes)) {
+                foreach ($decodedCodes as $code) {
+                    $generator = new BarcodeGeneratorPNG();
+                    $barcodeData = $generator->getBarcode($code, $generator::TYPE_CODE_128);
+                    $barcodeImage = base64_encode($barcodeData);
+
+                    $barcodes[] = [
+                        'code' => $code,
+                        'image' => $barcodeImage,
+                        'product' => $product
+                    ];
+                }
+            } elseif (is_string($productCode->product_code)) {
+                $generator = new BarcodeGeneratorPNG();
+                $barcodeData = $generator->getBarcode($productCode->product_code, $generator::TYPE_CODE_128);
+                $barcodeImage = base64_encode($barcodeData);
+
+                $barcodes[] = [
+                    'code' => $productCode->product_code,
+                    'image' => $barcodeImage,
+                    'product' => $product
+                ];
+            } else {
+            }
+        }
+
+        return view('backend.product.code_product', compact('barcodes', 'product'));
+    }
+
 
     // Import Product
     public function ImportProduct()
@@ -205,7 +239,6 @@ class ProductController extends Controller
             'alert-type' => 'success',
         ];
         return redirect()->route('all#product')->with($noti);
-
     } // End Method
 
     //Refill Stock Method
@@ -253,7 +286,6 @@ class ProductController extends Controller
 
         // Return the list of products to your view
         return view('backend.stock.noti_expire')->with('products', $products);
-
     } // End Method
 
     // Reduce Stock Method
@@ -296,7 +328,7 @@ class ProductController extends Controller
     } // End method
 
 
- // All Prodcut code print in A4
+    // All Prodcut code print in A4
     public function printProductBarcodes()
     {
         $products = Product::all();
@@ -311,5 +343,4 @@ class ProductController extends Controller
         // Pass the products with barcode images to the view
         return view('print.product_barcodes', compact('products'));
     }
-
 }

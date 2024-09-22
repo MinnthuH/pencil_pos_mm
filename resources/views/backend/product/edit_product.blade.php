@@ -34,7 +34,7 @@
                                 enctype="multipart/form-data">
                                 @csrf
 
-                                <input type="hidden" name="id" value="{{$product->id}}">
+                                <input type="hidden" name="id" value="{{ $product->id }}">
                                 <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Edit Product
                                 </h5>
                                 <div class="row">
@@ -69,20 +69,42 @@
                                             <select name="supplierId" class="form-select" id="example-select">
                                                 <option selected disabled>တင်သွင်းသူ ရွေးချယ်ပါ</option>
                                                 @foreach ($supplier as $sup)
-                                                    <option value="{{ $sup->id }}"{{ $sup->id == $product->supplier_id ? 'selected' : '' }}>{{ $sup->name }}
+                                                    <option
+                                                        value="{{ $sup->id }}"{{ $sup->id == $product->supplier_id ? 'selected' : '' }}>
+                                                        {{ $sup->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <!-- end col -->
-                                    <div class="col-md-6">
+
+                                    @php
+                                    $productCodes = $product->product_code;
+                                    $decodedCodes = is_array(json_decode($productCodes, true)) ? json_decode($productCodes, true) : explode(',', $productCodes);
+                                @endphp
+
+                                @foreach ($decodedCodes as $index => $code)
+                                    <div class="col-md-6 dynamic-column" id="product-row-{{ $index }}">
                                         <div class="form-group mb-3">
-                                            <label for="firstname" class="form-label">Product Code</label>
-                                            <input type="text" name="productCode" class="form-control"
-                                                value="{{ $product->product_code }}">
+                                            <label for="productCode" class="form-label">Product Code {{ $index + 1 }}</label>
+                                            <div class="input-group">
+                                                <input type="text" name="productCode[]" class="form-control" value="{{ $code }}"
+                                                    placeholder="Product Code {{ $index + 1 }}">
+                                                @if ($index == 0)
+                                                    <button type="button" id="add-column" class="btn btn-outline-secondary">Add Column</button>
+                                                @else
+                                                    <button type="button" class="btn btn-outline-danger remove-column">Remove Column</button>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
+                                @endforeach
+
+
+
+
+
                                     <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
@@ -102,7 +124,8 @@
                                     <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
-                                            <label for="firstname" class="form-label">အနည်းဆုံးကျန်ရမည့် အရေအတွက်</label>
+                                            <label for="firstname" class="form-label">အနည်းဆုံးကျန်ရမည့်
+                                                အရေအတွက်</label>
                                             <input type="text" name="trackStock" class="form-control"
                                                 value="{{ $product->product_track }}">
                                         </div>
@@ -159,7 +182,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group mb-3">
-                                            <img id="showImage" src="{{ asset($product->product_image ?: 'upload/no_image.jpg') }}"
+                                            <img id="showImage"
+                                                src="{{ asset($product->product_image ?: 'upload/no_image.jpg') }}"
                                                 class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
                                         </div>
                                     </div> <!-- end col -->
@@ -202,63 +226,63 @@
         $('#myForm').validate({
             rules: {
                 productName: {
-                    required : true,
+                    required: true,
                 },
                 categoryId: {
-                    required : true,
+                    required: true,
                 },
                 supplierId: {
-                    required : true,
+                    required: true,
                 },
 
                 productGarage: {
-                    required : true,
+                    required: true,
                 },
                 productStore: {
-                    required : true,
+                    required: true,
                 },
                 buyingDate: {
-                    required : true,
+                    required: true,
                 },
                 expireDate: {
-                    required : true,
+                    required: true,
                 },
                 buyingPrice: {
-                    required : true,
+                    required: true,
                 },
                 sellingPrice: {
-                    required : true,
+                    required: true,
                 },
 
 
             },
-            messages :{
+            messages: {
                 productName: {
-                    required : 'ကုန်ပစ္စည်းအမည် ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းအမည် ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 categoryId: {
-                    required : 'ကုန်ပစ္စည်းအမျိုးအစား ရွေးချယ်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းအမျိုးအစား ရွေးချယ်ရန် လိုအပ်ပါသည်',
                 },
                 supplierId: {
-                    required : 'ကုန်ပစ္စည်းတင်သွင်းသူ ရွေးချယ်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းတင်သွင်းသူ ရွေးချယ်ရန် လိုအပ်ပါသည်',
                 },
                 productGarage: {
-                    required : 'ကုန်ပစ္စည်းထားသည့်နေရာ ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းထားသည့်နေရာ ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 productStore: {
-                    required : 'ကုန်ပစ္စည်းအရေအတွက် ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းအရေအတွက် ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 buyingDate: {
-                    required : 'ကုန်ပစ္စည်းဝယ်သည့်နေ့ ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းဝယ်သည့်နေ့ ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 expireDate: {
-                    required : 'ကုန်ပစ္စည်းသက်တမ်းကုန်ဆုံးရက် ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းသက်တမ်းကုန်ဆုံးရက် ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 buyingPrice: {
-                    required : 'ကုန်ပစ္စည်းဝယ်ဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းဝယ်ဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 sellingPrice: {
-                    required : 'ကုန်ပစ္စည်းရောင်းဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းရောင်းဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
 
 
@@ -275,6 +299,31 @@
             unhighlight: function(element, errorClass, validClass) {
                 $(element).removeClass('is-invalid');
             },
+        });
+    });
+
+
+    $(document).ready(function() {
+        $('#add-column').click(function() {
+            var newColumnIndex = $('.dynamic-column').length;
+            var newColumn = `
+            <div class="col-md-6 dynamic-column" id="product-row-${newColumnIndex}">
+                <div class="form-group mb-3">
+                    <label for="newProductCode" class="form-label">New Product Code ${newColumnIndex + 1}</label>
+                    <div class="input-group">
+                        <input type="text" name="productCode[]" class="form-control" value="">
+                        <button type="button" class="btn btn-outline-danger remove-column">Remove Column</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            $('.dynamic-column').last().after(newColumn);
+        });
+
+        // Remove the column
+        $(document).on('click', '.remove-column', function() {
+            $(this).closest('.dynamic-column').remove();
         });
     });
 </script>

@@ -29,11 +29,42 @@
                         @endif
                     </div>
                     <h4 class="page-title">{{ $shopName }}&nbsp;&nbsp;အရောင်းစာရင်း</h4>
-                    <h4>Today's Total Sales: {{ number_format($todayTotal, 2) }} <span></span>Ks</h4>
+                    <h4>Today's Total Sales: {{ number_format($todayTotal, 2) }} Ks
+                        @if ($startDate && $endDate)
+                            @if ($startDate == $endDate)
+                                (<span>Date: {{ \Carbon\Carbon::parse($startDate)->format('m/d/Y') }}</span>)
+                            @else
+                                (<span>Date: {{ \Carbon\Carbon::parse($startDate)->format('m/d/Y') }} -
+                                    {{ \Carbon\Carbon::parse($endDate)->format('m/d/Y') }}</span>)
+                            @endif
+                        @else
+                            (<span>Date: {{ \Carbon\Carbon::now()->format('m/d/Y') }}</span>)
+                        @endif
+
+
+
+                    </h4>
+
                 </div>
             </div>
         </div>
         <!-- end page title -->
+        <form action="{{ route('all#sale', $id) }}" method="GET" class="mb-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                </div>
+                <div class="col-md-4 mt-3">
+                    <button type="submit" class="btn"
+                        style="background-color: #4A81D4; color: white">Search</button>
+                </div>
+            </div>
+        </form>
 
         <div class="row">
             <div class="col-12">
