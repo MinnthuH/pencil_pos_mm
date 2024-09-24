@@ -79,6 +79,9 @@
                                 <li>
                                     <a href="{{ route('trash.sale') }}">ပယ်ဖျက်အရောင်းစာရင်းများ</a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('pending#due') }}">အကြွေးစာရင်းများ</a>
+                                </li>
                             @else
                                 @php
                                     $userShop = App\Models\Shop::find(Auth::user()->shop_id);

@@ -32,8 +32,8 @@
                             <thead>
                                 <tr>
                                     <th>Sl</th>
-                                    <th>Name</th>
-                                    <th>Order Date</th>
+                                    <th>Invoice No</th>
+                                    <th>Sale Date</th>
                                     <th>Payment</th>
                                     <th>Total</th>
                                     <th>Pay</th>
@@ -47,7 +47,7 @@
                                 @foreach ($alldue as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $item['customer']['name'] }}</td>
+                                        <td>{{ $item->invoice_no}}</td>
                                         <td>{{ $item->order_date }}</td>
                                         <td>{{ $item->paymet_status }}</td>
                                         <td> <span class="btn btn-info waves-effect wave">{{ $item->total }}

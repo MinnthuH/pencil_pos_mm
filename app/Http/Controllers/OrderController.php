@@ -245,7 +245,7 @@ class OrderController extends Controller
         ]);
 
         $noti = [
-            'message' => 'Order Done  Successfully',
+            'message' => 'Due Paid  Successfully',
             'alert-type' => 'success',
         ];
 
