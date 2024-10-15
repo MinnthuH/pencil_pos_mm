@@ -177,11 +177,11 @@
             </form>
 
 
-            <form action="{{ route('stock#product', $sale->id) }}" method="get">
+            {{-- <form action="{{ route('stock#product', $sale->id) }}" method="get">
                 <button class="btn btn-print" type="submit" onclick="window.print(); return false;">
                     Print
                 </button>
-            </form>
+            </form> --}}
 
 
 
@@ -189,7 +189,7 @@
         </div>
     </div>
 </body>
-<script>
+{{-- <script>
     // Function to handle the print event
     function handlePrint() {
         // Disable the "Back to Cashier" button when printing
@@ -204,6 +204,24 @@
 
     // Attach the handlePrint function to the Print button
     document.getElementById("printButton").addEventListener("click", handlePrint);
+</script> --}}
+
+
+<script>
+    // Disable the "Back to Cashier" button for 1 minute after it is clicked
+    document.getElementById('backToCashierForm').addEventListener('submit', function(e) {
+        const backButton = document.getElementById('backButton');
+
+        // Disable the button to prevent multiple submissions
+        backButton.disabled = true;
+
+        // Set a timer to re-enable the button after 1 minute (60,000 milliseconds)
+        setTimeout(function() {
+            backButton.disabled = false;
+        }, 60000); // 1 minute cooldown
+
+        // Optionally, you can show an alert or message to the user if they try to click multiple times.
+    });
 </script>
 
 

@@ -237,7 +237,7 @@
                     <input type="hidden" name="total" value="{{ Cart::total() }}">
                     <input type="hidden" name="capital" value="{{ $totalBuyPrice }}">
                     <div class="mb-3 text-center">
-                        <button class="btn btn-blue" type="submit">ပေးချေမည်</button>
+                        <button class="btn btn-blue" type="submit" id="submitBtn">ပေးချေမည်</button>
                     </div>
                 </form>
             </div>
@@ -253,6 +253,18 @@
             var payNowInput = document.getElementById('payNow');
             payNowInput.focus();
         });
+    });
+</script>
+
+<script>
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        var submitButton = document.getElementById('submitBtn');
+
+        // Disable the submit button to prevent multiple submissions
+        submitButton.disabled = true;
+        submitButton.innerHTML = 'Processing...'; // Optionally show a loading message
+
+        // Allow the form to be submitted
     });
 </script>
 

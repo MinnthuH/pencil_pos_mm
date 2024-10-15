@@ -258,7 +258,7 @@ public function AllStockIn()
     {
 
         $shops = Shop::where('id', '!=', 1)->get();
-        $products = Product::latest()->paginate(16); // Change the number '10' to the desired number of products per page
+        $products = Product::latest()->paginate(200); // Change the number '10' to the desired number of products per page
         $categories = Category::latest()->get();
 
         return view('backend.warehouse.shop_stockin', compact('products', 'categories', 'shops', ));
