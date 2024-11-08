@@ -7,14 +7,16 @@ use App\Models\Shop;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\ShopControl;
 use App\Models\ShopProduct;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TransferStock;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Support\Str;
 
 
 class ShopController extends Controller
@@ -123,6 +125,93 @@ class ShopController extends Controller
         return view('shop.shop_stock', compact('shop', 'stocks'));
     } // End Method
 
+    // Shop Stock Control
+    public function updateQuantity(Request $request)
+    {
+        // Validate the inputs
+        $validated = $request->validate([
+            'product_id' => 'required|integer',
+            'shop_id' => 'required|integer',
+            'quantity' => 'required|integer|min:1',
+            'action' => 'required|string'
+        ]);
+
+        // Find the product in the shop
+        $shopProduct = ShopProduct::where('shop_id', $validated['shop_id'])
+            ->where('product_id', $validated['product_id'])
+            ->first();
+
+        // Check if the product exists in the shop
+        if ($shopProduct) {
+            if (in_array($validated['action'], ['loss', 'damage'])) {
+                // Reduce quantity for loss or damage
+                if (
+                    $shopProduct->quantity >= $validated['quantity']
+                ) {
+                    $shopProduct->quantity -= $validated['quantity'];
+                } else {
+                    $noti = [
+                        'message' => 'Insufficient stock for this operation.',
+                        'alert-type' => 'error',
+                    ];
+                    return redirect()->back()->with($noti);
+                }
+            } elseif ($validated['action'] === 'refound') {
+                // Increase quantity for a refound
+                $shopProduct->quantity += $validated['quantity'];
+            }
+
+            // Save the updated stock
+            $shopProduct->save();
+
+            // Log the action in the shop_controls table
+            ShopControl::create([
+                'user_id' => Auth::id(),             // Current user ID
+                'shop_id' => $validated['shop_id'],
+                'product_id' => $validated['product_id'],
+                'quantity' => $validated['quantity'],
+                'action' => $validated['action'],
+            ]);
+
+            $noti = [
+                'message' => 'Shop ' . ucfirst($validated['action']) . ' successful.',
+                'alert-type' => 'success',
+            ];
+            return redirect()->back()->with($noti);
+        }
+
+        $noti = [
+            'message' => 'Product not found in this shop.',
+            'alert-type' => 'error',
+        ];
+        return redirect()->back()->with($noti);
+    }
+    // End Method
+
+
+    // Shop Stock Control List
+    public function ControlList()
+    {
+        $controlList = ShopControl::all();
+
+        return view('shop.control_list', compact('controlList'));
+    }
+    // End Method
+
+    // Shop Stock Control list Delete
+    public function ControlListDelete($id)
+    {
+        $data = ShopControl::findOrFail($id);
+        $data->delete();
+
+        $noti = [
+            'message' => 'Shop Control List Delete Successful',
+            'alert-type' => 'success',
+        ];
+        return redirect()->route('control.list')->with($noti);
+    }
+    // End Method
+
     // Stock Transfer Method
     public function StockTransfer(Request $request)
     {
@@ -222,124 +311,121 @@ class ShopController extends Controller
         // dd($cartItem->toArray());
 
         return view('shop.create_adjust', compact('shop', 'cartItem', 'orgShopName'));
-
     } // End Method
 
-// Create Stock Adjust
-public function AddTransferStock(Request $request)
-{
-    $shopId = $request->shopId;
-    $orgShopId = $request->orgShopId;
-    $cartItems = Cart::content();
-    $datePart = Carbon::now()->format('Ymd'); // e.g., 20240809
-    $randomPart = strtoupper(Str::random(6)); // e.g., A1B2C3
-    $invoiceNo = 'MGL-' . $datePart . '-' . $randomPart;
+    // Create Stock Adjust
+    public function AddTransferStock(Request $request)
+    {
+        $shopId = $request->shopId;
+        $orgShopId = $request->orgShopId;
+        $cartItems = Cart::content();
+        $datePart = Carbon::now()->format('Ymd'); // e.g., 20240809
+        $randomPart = strtoupper(Str::random(6)); // e.g., A1B2C3
+        $invoiceNo = 'MGL-' . $datePart . '-' . $randomPart;
 
-    // Start the database transaction
-    DB::beginTransaction();
+        // Start the database transaction
+        DB::beginTransaction();
 
-    try {
-        // Loop through each cart item to adjust stock
-        foreach ($cartItems as $item) {
-            $productId = $item->id;
-            $qty = $item->qty;
+        try {
+            // Loop through each cart item to adjust stock
+            foreach ($cartItems as $item) {
+                $productId = $item->id;
+                $qty = $item->qty;
 
-            // Check for insufficient stock in the original shop
-            $originalShopProduct = ShopProduct::where('shop_id', $orgShopId)
-                ->where('product_id', $productId)
-                ->firstOrFail();
-
-            if ($originalShopProduct->quantity < $qty) {
-                throw new \Exception('Insufficient stock for product ID ' . $productId . ' in the original shop.');
-            }
-
-            if ($shopId == 1) {
-                // Adjust the product_store in Product model
-                $product = Product::findOrFail($productId);
-                $product->product_store += $qty;
-                $product->save();
-
-                // Reduce stock from the original shop
-                $originalShopProduct->quantity -= $qty;
-                $originalShopProduct->save();
-
-                // Insert the transfer stock record
-                TransferStock::create([
-                    'invoice_no' => $invoiceNo,
-                    'from_shop_id' => $orgShopId,
-                    'to_shop_id' => $shopId,
-                    'product_id' => $productId,
-                    'quantity' => $qty,
-                    'created_at' => Carbon::now(),
-                ]);
-
-            } else {
-                // Reduce stock from the original shop
-                $originalShopProduct->quantity -= $qty;
-                $originalShopProduct->save();
-
-                // Check if the product exists in the destination shop
-                $shopProduct = ShopProduct::where('shop_id', $shopId)
+                // Check for insufficient stock in the original shop
+                $originalShopProduct = ShopProduct::where('shop_id', $orgShopId)
                     ->where('product_id', $productId)
-                    ->first();
+                    ->firstOrFail();
 
-                if ($shopProduct) {
-                    // Check for insufficient stock in the destination shop
-                    if ($shopProduct->quantity < $qty) {
-                        throw new \Exception('Insufficient stock for product ID ' . $productId . ' in the destination shop.');
-                    }
-
-                    $shopProduct->quantity += $qty;
-                    $shopProduct->save();
-                } else {
-                    // Create a new record if the product doesn't exist in the destination shop
-                    ShopProduct::create([
-                        'shop_id' => $shopId,
-                        'product_id' => $productId,
-                        'quantity' => $qty,
-                    ]);
+                if ($originalShopProduct->quantity < $qty) {
+                    throw new \Exception('Insufficient stock for product ID ' . $productId . ' in the original shop.');
                 }
 
-                // Insert the transfer stock record
-                TransferStock::create([
-                    'invoice_no' => $invoiceNo,
-                    'from_shop_id' => $orgShopId,
-                    'to_shop_id' => $shopId,
-                    'product_id' => $productId,
-                    'quantity' => $qty,
-                    'created_at' => Carbon::now(),
-                ]);
+                if ($shopId == 1) {
+                    // Adjust the product_store in Product model
+                    $product = Product::findOrFail($productId);
+                    $product->product_store += $qty;
+                    $product->save();
+
+                    // Reduce stock from the original shop
+                    $originalShopProduct->quantity -= $qty;
+                    $originalShopProduct->save();
+
+                    // Insert the transfer stock record
+                    TransferStock::create([
+                        'invoice_no' => $invoiceNo,
+                        'from_shop_id' => $orgShopId,
+                        'to_shop_id' => $shopId,
+                        'product_id' => $productId,
+                        'quantity' => $qty,
+                        'created_at' => Carbon::now(),
+                    ]);
+                } else {
+                    // Reduce stock from the original shop
+                    $originalShopProduct->quantity -= $qty;
+                    $originalShopProduct->save();
+
+                    // Check if the product exists in the destination shop
+                    $shopProduct = ShopProduct::where('shop_id', $shopId)
+                        ->where('product_id', $productId)
+                        ->first();
+
+                    if ($shopProduct) {
+                        // Check for insufficient stock in the destination shop
+                        if ($shopProduct->quantity < $qty) {
+                            throw new \Exception('Insufficient stock for product ID ' . $productId . ' in the destination shop.');
+                        }
+
+                        $shopProduct->quantity += $qty;
+                        $shopProduct->save();
+                    } else {
+                        // Create a new record if the product doesn't exist in the destination shop
+                        ShopProduct::create([
+                            'shop_id' => $shopId,
+                            'product_id' => $productId,
+                            'quantity' => $qty,
+                        ]);
+                    }
+
+                    // Insert the transfer stock record
+                    TransferStock::create([
+                        'invoice_no' => $invoiceNo,
+                        'from_shop_id' => $orgShopId,
+                        'to_shop_id' => $shopId,
+                        'product_id' => $productId,
+                        'quantity' => $qty,
+                        'created_at' => Carbon::now(),
+                    ]);
+                }
             }
+
+            // Clear the cart after transferring the stock
+            Cart::destroy();
+
+            // Commit the transaction
+            DB::commit();
+
+            $noti = [
+                'message' => 'Product Adjustment Successful',
+                'alert-type' => 'success',
+            ];
+
+            return redirect()->route('all#shop')->with($noti);
+        } catch (\Exception $e) {
+            // Rollback the transaction if something goes wrong
+            DB::rollback();
+
+            // Log the error
+            Log::error('Stock adjustment failed', ['error' => $e->getMessage()]);
+
+            $noti = [
+                'message' => 'Product Adjustment Failed: ' . $e->getMessage(),
+                'alert-type' => 'error',
+            ];
+
+            return redirect()->route('all#shop')->with($noti);
         }
-
-        // Clear the cart after transferring the stock
-        Cart::destroy();
-
-        // Commit the transaction
-        DB::commit();
-
-        $noti = [
-            'message' => 'Product Adjustment Successful',
-            'alert-type' => 'success',
-        ];
-
-        return redirect()->route('all#shop')->with($noti);
-
-    } catch (\Exception $e) {
-        // Rollback the transaction if something goes wrong
-        DB::rollback();
-
-        // Log the error
-        Log::error('Stock adjustment failed', ['error' => $e->getMessage()]);
-
-        $noti = [
-            'message' => 'Product Adjustment Failed: ' . $e->getMessage(),
-            'alert-type' => 'error',
-        ];
-
-        return redirect()->route('all#shop')->with($noti);
     }
-}
- // End Method
+    // End Method
 
 }

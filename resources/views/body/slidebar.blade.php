@@ -117,10 +117,10 @@
                                     </li>
                                 @endif
                                 @if (Auth::user()->can('warehouse.edit'))
-                                <li>
-                                    <a href="{{ route('mass.transfer') }}">Many Transfer</a>
-                                </li>
-                            @endif
+                                    <li>
+                                        <a href="{{ route('mass.transfer') }}">Many Transfer</a>
+                                    </li>
+                                @endif
                                 {{-- <li>
                                     <a href="{{ route('manage#stock') }}">ဆိုင်လက်ကျန်စာရင်း</a>
                                 </li> --}}
@@ -153,10 +153,10 @@
                                     </li>
                                 @endif
                                 @if (Auth::user()->can('warehouse.edit'))
-                                <li>
-                                    <a href="{{ route('shop.stockin') }}">Shop Stock In</a>
-                                </li>
-                            @endif
+                                    <li>
+                                        <a href="{{ route('shop.stockin') }}">Shop Stock In</a>
+                                    </li>
+                                @endif
 
                             </ul>
                         </div>
@@ -316,6 +316,9 @@
                                 </li>
                                 <li>
                                     <a href="{{ route('add#shop') }}">Add Shop </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('control.list') }}">Shop Stock Control List </a>
                                 </li>
                             </ul>
                         </div>

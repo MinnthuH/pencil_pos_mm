@@ -45,7 +45,7 @@ class WarehouseInventory extends Controller
         return view('backend.warehouse.all_inventory', compact('inventory'));
     }
 
-// Add Inventory Method
+    // Add Inventory Method
     public function AddInventory($id)
     {
         $product = Product::findOrFail($id);
@@ -94,7 +94,6 @@ class WarehouseInventory extends Controller
             'alert-type' => 'success',
         ];
         return redirect()->route('all.inventory')->with($noti);
-
     } // End Method
 
     // Delete Inventory Method
@@ -168,20 +167,20 @@ class WarehouseInventory extends Controller
     // All Transfer Stock Record Method
 
     public function AllTransferRecord()
-{
-    $transfers = TransferStock::select(
+    {
+        $transfers = TransferStock::select(
             'invoice_no',
             'to_shop_id',
             'from_shop_id',
             DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date')
         )
-        ->with('fromShop', 'toShop')
-        ->groupBy('invoice_no', 'to_shop_id', 'from_shop_id')
-        ->orderBy(DB::raw('MIN(id)'), 'desc') // Using MIN(id) to order by the earliest record in each group
-        ->get();
+            ->with('fromShop', 'toShop')
+            ->groupBy('invoice_no', 'to_shop_id', 'from_shop_id')
+            ->orderBy(DB::raw('MIN(id)'), 'desc') // Using MIN(id) to order by the earliest record in each group
+            ->get();
 
-    return view('backend.warehouse.all_transfer_record', compact('transfers'));
-}
+        return view('backend.warehouse.all_transfer_record', compact('transfers'));
+    }
 
 
     // public function AllTransferRecord()
@@ -223,19 +222,19 @@ class WarehouseInventory extends Controller
     } // End Method
 
 
-// All Stock IN List Method
-public function AllStockIn()
-{
-    $stockIn = StockIn::select('invoice_no', 'shop_id', DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date'), DB::raw('MIN(id) as min_id'))
-        ->groupBy('invoice_no', 'shop_id')
-        ->orderBy('min_id', 'desc') // Order by the minimum id of each group
-        ->get();
+    // All Stock IN List Method
+    public function AllStockIn()
+    {
+        $stockIn = StockIn::select('invoice_no', 'shop_id', DB::raw('DATE_FORMAT(MIN(created_at), "%e/%m/%Y") as date'), DB::raw('MIN(id) as min_id'))
+            ->groupBy('invoice_no', 'shop_id')
+            ->orderBy('min_id', 'desc') // Order by the minimum id of each group
+            ->get();
 
-    return view('backend.warehouse.all_stock_in', compact('stockIn'));
-}
-// End Method
+        return view('backend.warehouse.all_stock_in', compact('stockIn'));
+    }
+    // End Method
 
-// Stock Detail Method
+    // Stock Detail Method
     public function DetailStockIn($invoiceNo)
     {
         // Fetch all stock entries with the same invoice number
@@ -261,7 +260,7 @@ public function AllStockIn()
         $products = Product::latest()->paginate(200); // Change the number '10' to the desired number of products per page
         $categories = Category::latest()->get();
 
-        return view('backend.warehouse.shop_stockin', compact('products', 'categories', 'shops', ));
+        return view('backend.warehouse.shop_stockin', compact('products', 'categories', 'shops',));
     } // End Method
 
     public function StockInOrder(Request $request)
@@ -274,7 +273,6 @@ public function AllStockIn()
         // dd($cartItem->toArray());
 
         return view('backend.warehouse.shop_stockin_order', compact('shop', 'cartItem'));
-
     }
 
     // shop stock Add Method
@@ -343,7 +341,6 @@ public function AllStockIn()
                 'alert-type' => 'success',
             ];
             return redirect()->route('all.stockin')->with($noti);
-
         } catch (\Exception $e) {
             // Rollback the transaction if something goes wrong
             DB::rollback();
@@ -381,7 +378,6 @@ public function AllStockIn()
                     // Reduce stock from main warehouse
                     $product->product_store -= $qty;
                     $product->save();
-
                 } else {
                     // Find the corresponding ShopProduct record
                     $shopProduct = ShopProduct::where('shop_id', $shopId)
@@ -407,7 +403,6 @@ public function AllStockIn()
                 'message' => 'Stock In Deleted Successfully',
                 'alert-type' => 'success',
             ];
-
         } catch (\Exception $e) {
             // Return error notification
             $noti = [
@@ -423,7 +418,7 @@ public function AllStockIn()
     // delete transfer record
     public function deleteRecord(Request $request)
     {
-        \Log::info('Delete request received', $request->all());
+        // \Log::info('Delete request received', $request->all());
 
         $fromShopId = $request->fromshopid;
         $toShopId = $request->toshopid;
@@ -433,10 +428,10 @@ public function AllStockIn()
         $startDate = Carbon::parse($date)->startOfDay();
         $endDate = Carbon::parse($date)->endOfDay();
 
-        $deleted = TransferStock::where(function($query) use ($fromShopId, $toShopId) {
-                $query->where('from_shop_id', $fromShopId)
-                      ->orWhere('to_shop_id', $toShopId);
-            })
+        $deleted = TransferStock::where(function ($query) use ($fromShopId, $toShopId) {
+            $query->where('from_shop_id', $fromShopId)
+                ->orWhere('to_shop_id', $toShopId);
+        })
             ->where('product_id', $productId)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->delete();
@@ -487,7 +482,6 @@ public function AllStockIn()
         $categories = Category::latest()->get();
 
         return view('backend.warehouse.stocks_tranfer', compact('products', 'categories', 'shops', 'shopId'));
-
     } // End Method
 
     // Import Transfer Shop with file
@@ -509,7 +503,7 @@ public function AllStockIn()
         return redirect()->route('stock.inventory')->with($noti);
     }
 
-// Export Warehouse Stock with file
+    // Export Warehouse Stock with file
     public function ExportStock()
     {
         return Excel::download(new WarehouseStockExport, 'warehouse_stocks.xlsx');
@@ -528,7 +522,6 @@ public function AllStockIn()
         $categories = Category::latest()->get();
 
         return view('backend.warehouse.stock_import', compact('products', 'categories', 'shops', 'shopId'));
-
     } // End Method
 
     // Warehouse stock import Method
@@ -542,7 +535,6 @@ public function AllStockIn()
         // dd($cartItem->toArray());
 
         return view('backend.warehouse.stock_import_order', compact('shop', 'cartItem'));
-
     } // End Method
 
     // Add Stock to Warehouse Method
@@ -628,7 +620,6 @@ public function AllStockIn()
         ];
 
         return redirect()->back()->with($noti);
-
     } // End Method
 
     // Update Stock Cart Method
@@ -643,7 +634,6 @@ public function AllStockIn()
             'alert-type' => 'success',
         ];
         return redirect()->back()->with($noti);
-
     } // End Method
 
     // Stock cart remove method
@@ -670,7 +660,6 @@ public function AllStockIn()
         // dd($cartItem->toArray());
 
         return view('backend.warehouse.stock_transfer_order', compact('shop', 'cartItem'));
-
     } // End Method
 
     // Add Transfer Stock

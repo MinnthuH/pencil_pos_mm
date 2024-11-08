@@ -20,7 +20,7 @@
                                     class="btn btn-blue rounded-pill waves-effect waves-light ms-2"> Stock Import</a>
 
                                 <a href="{{ route('mass.transfer') }}"
-                                class="btn btn-blue rounded-pill waves-effect waves-light ms-2">Many Transfer</a>
+                                    class="btn btn-blue rounded-pill waves-effect waves-light ms-2">Many Transfer</a>
 
                                 <a href="{{ route('export.stock') }}"
                                     class="btn btn-blue rounded-pill waves-effect waves-light ms-2"> Export</a>
@@ -54,16 +54,35 @@
                                 @foreach ($inventory as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td><img src="{{ asset($item->product_image ?: 'upload/no_image.jpg') }}" style="width:50px;height:40px;" alt=""></td>
+                                        <td><img src="{{ asset($item->product_image ?: 'upload/no_image.jpg') }}"
+                                                style="width:50px;height:40px;" alt=""></td>
                                         <td>{{ $item->product_name }}</td>
                                         <td>{{ $item->category->category_name }}</td>
-                                        <td>{{ $item->product_code }}</td>
+                                        @php
+                                            $productCodes = json_decode($item->product_code);
+                                        @endphp
+                                        @if (is_array($productCodes))
+                                            <td>
+
+                                                @foreach ($productCodes as $code)
+                                                    {{ $code }} ,
+                                                @endforeach
+
+                                            </td>
+                                        @else
+                                            <td>
+                                                {{ $item->product_code }}
+                                            </td>
+                                        @endif
                                         <td>
-                                            <button class="btn btn-warning waves-effect waves-light">{{ $item->product_store }}</button>
+                                            <button
+                                                class="btn btn-warning waves-effect waves-light">{{ $item->product_store }}</button>
                                         </td>
                                         <td>
                                             @if (Auth::user()->can('warehouse.edit'))
-                                                <a href="#" class="btn btn-info sm" data-bs-toggle="modal" data-bs-target="#signup-modal" data-productid="{{ $item->id }}" title="Transfer">
+                                                <a href="#" class="btn btn-info sm" data-bs-toggle="modal"
+                                                    data-bs-target="#signup-modal" data-productid="{{ $item->id }}"
+                                                    title="Transfer">
                                                     <i class="fas fa-chart-line"></i>
                                                 </a>
                                             @endif
@@ -95,8 +114,10 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="transferStock" class="form-label">လွှဲပြောင်းမည့် ကုန်ပစ္စည်း အရေအတွက်</label>
-                                <input class="form-control" type="number" id="transferStock" name="transferStock" placeholder="လွှဲေပြာင်းမည့် ကုန်ပစ္စည်း အရေအတွက်ထည့်ပါ" required min="1">
+                                <label for="transferStock" class="form-label">လွှဲပြောင်းမည့် ကုန်ပစ္စည်း
+                                    အရေအတွက်</label>
+                                <input class="form-control" type="number" id="transferStock" name="transferStock"
+                                    placeholder="လွှဲေပြာင်းမည့် ကုန်ပစ္စည်း အရေအတွက်ထည့်ပါ" required min="1">
                             </div>
                             <div class="mb-3 text-center">
                                 <button class="btn btn-blue" type="submit">Transfer</button>

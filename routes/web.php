@@ -80,6 +80,9 @@ Route::controller(ShopController::class)->group(function () {
     Route::get('/add/shop', 'AddShop')->name('add#shop'); // add shop page
     Route::post('/store/shop', 'StoreShop')->name('store#shop'); // store shop data
 
+    Route::get('/shop/control-list', 'ControlList')->name('control.list'); // Shop Stock Adjust Control List
+    Route::get('/shop/control-list/{id}', 'ControlListDelete')->name('control.list.delete'); // Control List delete
+
     Route::get('/shop-info/{id}', 'ShopInfo')->name('shop#info'); // shop info page
     Route::post('/shopinfo/update', 'ShopInfoUpdate')->name('shop#infoUpdate'); // shop info page
     Route::get('/shop/delete/{id}', 'ShopDelete')->name('shop#delete'); // shop delete
@@ -87,9 +90,14 @@ Route::controller(ShopController::class)->group(function () {
     Route::get('/shop/stock/{id}', 'ShopStock')->name('shop.stock'); // shop stock
     Route::post('/stock/transfer', 'StockTransfer')->name('stock.transfer'); //stock transfer to shop from shop stock list
 
-    Route::get('/stock/adjust/{id}','StockAdjust')->name('stock.adjust'); // stock adjustment
-    Route::post('create/adjust','CreateAdjust')->name('create.adjust'); // stock adjust create
-    Route::post('/add/trasnfer/stock','AddTransferStock')->name('add.transfer.stock'); // Transfer Stock
+    Route::get('/stock/adjust/{id}', 'StockAdjust')->name('stock.adjust'); // stock adjustment
+    Route::post('create/adjust', 'CreateAdjust')->name('create.adjust'); // stock adjust create
+    Route::post('/add/trasnfer/stock', 'AddTransferStock')->name('add.transfer.stock'); // Transfer Stock
+
+    Route::post('/update-quantity', 'updateQuantity')->name('update.quantity'); // shop stock control
+
+    // shop stock control
+
 });
 
 // Employee All Route
@@ -190,7 +198,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('export/product', 'ExportProduct')->name('export#product'); // Exprot product route
     Route::post('import', 'Import')->name('import'); // Import
 
-    Route::get('/print/product-barcodes','printProductBarcodes')->name('print.productBarcodes');
+    Route::get('/print/product-barcodes', 'printProductBarcodes')->name('print.productBarcodes');
 
 
 
@@ -351,26 +359,26 @@ Route::controller(WarehouseInventory::class)->group(function () {
 
     Route::get('stock/import', 'StockImport')->name('stock.import'); // stock import route
 
-    Route::post('/stockin-shop/order','StockInOrder'); // shop stock import order route
+    Route::post('/stockin-shop/order', 'StockInOrder'); // shop stock import order route
 
-    Route::post('/create-import/order','ImportOrder'); // warehouse stock import order route
+    Route::post('/create-import/order', 'ImportOrder'); // warehouse stock import order route
 
-    Route::post('add/stock/','AddStock')->name('add.stock'); // Add stock to warehouse method
+    Route::post('add/stock/', 'AddStock')->name('add.stock'); // Add stock to warehouse method
 
     Route::get('export/stock', 'ExportStock')->name('export.stock'); // Export Stock to Warehouse with file
     Route::post('import/stock', 'ImportStock')->name('import.stock'); // Import Stock to Warehouse with file
-    Route::post('add/stockin-shop','AddStockInShop')->name('add.stockin.shop'); // Add stock to shop method
+    Route::post('add/stockin-shop', 'AddStockInShop')->name('add.stockin.shop'); // Add stock to shop method
 
     Route::get('all/transfer-record', 'AllTransferRecord')->name('all.transfer.record'); // all transfer record
-    Route::get('detail/transfer/{invoiceNo}','DetailTransfer')->name('detail.transfer'); // detail transfer in
+    Route::get('detail/transfer/{invoiceNo}', 'DetailTransfer')->name('detail.transfer'); // detail transfer in
 
-    Route::get('all/stockin','AllStockIn')->name('all.stockin'); // all stock in route
-    Route::get('detail/stockin/{invoiceNo}','DetailStockIn')->name('detail.stockin'); // detail stock in
+    Route::get('all/stockin', 'AllStockIn')->name('all.stockin'); // all stock in route
+    Route::get('detail/stockin/{invoiceNo}', 'DetailStockIn')->name('detail.stockin'); // detail stock in
 
-    Route::get('shop/stockin','ShopStockIn')->name('shop.stockin'); // shop stock in route
+    Route::get('shop/stockin', 'ShopStockIn')->name('shop.stockin'); // shop stock in route
 
 
-    Route::get('delete/stockin/{id}','DeleteStockin')->name('delete.stockin'); // stock in delete
+    Route::get('delete/stockin/{id}', 'DeleteStockin')->name('delete.stockin'); // stock in delete
 
     // Route::delete('/delete-transfer-record/{id}', 'DeleteTransferRecord')->name('delete.transfer.record');
 
