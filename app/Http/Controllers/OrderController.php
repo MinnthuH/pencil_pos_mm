@@ -37,7 +37,7 @@ class OrderController extends Controller
 
             $result = Sale::insertGetId([
                 'user_id' => $request->userId,
-                'shop_id'=>$shopId,
+                'shop_id' => $shopId,
                 'customer_id' => $request->customerId,
                 'deli_id' => $request->deliId,
                 'invoice_date' => Carbon::now(),
@@ -56,6 +56,8 @@ class OrderController extends Controller
 
             $data = array();
             $data['customer_id'] = $request->customerId;
+            $data['user_id'] = $request->userId;
+            $data['shop_id'] = $shopId;
             $data['order_date'] = $request->orderDate;
             $data['order_status'] = $request->orderStaus;
             $data['total_products'] = $request->porductCount;
@@ -85,7 +87,6 @@ class OrderController extends Controller
                 $pdata['created_at'] = Carbon::now();
 
                 OrderDetail::insert($pdata);
-
             } // end foreach
 
             foreach ($contents as $content) {
@@ -114,7 +115,7 @@ class OrderController extends Controller
             $returnChange = $request->returnChange;
             $customerId = $request->customerId;
             $customer = Customer::where('id', $customerId)->first();
-            $shop=Shop::Where('id',$shopId)->first();
+            $shop = Shop::Where('id', $shopId)->first();
 
             $sale = Sale::latest()->firstOrFail();
 
@@ -130,7 +131,6 @@ class OrderController extends Controller
             // Handle the error, log it, or redirect to an error page
             dd($e);
         }
-
     } // End Method
 
     // Pending Order Method
@@ -139,7 +139,6 @@ class OrderController extends Controller
 
         $order = Order::where('order_status', 'pending')->get();
         return view('backend.order.pending_order', compact('order'));
-
     } // End Method
 
     // Detail Order Mehtod
@@ -150,7 +149,6 @@ class OrderController extends Controller
         $orderItem = OrderDetail::with('product')->where('order_id', $id)->orderBy('id', 'DESC')->get();
 
         return view('backend.order.detail_order', compact('order', 'orderItem'));
-
     } //End Method
 
     // Update Order Status Method
@@ -180,7 +178,6 @@ class OrderController extends Controller
     {
         $order = Order::where('order_status', 'complete')->get();
         return view('backend.order.complete_order', compact('order'));
-
     } // End Method
 
     // Manage Stock Method
@@ -204,7 +201,6 @@ class OrderController extends Controller
             'chroot' => public_path(),
         ]);
         return $pdf->download('invoice.pdf');
-
     } // End Method
 
     //////////// Due /////////////
@@ -250,7 +246,6 @@ class OrderController extends Controller
         ];
 
         return redirect()->route('pending#due')->with($noti);
-
     } // End Method
 
     ////////////////////////Private Funciton//////////////////////////
@@ -266,5 +261,4 @@ class OrderController extends Controller
 
         return $invoiceNumber;
     }
-
 }

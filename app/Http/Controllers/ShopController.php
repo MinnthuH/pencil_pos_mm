@@ -118,11 +118,69 @@ class ShopController extends Controller
         $shop = Shop::findOrFail($id);
 
         // Get all stocks where shop_id matches the provided $id
-        $stocks = ShopProduct::where('shop_id', $id)->get();
+        // $stocks = ShopProduct::where('shop_id', $id)->get();
+
+        // Get all stocks where shop_id matches the provided $id, ordered by product roll_no in ascending order
+        $stocks = ShopProduct::where('shop_id', $id)
+            ->with(['product' => function ($query) {
+                $query->orderBy('roll_no', 'asc');
+            }])
+            ->get()
+            ->sortBy('product.roll_no'); // Sort after retrieval to respect the relationship
 
         // dd($stocks->toArray());
         // Return the view with the shop and stocks data
         return view('shop.shop_stock', compact('shop', 'stocks'));
+    } // End Method
+
+
+    // Shop Stock Control Page
+    public function shopControl($id)
+    {
+        // Ensure shop exists and retrieve its ID
+        $shop = Shop::findOrFail($id);
+        $shopId = $shop->id;
+
+        // Retrieve ShopProduct records for the given shop where quantity is >= 1
+        $shopProducts = ShopProduct::where('shop_id', $shopId)
+            ->where('quantity', '>=', 1)  // Only include products with quantity >= 1
+            ->get()
+            ->keyBy('product_id');
+
+        $shopProductIds = $shopProducts->keys()->toArray();
+
+        // Retrieve products based on the IDs from shopProducts
+        $products = Product::whereIn('id', $shopProductIds)
+            ->latest()
+            ->paginate(200);
+
+        // Add quantity to each product
+        foreach ($products as $product) {
+            $product->quantity = $shopProducts->get($product->id)->quantity ?? 0;
+        }
+
+        // Fetch additional data
+        $customers = Customer::latest()->get();
+        $categories = Category::latest()->get();
+        $shops = Shop::where('id', '!=', $shopId)->get();
+
+        // Return the view with the retrieved data
+        return view('shop.control', compact('products', 'customers', 'categories', 'shopProducts', 'shops', 'shop'));
+    } // End Method
+
+    // Create Stock Adjust
+    public function CreateControl(Request $request)
+    {
+
+        $id = $request->originalShop;
+        $orgShopName = Shop::where('id', $id)->first();
+        $cartItem = Cart::content();
+        $shopId = $request->shopId;
+        $shop = Shop::where('id', $shopId)->first();
+
+        // dd($cartItem->toArray());
+
+        return view('shop.create_control', compact('shop', 'cartItem', 'orgShopName'));
     } // End Method
 
     // Shop Stock Control
@@ -224,11 +282,11 @@ class ShopController extends Controller
         $shopProduct = ShopProduct::where('shop_id', $shopId)
             ->where('product_id', $productId)
             ->first();
-        dd($shopProduct);
+        // dd($shopProduct);
         // Check if the ShopProduct record exists
         if ($shopProduct) {
             $quantity = $shopProduct->quantity;
-            dd($quantity);
+            // dd($quantity);
         } else {
             dd('No product found for this shop with the given product ID');
         }

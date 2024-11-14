@@ -47,24 +47,23 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="amount" class="form-label">Amount</label>
-                                            <input type="text" name="amount"
-                                                class="form-control">
+                                            <input type="text" name="amount" class="form-control">
                                         </div>
                                     </div>
                                     <!-- end col -->
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="amount" class="form-label"></label>
-                                            <input type="hidden" name="date"
-                                                class="form-control" value="{{ date('d-m-Y')}}">
+                                            <input type="hidden" name="date" class="form-control"
+                                                value="{{ date('d-m-Y') }}">
                                         </div>
                                     </div>
                                     <!-- end col -->
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="amount" class="form-label"></label>
-                                            <input type="hidden" name="month"
-                                                class="form-control" value="{{ date('F')}}">
+                                            <input type="hidden" name="month" class="form-control"
+                                                value="{{ date('F') }}">
                                         </div>
                                     </div>
                                     <!-- end col -->
@@ -72,7 +71,7 @@
                                         <div class="mb-3">
                                             <label for="amount" class="form-label"></label>
                                             <input type="hidden" name="year"
-                                                class="form-control"value="{{ date('Y')}}">
+                                                class="form-control"value="{{ date('Y') }}">
                                         </div>
                                     </div>
                                     <!-- end col -->

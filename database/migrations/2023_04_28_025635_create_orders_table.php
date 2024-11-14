@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-                Schema::create('orders', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('customer_id');
+            $table->integer('user_id');
+            $table->integer('shop_id');
             $table->string('order_date');
             $table->string('order_status');
             $table->string('total_products')->nullable();

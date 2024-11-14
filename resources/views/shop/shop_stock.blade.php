@@ -28,13 +28,15 @@
                                         <th>အမျိုးအစား</th>
                                         <th>Code</th>
                                         <th>လက်ကျန်</th>
-                                        <th>Action</th>
+                                        @if (Auth::user()->can('admin.manage'))
+                                            <th>Action</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($stocks as $key => $item)
                                         <tr>
-                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $item->product->roll_no }}</td>
                                             <td><img src="{{ asset($item->product->product_image ?: 'upload/no_image.jpg') }}"
                                                     style="width:50px;height:40px;" alt=""></td>
                                             <td>{{ $item->product->product_name }}</td>
@@ -48,26 +50,29 @@
                                                 <button
                                                     class="btn btn-warning waves-effect waves-light">{{ $item->quantity }}</button>
                                             </td>
-                                            <td>
-                                                <button type="button" class="btn btn-blue" data-bs-toggle="modal"
-                                                    data-bs-target="#shop-stock-modal" data-action="loss"
-                                                    data-productid="{{ $item->product->id }}"
-                                                    data-shopid="{{ $shop->id }}">
-                                                    Loss
-                                                </button>
-                                                <button type="button" class="btn btn-blue" data-bs-toggle="modal"
-                                                    data-bs-target="#shop-stock-modal" data-action="refound"
-                                                    data-productid="{{ $item->product->id }}"
-                                                    data-shopid="{{ $shop->id }}">
-                                                    Refound
-                                                </button>
-                                                <button type="button" class="btn btn-blue" data-bs-toggle="modal"
-                                                    data-bs-target="#shop-stock-modal" data-action="damage"
-                                                    data-productid="{{ $item->product->id }}"
-                                                    data-shopid="{{ $shop->id }}">
-                                                    Damage
-                                                </button>
-                                            </td>
+
+                                            @if (Auth::user()->can('admin.manage'))
+                                                <td>
+                                                    <button type="button" class="btn btn-blue" data-bs-toggle="modal"
+                                                        data-bs-target="#shop-stock-modal" data-action="loss"
+                                                        data-productid="{{ $item->product->id }}"
+                                                        data-shopid="{{ $shop->id }}">
+                                                        Loss
+                                                    </button>
+                                                    <button type="button" class="btn btn-blue" data-bs-toggle="modal"
+                                                        data-bs-target="#shop-stock-modal" data-action="refound"
+                                                        data-productid="{{ $item->product->id }}"
+                                                        data-shopid="{{ $shop->id }}">
+                                                        Refound
+                                                    </button>
+                                                    <button type="button" class="btn btn-blue" data-bs-toggle="modal"
+                                                        data-bs-target="#shop-stock-modal" data-action="damage"
+                                                        data-productid="{{ $item->product->id }}"
+                                                        data-shopid="{{ $shop->id }}">
+                                                        Damage
+                                                    </button>
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>

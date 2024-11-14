@@ -33,6 +33,8 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th>Invoice No</th>
+                                    <th>Shop Name</th>
+                                    <th>Cashier Name</th>
                                     <th>Sale Date</th>
                                     <th>Payment</th>
                                     <th>Total</th>
@@ -47,11 +49,13 @@
                                 @foreach ($alldue as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $item->invoice_no}}</td>
+                                        <td>{{ $item->invoice_no }}</td>
+                                        <td>{{ $item->shop->name ?? 'N/A' }}</td>
+                                        <td>{{ $item->user->name ?? 'N/A' }}</td>
                                         <td>{{ $item->order_date }}</td>
                                         <td>{{ $item->paymet_status }}</td>
                                         <td> <span class="btn btn-info waves-effect wave">{{ $item->total }}
-                                            Ks</span></td>
+                                                Ks</span></td>
                                         <td> <span class="btn btn-warning waves-effect wave">{{ $item->pay }}
                                                 Ks</span></td>
                                         <td> <span class="btn btn-danger waves-effect wave">{{ $item->due }}
@@ -100,7 +104,7 @@
 
                     <div class="mb-3">
                         <label for="paydue" class="form-label">Pay Due</label>
-                        <input class="form-control" type="text"  name="due" id="due">
+                        <input class="form-control" type="text" name="due" id="due">
                     </div>
 
 

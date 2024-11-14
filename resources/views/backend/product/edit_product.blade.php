@@ -48,6 +48,14 @@
                                     <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
+                                            <label for="firstname" class="form-label">Roll No</label>
+                                            <input type="text" name="roll_num" class="form-control"
+                                                value="{{ $product->roll_no }}">
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
                                             <label for="firstname" class="form-label">အမျိုးအစား</label>
                                             <select name="categoryId" class="form-select" id="example-select">
                                                 <option selected disabled>အမျိုးအစား အရွေးချယ်ပါ</option>
@@ -80,26 +88,33 @@
                                     <!-- end col -->
 
                                     @php
-                                    $productCodes = $product->product_code;
-                                    $decodedCodes = is_array(json_decode($productCodes, true)) ? json_decode($productCodes, true) : explode(',', $productCodes);
-                                @endphp
+                                        $productCodes = $product->product_code;
+                                        $decodedCodes = is_array(json_decode($productCodes, true))
+                                            ? json_decode($productCodes, true)
+                                            : explode(',', $productCodes);
+                                    @endphp
 
-                                @foreach ($decodedCodes as $index => $code)
-                                    <div class="col-md-6 dynamic-column" id="product-row-{{ $index }}">
-                                        <div class="form-group mb-3">
-                                            <label for="productCode" class="form-label">Product Code {{ $index + 1 }}</label>
-                                            <div class="input-group">
-                                                <input type="text" name="productCode[]" class="form-control" value="{{ $code }}"
-                                                    placeholder="Product Code {{ $index + 1 }}">
-                                                @if ($index == 0)
-                                                    <button type="button" id="add-column" class="btn btn-outline-secondary">Add Column</button>
-                                                @else
-                                                    <button type="button" class="btn btn-outline-danger remove-column">Remove Column</button>
-                                                @endif
+                                    @foreach ($decodedCodes as $index => $code)
+                                        <div class="col-md-6 dynamic-column" id="product-row-{{ $index }}">
+                                            <div class="form-group mb-3">
+                                                <label for="productCode" class="form-label">Product Code
+                                                    {{ $index + 1 }}</label>
+                                                <div class="input-group">
+                                                    <input type="text" name="productCode[]" class="form-control"
+                                                        value="{{ $code }}"
+                                                        placeholder="Product Code {{ $index + 1 }}">
+                                                    @if ($index == 0)
+                                                        <button type="button" id="add-column"
+                                                            class="btn btn-outline-secondary">Add Column</button>
+                                                    @else
+                                                        <button type="button"
+                                                            class="btn btn-outline-danger remove-column">Remove
+                                                            Column</button>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
 
 
 

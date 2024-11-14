@@ -30,7 +30,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="tab-pane" id="settings">
-                            <form id="myForm" method="post" action="{{ route('stroe#porduct') }}" enctype="multipart/form-data">
+                            <form id="myForm" method="post" action="{{ route('stroe#porduct') }}"
+                                enctype="multipart/form-data">
                                 @csrf
 
                                 <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Add Product
@@ -40,6 +41,13 @@
                                         <div class="form-group mb-3">
                                             <label for="firstname" class="form-label">ကုန်ပစ္စည်း အမည်</label>
                                             <input type="text" name="productName" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="firstname" class="form-label">Roll No</label>
+                                            <input type="text" name="roll_num" class="form-control">
                                         </div>
                                     </div>
                                     <!-- end col -->
@@ -94,7 +102,8 @@
                                     <!-- end col -->
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
-                                            <label for="firstname" class="form-label">အနည်းဆုံးကျန်ရမည့် အရေအတွက်</label>
+                                            <label for="firstname" class="form-label">အနည်းဆုံးကျန်ရမည့်
+                                                အရေအတွက်</label>
                                             <input type="number" name="trackStock" class="form-control">
                                         </div>
                                     </div>
@@ -184,80 +193,80 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function (){
+    $(document).ready(function() {
         $('#myForm').validate({
             rules: {
                 productName: {
-                    required : true,
+                    required: true,
                 },
                 categoryId: {
-                    required : true,
+                    required: true,
                 },
                 supplierId: {
-                    required : true,
+                    required: true,
                 },
 
                 productGarage: {
-                    required : true,
+                    required: true,
                 },
                 productStore: {
-                    required : true,
+                    required: true,
                 },
                 trackStock: {
-                    required : true,
+                    required: true,
                 },
                 buyingDate: {
-                    required : true,
+                    required: true,
                 },
                 expireDate: {
-                    required : true,
+                    required: true,
                 },
                 buyingPrice: {
-                    required : true,
+                    required: true,
                 },
                 sellingPrice: {
-                    required : true,
+                    required: true,
                 },
                 productImage: {
-                    required : true,
+                    required: true,
                 },
                 unit: {
-                    required : true,
+                    required: true,
                 },
             },
-            messages :{
+            messages: {
                 productName: {
-                    required : 'ကုန်ပစ္စည်းအမည် ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းအမည် ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 categoryId: {
-                    required : 'ကုန်ပစ္စည်းအမျိုးအစား ရွေးချယ်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းအမျိုးအစား ရွေးချယ်ရန် လိုအပ်ပါသည်',
                 },
                 supplierId: {
-                    required : 'ကုန်ပစ္စည်းတင်သွင်းသူ ရွေးချယ်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းတင်သွင်းသူ ရွေးချယ်ရန် လိုအပ်ပါသည်',
                 },
                 productGarage: {
-                    required : 'ကုန်ပစ္စည်းထားသည့်နေရာ ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းထားသည့်နေရာ ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 productStore: {
-                    required : 'ကုန်ပစ္စည်းအရေအတွက် ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းအရေအတွက် ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 trackStock: {
-                    required : 'အနည်းဆုံးကျန်ရှိရမည့် ကုန်ပစ္စည်းအရေအတွက် ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'အနည်းဆုံးကျန်ရှိရမည့် ကုန်ပစ္စည်းအရေအတွက် ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 buyingDate: {
-                    required : 'ကုန်ပစ္စည်းဝယ်သည့်နေ့ ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းဝယ်သည့်နေ့ ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 expireDate: {
-                    required : 'ကုန်ပစ္စည်းသက်တမ်းကုန်ဆုံးရက် ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းသက်တမ်းကုန်ဆုံးရက် ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 buyingPrice: {
-                    required : 'ကုန်ပစ္စည်းဝယ်ဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းဝယ်ဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 sellingPrice: {
-                    required : 'ကုန်ပစ္စည်းရောင်းဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းရောင်းဈေး ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 productImage: {
-                    required : 'ကုန်ပစ္စည်းဓါတ်ပုံ ဖြည့်ရန် လိုအပ်ပါသည်',
+                    required: 'ကုန်ပစ္စည်းဓါတ်ပုံ ဖြည့်ရန် လိုအပ်ပါသည်',
                 },
                 unit: {
                     required: 'ကုန်ပစ္စည်းရေတွက်ပုံ ဖြည့်ရန် လိုအပ်ပါသည်',
@@ -265,20 +274,19 @@
 
 
             },
-            errorElement : 'span',
-            errorPlacement: function (error,element) {
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
                 error.addClass('invalid-feedback');
                 element.closest('.form-group').append(error);
             },
-            highlight : function(element, errorClass, validClass){
+            highlight: function(element, errorClass, validClass) {
                 $(element).addClass('is-invalid');
             },
-            unhighlight : function(element, errorClass, validClass){
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).removeClass('is-invalid');
             },
         });
     });
-
 </script>
 
 

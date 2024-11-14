@@ -16,8 +16,10 @@ return new class extends Migration
             $table->bigInteger('user_id');
             $table->bigInteger('shop_id');
             $table->bigInteger('product_id');
+            $table->string('job_number');
             $table->string('quantity');
-            $table->string('action');
+            $table->string('action', 100);
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

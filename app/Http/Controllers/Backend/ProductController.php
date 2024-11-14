@@ -23,7 +23,8 @@ class ProductController extends Controller
     // All Product Page Method
     public function AllProduct()
     {
-        $product = Product::latest()->get();
+        // $product = Product::latest()->get();
+        $product = Product::orderBy('roll_no', 'asc')->get();
         return view('backend.product.all_product', compact('product'));
     } // End Method
 
@@ -50,6 +51,7 @@ class ProductController extends Controller
 
         Product::insert([
             'product_name' => $request->productName,
+            'roll_no' => $request->roll_num,
             'category_id' => $request->categoryId,
             'supplier_id' => $request->supplierId,
             'product_code' => $pcode,
@@ -104,6 +106,7 @@ class ProductController extends Controller
 
             Product::findOrFail($productId)->update([
                 'product_name' => $request->productName,
+                'roll_no' => $request->roll_num,
                 'category_id' => $request->categoryId,
                 'supplier_id' => $request->supplierId,
                 'product_code' => json_encode($request->productCode),

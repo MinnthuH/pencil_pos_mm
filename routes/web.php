@@ -80,6 +80,9 @@ Route::controller(ShopController::class)->group(function () {
     Route::get('/add/shop', 'AddShop')->name('add#shop'); // add shop page
     Route::post('/store/shop', 'StoreShop')->name('store#shop'); // store shop data
 
+    Route::get('shop/contorl/{id}', 'shopControl')->name('shop.control'); // shop stock control page
+    Route::post('create/control', 'CreateControl')->name('create.control'); // stock adjust create
+
     Route::get('/shop/control-list', 'ControlList')->name('control.list'); // Shop Stock Adjust Control List
     Route::get('/shop/control-list/{id}', 'ControlListDelete')->name('control.list.delete'); // Control List delete
 

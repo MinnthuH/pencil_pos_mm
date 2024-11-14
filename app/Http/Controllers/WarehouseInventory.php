@@ -110,7 +110,7 @@ class WarehouseInventory extends Controller
     // Inventory Stock Method
     public function StockInventory()
     {
-        $inventory = Product::latest()->get();
+        $inventory = Product::orderBy('roll_no', 'asc')->get();
 
         $shops = Shop::where('id', '!=', 1)->get();
 
@@ -516,7 +516,7 @@ class WarehouseInventory extends Controller
 
         $shops = Shop::latest()->get();
 
-        $products = Product::latest()->paginate(16); // Change the number '10' to the desired number of products per page
+        $products = Product::latest()->paginate(200); // Change the number '10' to the desired number of products per page
         // dd($products);
 
         $categories = Category::latest()->get();

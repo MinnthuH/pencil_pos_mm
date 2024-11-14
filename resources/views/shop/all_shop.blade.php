@@ -52,6 +52,9 @@
                                         <td>{{ $item->phone }}</td>
                                         <td>
 
+                                            <a href="{{ route('shop.control', $item->id) }}" class="btn btn-warning sm"
+                                                title="Stock Adjust"><i class="fas fa-tools"></i></a>
+
                                             <a href="{{ route('stock.adjust', $item->id) }}" class="btn btn-primary sm"
                                                 title="Stock Adjust"><i class="fas fa-exchange-alt"></i></a>
 

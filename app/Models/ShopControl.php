@@ -9,7 +9,7 @@ class ShopControl extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'shop_id', 'product_id', 'quantity', 'action'];
+    protected $fillable = ['user_id', 'shop_id', 'product_id', 'job_number', 'quantity', 'action', 'description'];
 
     public function user()
     {
