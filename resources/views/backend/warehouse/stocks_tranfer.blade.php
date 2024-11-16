@@ -62,7 +62,7 @@
                                 </tr>
                             </thead>
                             @php
-                                $allcart = Cart::content();
+                                $allcart = Cart::content()->sortByDesc(fn($cart) => $cart->options->added_at);
                             @endphp
                             <tbody>
                                 @foreach ($allcart as $cart)
@@ -70,7 +70,8 @@
 
                                         <td>{{ $cart->name }}</td>
                                         <td>
-                                            <form action="{{ url('/stock/cart_update/' . $cart->rowId) }}" method="post">
+                                            <form action="{{ url('/stock/cart_update/' . $cart->rowId) }}"
+                                                method="post">
                                                 @csrf
                                                 <input type="number" name="qty" style="width:70px;" min="1"
                                                     value="{{ $cart->qty }}">
@@ -98,7 +99,7 @@
                         @csrf
 
                         <div class="form-group m-2">
-                            <input type="hidden" value="{{$shopId}}" name="originalShop" >
+                            <input type="hidden" value="{{ $shopId }}" name="originalShop">
                             <div class="form-group m-2">
                                 <select name="shopId" class="form-select mt-3" id="example-select">
                                     <option selected disabled>Please Choose Shop</option>

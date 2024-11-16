@@ -63,7 +63,7 @@
                                 </tr>
                             </thead>
                             @php
-                                $allcart = Cart::content();
+                                $allcart = Cart::content()->sortByDesc(fn($cart) => $cart->options->added_at);
                             @endphp
                             <tbody>
                                 @foreach ($allcart as $cart)
@@ -75,18 +75,23 @@
                                                 <input type="number" name="qty" style="width:40px;" min="1"
                                                     value="{{ $cart->qty }}">
                                                 <button type="submit" class="btn btn-sm btn-success"
-                                                    style="margin-top:-2px;"><i class="fas fa-check"></i></button>
+                                                    style="margin-top:-2px;">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
                                             </form>
                                         </td>
                                         <td>{{ $cart->price }}</td>
                                         <td>{{ $cart->price * $cart->qty }}</td>
-                                        <td><a href="{{ url('/cart_remove/' . $cart->rowId) }}"
-                                                style="margin-top:-2px;"><i class="fas fa-trash-alt"
-                                                    style="color:rgb(25, 7, 187)"></i></a>
+                                        <td>
+                                            <a href="{{ url('/cart_remove/' . $cart->rowId) }}"
+                                                style="margin-top:-2px;">
+                                                <i class="fas fa-trash-alt" style="color:rgb(25, 7, 187)"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                         <div class="bg-dark">
                             <br>

@@ -49,7 +49,7 @@
         <div class="col-12">
             <div class="page-title-box">
 
-                <h4 class="page-title ms-5">{{$shop->name}}Stock Adjustment</h4>
+                <h4 class="page-title ms-5">{{ $shop->name }}Stock Adjustment</h4>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
                                 </tr>
                             </thead>
                             @php
-                                $allcart = Cart::content();
+                                $allcart = Cart::content()->sortByDesc(fn($cart) => $cart->options->added_at);
                             @endphp
                             <tbody>
                                 @foreach ($allcart as $cart)
@@ -75,7 +75,8 @@
 
                                         <td>{{ $cart->name }}</td>
                                         <td>
-                                            <form action="{{ url('/stock/cart_update/' . $cart->rowId) }}" method="post">
+                                            <form action="{{ url('/stock/cart_update/' . $cart->rowId) }}"
+                                                method="post">
                                                 @csrf
                                                 <input type="number" name="qty" style="width:40px;" min="1"
                                                     value="{{ $cart->qty }}">
@@ -97,7 +98,7 @@
                     <form action="{{ url('create/adjust') }}" id="myForm" method="post">
                         @csrf
 
-                        <input type="hidden" value="{{$shop->id}}" name="originalShop" >
+                        <input type="hidden" value="{{ $shop->id }}" name="originalShop">
                         <div class="form-group m-2">
                             <select name="shopId" class="form-select mt-3" id="example-select">
                                 <option selected disabled>Please Choose Shop</option>
@@ -292,28 +293,28 @@
         });
 
         $('#myForm').validate({
-             rules: {
+            rules: {
                 shopId: {
-                     required: true,
-                 },
-             },
-             messages: {
-                shopId: {
-                     required: 'လွှဲပြောင်းမည့်ဆိုင် ရွေးချယ်ပေးရန် လိုအပ်ပါသည်',
-                 },
-             },
-             errorElement: 'span',
-             errorPlacement: function(error, element) {
-                 error.addClass('invalid-feedback');
-                 element.closest('.form-group').append(error);
-             },
-             highlight: function(element, errorClass, validClass) {
-                 $(element).addClass('is-invalid');
-             },
-             unhighlight: function(element, errorClass, validClass) {
-                 $(element).removeClass('is-invalid');
+                    required: true,
+                },
             },
-         });
+            messages: {
+                shopId: {
+                    required: 'လွှဲပြောင်းမည့်ဆိုင် ရွေးချယ်ပေးရန် လိုအပ်ပါသည်',
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            },
+        });
     });
 </script>
 <input type="text" class="form-control" id="searchInput" placeholder="Search products by name, code, or scan barcode"

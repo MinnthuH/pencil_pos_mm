@@ -611,7 +611,7 @@ class WarehouseInventory extends Controller
                 'name' => $request->porductName,
                 'qty' => $request->qty,
                 'price' => $request->price,
-                'options' => ['bPrice' => $request->buyPrice],
+                'options' => ['bPrice' => $request->buyPrice, 'added_at' => now()],
             ],
         ]);
         $noti = [

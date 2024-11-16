@@ -30,7 +30,8 @@ class PosController extends Controller
         $products = Product::whereIn('id', $shopProductIds)
             ->where('expire_date', '>', Carbon::now())
             ->latest()
-            ->paginate(150); // Change the number '10' to the desired number of products per page
+            ->orderBy('roll_no', 'asc') // Sort by roll_no in ascending order
+            ->paginate(200); // Change the number '10' to the desired number of products per page
 
         // Add quantity to each product
         foreach ($products as $product) {
@@ -99,7 +100,7 @@ class PosController extends Controller
                 'name' => $request->porductName,
                 'qty' => $request->qty,
                 'price' => $request->price,
-                'options' => ['bPrice' => $request->buyPrice],
+                'options' => ['bPrice' => $request->buyPrice, 'added_at' => now()],
             ],
         ]);
         $noti = [
@@ -108,6 +109,12 @@ class PosController extends Controller
         ];
         return redirect()->back()->with($noti);
     } // End Method
+
+    public function showCart()
+    {
+        $allcart = Cart::content()->sortByDesc(fn($cart) => $cart->options->added_at);
+        return view('your-view-file', compact('allcart'));
+    }
 
 
     // Update Cart Method
@@ -122,7 +129,6 @@ class PosController extends Controller
             'alert-type' => 'success',
         ];
         return redirect()->back()->with($noti);
-
     } // End Method
 
     // cart remove method
