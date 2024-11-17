@@ -49,7 +49,7 @@
         <div class="col-12">
             <div class="page-title-box">
 
-                <h4 class="page-title ms-5">{{ $shop->name }}Stock Control View</h4>
+                <h4 class="page-title ms-5">{{ $shop->name }}&nbsp; Stock Control View</h4>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
                                 </tr>
                             </thead>
                             @php
-                                $allcart = Cart::content();
+                                $allcart = Cart::content()->sortByDesc(fn($cart) => $cart->options->added_at);
                             @endphp
                             <tbody>
                                 @foreach ($allcart as $cart)
@@ -101,7 +101,7 @@
                         <input type="hidden" value="{{ $shop->id }}" name="originalShop">
                         <div class="form-group m-2">
                             <div class="mb-3">
-                                <select name="action" class="form-select mt-3" id="example-select">
+                                <select name="action" class="form-select mt-3" id="example-select" required>
                                     <option selected disabled>Please Choose Action</option>
                                     <option value="loss">LOSS</option>
                                     <option value="damage">DAMAGE</option>

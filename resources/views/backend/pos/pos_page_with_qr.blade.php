@@ -4,7 +4,7 @@
 @section('title')
     POS | Pencil POS System
 @endsection
-{{-- jquery link  --}}
+{{-- jquery link --}}
 <script src="{{ asset('backend/assets/jquery.js') }}"></script>
 
 <style type="text/css">
@@ -388,7 +388,4 @@
         // });
     });
 </script>
-
-
-
 @endsection

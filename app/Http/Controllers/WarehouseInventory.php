@@ -604,20 +604,31 @@ class WarehouseInventory extends Controller
     public function StockAddCart(Request $request)
     {
 
-        // dd($request->toArray());
-        $addCard = Cart::add([
-            [
+        // Check if the product already exists in the cart
+        $cartItem = Cart::content()->firstWhere('id', $request->id);
+
+        if ($cartItem) {
+            // Update the quantity of the existing item
+            $newQty = $cartItem->qty + $request->qty;
+            Cart::update($cartItem->rowId, $newQty);
+            $noti = [
+                'message' => 'Cart updated successfully',
+                'alert-type' => 'success',
+            ];
+        } else {
+            // Add the product as a new item
+            Cart::add([
                 'id' => $request->id,
                 'name' => $request->porductName,
                 'qty' => $request->qty,
                 'price' => $request->price,
                 'options' => ['bPrice' => $request->buyPrice, 'added_at' => now()],
-            ],
-        ]);
-        $noti = [
-            'message' => 'ကုန်ပစ္စည်း ဈေးခြင်းထဲထည့်ခြင်း အောင်မြင်ပါသည်',
-            'alert-type' => 'success',
-        ];
+            ]);
+            $noti = [
+                'message' => 'Product added to cart successfully.',
+                'alert-type' => 'success',
+            ];
+        }
 
         return redirect()->back()->with($noti);
     } // End Method
@@ -678,6 +689,17 @@ class WarehouseInventory extends Controller
 
             $product = Product::findOrFail($productId);
 
+            // Check if stock is sufficient
+            if (
+                $product->product_store < $qty
+            ) {
+                $noti = [
+                    'message' => "ကုန်ပစ္စည်း '{$product->product_name}' သည် Warehouse လုံလောက်သော stock မရှိပါ!",
+                    'alert-type' => 'error',
+                ];
+                return redirect()->route('mass.transfer')->with($noti);
+            }
+
             // Reduce stock from main warehouse
             $product->product_store -= $qty;
             $product->save();
@@ -714,6 +736,7 @@ class WarehouseInventory extends Controller
         ];
         return redirect()->route('mass.transfer')->with($noti);
     } // End Method
+
 
     // Trasnfer Record export daily
     public function exportDaily()

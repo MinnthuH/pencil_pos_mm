@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box">
-                        <h4 class="page-title">{{ $shop->id }} Shop Stock</h4>
+                        <h4 class="page-title">{{ $shop->name }} Shop Stock</h4>
                     </div>
                 </div>
             </div>
@@ -28,9 +28,9 @@
                                         <th>အမျိုးအစား</th>
                                         <th>Code</th>
                                         <th>လက်ကျန်</th>
-                                        @if (Auth::user()->can('admin.manage'))
+                                        {{-- @if (Auth::user()->can('admin.manage'))
                                             <th>Action</th>
-                                        @endif
+                                        @endif --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -51,7 +51,7 @@
                                                     class="btn btn-warning waves-effect waves-light">{{ $item->quantity }}</button>
                                             </td>
 
-                                            @if (Auth::user()->can('admin.manage'))
+                                            {{-- @if (Auth::user()->can('admin.manage'))
                                                 <td>
                                                     <button type="button" class="btn btn-blue" data-bs-toggle="modal"
                                                         data-bs-target="#shop-stock-modal" data-action="loss"
@@ -72,7 +72,7 @@
                                                         Damage
                                                     </button>
                                                 </td>
-                                            @endif
+                                            @endif --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

@@ -82,9 +82,14 @@ Route::controller(ShopController::class)->group(function () {
 
     Route::get('shop/contorl/{id}', 'shopControl')->name('shop.control'); // shop stock control page
     Route::post('create/control', 'CreateControl')->name('create.control'); // stock adjust create
+    Route::post('/add/control', 'AddControl')->name('add.control'); // Add Control Method
 
     Route::get('/shop/control-list', 'ControlList')->name('control.list'); // Shop Stock Adjust Control List
-    Route::get('/shop/control-list/{id}', 'ControlListDelete')->name('control.list.delete'); // Control List delete
+    Route::get('/shop/control-record', 'ControlRecord')->name('control.record'); // Shop Stock Adjust Control List
+    Route::get('/shop/record-detail/{jobNumber}', 'DetailRecord')->name('detail.record'); // Shop Control Record Detail
+
+
+    Route::get('/shop/control-list-delete/{id}', 'ControlListDelete')->name('control.list.delete'); // Control List delete
 
     Route::get('/shop-info/{id}', 'ShopInfo')->name('shop#info'); // shop info page
     Route::post('/shopinfo/update', 'ShopInfoUpdate')->name('shop#infoUpdate'); // shop info page

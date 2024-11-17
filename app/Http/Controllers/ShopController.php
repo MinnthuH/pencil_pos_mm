@@ -172,16 +172,77 @@ class ShopController extends Controller
     public function CreateControl(Request $request)
     {
 
+        $action = $request->action;
+        $description = $request->description;
         $id = $request->originalShop;
-        $orgShopName = Shop::where('id', $id)->first();
         $cartItem = Cart::content();
-        $shopId = $request->shopId;
-        $shop = Shop::where('id', $shopId)->first();
+        $shop = Shop::where('id', $id)->first();
 
-        // dd($cartItem->toArray());
 
-        return view('shop.create_control', compact('shop', 'cartItem', 'orgShopName'));
+        return view('shop.create_control', compact('shop', 'cartItem', 'action', 'description'));
     } // End Method
+
+    // Add Contorl Method
+    public function AddControl(Request $request)
+    {
+        // Get cart items
+        $cartItems = Cart::content();
+
+        $datePart = Carbon::now()->format('Ymd'); // e.g., 20240809
+        $randomPart = strtoupper(Str::random(6)); // e.g., A1B2C3
+        $jobNumber =  $datePart . '-' . $randomPart . '-' . 'MGL';
+
+        foreach ($cartItems as $item) {
+            // Find the shop product
+            $shopProduct = ShopProduct::where('shop_id', $request->shopId)
+                ->where('product_id', $item->id)
+                ->first();
+
+            if (!$shopProduct) {
+                return redirect()->back()->with([
+                    'message' => "Product {$item->name} not found in shop stock.",
+                    'alert-type' => 'error',
+                ]);
+            }
+
+            // Adjust the quantity based on the action
+            if ($request->action === 'loss' || $request->action === 'damage') {
+                $shopProduct->quantity -= $item->qty;
+            } elseif ($request->action === 'refound') {
+                $shopProduct->quantity += $item->qty;
+            }
+
+            // Prevent negative quantity
+            if ($shopProduct->quantity < 0) {
+                $shopProduct->quantity = 0;
+            }
+
+            // Save updated quantity
+            $shopProduct->save();
+
+            // Log the action in shop_controls table
+            ShopControl::create([
+                'user_id' => auth()->id(),
+                'shop_id' => $request->shopId,
+                'product_id' => $item->id,
+                'job_number' => $jobNumber,
+                'quantity' => $item->qty,
+                'action' => $request->action,
+                'description' => $request->description,
+            ]);
+        }
+
+        // Clear the cart after processing
+        Cart::destroy();
+
+        $noti = [
+            'message' => 'Shop Product Management Success.',
+            'alert-type' => 'success',
+        ];
+
+        return redirect()->route('control.record')->with($noti);
+    }
+    // End Method
 
     // Shop Stock Control
     public function updateQuantity(Request $request)
@@ -248,6 +309,50 @@ class ShopController extends Controller
 
 
     // Shop Stock Control List
+    public function ControlRecord()
+    {
+        $controlRecords = ShopControl::select(
+            'job_number',
+            'user_id',
+            'shop_id',
+            'action',
+            'description',
+            DB::raw('DATE_FORMAT(MIN(created_at), "%d/%m/%Y") as date')
+        )
+            ->groupBy('job_number', 'shop_id', 'user_id', 'action', 'description')
+            ->orderBy(DB::raw('MIN(id)'), 'desc') // Using MIN(id) to order by the earliest record in each group
+            ->get();
+
+        return view('shop.control_record', compact('controlRecords'));
+    }
+
+    // End Method
+
+
+    // Detail Record Method
+    public function DetailRecord($jobNumber)
+    {
+        $detailRecords = ShopControl::where('job_number', $jobNumber)
+            ->select(
+                'id',
+                'user_id',
+                'shop_id',
+                'product_id',
+                'action',
+                'description',
+                DB::raw('DATE(created_at) as date'),
+                'quantity'
+            )
+            ->with(['user', 'shop', 'product'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $numberOfRecords = $detailRecords->count();
+
+        return view('shop.detail_record', compact('detailRecords', 'numberOfRecords'));
+    } // End Method
+
+
+    // Shop Stock Control List
     public function ControlList()
     {
         $controlList = ShopControl::all();
@@ -263,10 +368,10 @@ class ShopController extends Controller
         $data->delete();
 
         $noti = [
-            'message' => 'Shop Control List Delete Successful',
+            'message' => 'Shop Control Record Delete Successful',
             'alert-type' => 'success',
         ];
-        return redirect()->route('control.list')->with($noti);
+        return redirect()->route('control.record')->with($noti);
     }
     // End Method
 

@@ -91,24 +91,57 @@ class PosController extends Controller
     }
 
     // Add Cart Method
+    // public function AddCart(Request $request)
+    // {
+    //     // dd($request->toArray());
+    //     $addCard = Cart::add([
+    //         [
+    //             'id' => $request->id,
+    //             'name' => $request->porductName,
+    //             'qty' => $request->qty,
+    //             'price' => $request->price,
+    //             'options' => ['bPrice' => $request->buyPrice, 'added_at' => now()],
+    //         ],
+    //     ]);
+    //     $noti = [
+    //         'message' => 'ကုန်ပစ္စည်း ဈေးခြင်းထဲထည့်ခြင်း အောင်မြင်ပါသည်',
+    //         'alert-type' => 'success',
+    //     ];
+    //     return redirect()->back()->with($noti);
+    // }
+    // End Method
+
     public function AddCart(Request $request)
     {
-        // dd($request->toArray());
-        $addCard = Cart::add([
-            [
+        // Check if the product already exists in the cart
+        $cartItem = Cart::content()->firstWhere('id', $request->id);
+
+        if ($cartItem) {
+            // Update the quantity of the existing item
+            $newQty = $cartItem->qty + $request->qty;
+            Cart::update($cartItem->rowId, $newQty);
+            $noti = [
+                'message' => 'Cart updated successfully',
+                'alert-type' => 'success',
+            ];
+        } else {
+            // Add the product as a new item
+            Cart::add([
                 'id' => $request->id,
                 'name' => $request->porductName,
                 'qty' => $request->qty,
                 'price' => $request->price,
                 'options' => ['bPrice' => $request->buyPrice, 'added_at' => now()],
-            ],
-        ]);
-        $noti = [
-            'message' => 'ကုန်ပစ္စည်း ဈေးခြင်းထဲထည့်ခြင်း အောင်မြင်ပါသည်',
-            'alert-type' => 'success',
-        ];
+            ]);
+            $noti = [
+                'message' => 'Product added to cart successfully.',
+                'alert-type' => 'success',
+            ];
+        }
+
         return redirect()->back()->with($noti);
-    } // End Method
+    }
+
 
     public function showCart()
     {

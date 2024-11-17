@@ -318,7 +318,7 @@
                                     <a href="{{ route('add#shop') }}">Add Shop </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('control.list') }}">Shop Stock Control List </a>
+                                    <a href="{{ route('control.record') }}">Shop Control Records </a>
                                 </li>
                             </ul>
                         </div>

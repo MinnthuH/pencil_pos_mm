@@ -18,10 +18,12 @@
                         <ol class="breadcrumb m-0">
                             <a href="{{ url('/all/shop') }}" class="btn btn-blue  waves-effect waves-light ">Cancel</a>
                             <span class="ms-2"></span><span></span>
-                            <form action="{{ route('add.transfer.stock') }}" method="post">
+                            <form action="{{ route('add.control') }}" method="post">
                                 @csrf
                                 {{-- <input type="hidden" name="shopId" value="{{ $shop->id }}"> --}}
-                                <input type="hidden" name="orgShopId" value="{{ $orgShopName->id }}">
+                                <input type="hidden" name="shopId" value="{{ $shop->id }}">
+                                <input type="hidden" name="action" value="{{ $action }}">
+                                <input type="hidden" name="description" value="{{ $description }}">
                                 <button class="btn btn-blue waves-effect waves-light " type="submit">Comfirm</button>
                             </form>
 
@@ -30,8 +32,7 @@
 
 
                     </div>
-                    <h4 class="page-title">{{ $orgShopName->name ?? 'Unknown' }}<span> မှ
-                        </span>{{ $shop->name }} Stock Control </h4>
+                    <h4 class="page-title">{{ $shop->name ?? 'Unknown' }} &nbsp; Stock Control </h4>
                 </div>
                 @php
                     $totalItems = count($cartItem); // Count the total number of items
@@ -51,8 +52,9 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th class="text-wrap">ကုန်ပစ္စည်းအမည်</th>
-
                                     <th>အရေအတွက်</th>
+                                    <th>Action</th>
+                                    <th>Description</th>
                                 </tr>
                             </thead>
 
@@ -64,6 +66,8 @@
                                         <!-- Use $loop->iteration to get the current iteration number -->
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->qty }}</td>
+                                        <td>{{ $action }}</td>
+                                        <td>{{ $description }}</td>
 
                                     </tr>
                                 @endforeach
