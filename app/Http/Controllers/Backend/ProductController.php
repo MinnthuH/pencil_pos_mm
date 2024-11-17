@@ -129,6 +129,7 @@ class ProductController extends Controller
         } else {
             Product::findOrFail($productId)->update([
                 'product_name' => $request->productName,
+                'roll_no' => $request->roll_num,
                 'category_id' => $request->categoryId,
                 'supplier_id' => $request->supplierId,
                 'product_code' => json_encode($request->productCode),
