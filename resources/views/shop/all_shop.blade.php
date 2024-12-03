@@ -47,7 +47,7 @@
                                 @foreach ($shops as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->name ?? 'N/A' }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>

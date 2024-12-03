@@ -294,7 +294,7 @@
                                     @foreach ($sales as $key => $item)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $item->shop->name }}</td>
+                                            <td>{{ $item->shop->name ?? 'N/A' }}</td>
                                             <td>{{ $item['user']['name'] ?? 'N/A' }}</td>
                                             <td>{{ $item->invoice_date }}</td>
                                             <td>{{ $item->invoice_no }}</td>

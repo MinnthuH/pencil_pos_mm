@@ -475,7 +475,7 @@ class WarehouseInventory extends Controller
 
         $products = Product::where('expire_date', '>', Carbon::now())
             ->whereColumn('product_store', '>=', 'product_track')
-            ->latest()
+            ->orderBy('roll_no', 'asc') // Sort by roll_no in ascending order
             ->paginate(200); // Change the number '10' to the desired number of products per page
         // dd($products);
 

@@ -147,6 +147,39 @@
 
                     <h4 class="header-title mb-0">ကုန်ပစ္စည်းများ</h4>
 
+                    {{-- <div class="row" id="product-list-container">
+                        @foreach ($products as $key => $item)
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
+                                <form action="{{ url('/add-cart') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $item->id }}">
+                                    <input type="hidden" name="porductName" value="{{ $item->product_name }}">
+                                    <input type="hidden" name="buyPrice" value="{{ $item->buy_price }}">
+                                    <input type="hidden" name="qty" value="1">
+                                    <input type="hidden" name="price" value="{{ $item->selling_price }}">
+
+                                    <button type="submit" class="btn btn-link">
+                                        <div class="card" style="width: 8.5rem;">
+                                            <div class="position-relative">
+                                                <img src="{{ asset($item->product_image ?: 'upload/no_image.jpg') }}"
+                                                    alt="Product Image" class="img-fluid">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $item->product_name }}</h5>
+                                                    <span
+                                                        class="badge bg-dark">{{ $item->selling_price }}&nbsp;ks</span>
+                                                </div>
+                                                <span class="badge bg-primary position-absolute top-0 end-0">
+                                                    {{ $item->quantity }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </form>
+                            </div>
+                        @endforeach
+                    </div> --}}
+
+
                     <div class="row" id="product-list-container">
                         @foreach ($products as $key => $item)
                             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mt-3">
@@ -178,6 +211,7 @@
                             </div>
                         @endforeach
                     </div>
+
 
                     <div class="row">
                         <div class="col-lg-8">

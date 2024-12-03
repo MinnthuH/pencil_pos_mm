@@ -29,9 +29,8 @@ class PosController extends Controller
         // Get the products with the filtered product IDs
         $products = Product::whereIn('id', $shopProductIds)
             ->where('expire_date', '>', Carbon::now())
-            ->latest()
             ->orderBy('roll_no', 'asc') // Sort by roll_no in ascending order
-            ->paginate(200); // Change the number '10' to the desired number of products per page
+            ->paginate(200);
 
         // Add quantity to each product
         foreach ($products as $product) {
@@ -42,10 +41,6 @@ class PosController extends Controller
         $customers = Customer::latest()->get();
         $categories = Category::latest()->get();
         $transports = Transport::latest()->get();
-
-        // pos page without QR
-        // return view('backend.pos.pos_page', compact('products', 'customers', 'categories', 'transports'));
-
 
         // pos page with QR
         return view('backend.pos.pos_page_with_qr', compact('products', 'customers', 'categories', 'transports', 'shopProducts'));
@@ -69,7 +64,7 @@ class PosController extends Controller
         $query = Product::where('category_id', $categoryId)
             ->whereIn('id', $shopProductIds)
             ->where('expire_date', '>', Carbon::now())
-            ->latest();
+            ->orderBy('roll_no', 'asc'); // Sort by roll_no in ascending order
 
         // Handle search
         $searchTerm = $request->input('search');
@@ -89,6 +84,7 @@ class PosController extends Controller
 
         return response()->json($products);
     }
+
 
     // Add Cart Method
     // public function AddCart(Request $request)

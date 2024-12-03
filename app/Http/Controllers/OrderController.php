@@ -17,13 +17,13 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Maatwebsite\Excel\Concerns\ToArray;
 
 class OrderController extends Controller
 {
     // Final Invoice Method
     public function FinalInvoice(Request $request)
     {
-
         DB::beginTransaction();
 
         try {
