@@ -479,8 +479,8 @@ class ShopController extends Controller
     // Create Stock Adjust
     public function AddTransferStock(Request $request)
     {
-        $shopId = $request->shopId;
-        $orgShopId = $request->orgShopId;
+        $shopId = $request->shopId; // Destination shop ID
+        $orgShopId = $request->orgShopId; // Original shop ID
         $cartItems = Cart::content();
         $datePart = Carbon::now()->format('Ymd'); // e.g., 20240809
         $randomPart = strtoupper(Str::random(6)); // e.g., A1B2C3
@@ -495,6 +495,10 @@ class ShopController extends Controller
                 $productId = $item->id;
                 $qty = $item->qty;
 
+                if ($qty <= 0) {
+                    throw new \Exception('Invalid quantity for product ID ' . $productId . '.');
+                }
+
                 // Check for insufficient stock in the original shop
                 $originalShopProduct = ShopProduct::where('shop_id', $orgShopId)
                     ->where('product_id', $productId)
@@ -505,7 +509,7 @@ class ShopController extends Controller
                 }
 
                 if ($shopId == 1) {
-                    // Adjust the product_store in Product model
+                    // Adjust the product_store in Product model for main storage
                     $product = Product::findOrFail($productId);
                     $product->product_store += $qty;
                     $product->save();
@@ -534,11 +538,7 @@ class ShopController extends Controller
                         ->first();
 
                     if ($shopProduct) {
-                        // Check for insufficient stock in the destination shop
-                        if ($shopProduct->quantity < $qty) {
-                            throw new \Exception('Insufficient stock for product ID ' . $productId . ' in the destination shop.');
-                        }
-
+                        // Update the destination shop's stock
                         $shopProduct->quantity += $qty;
                         $shopProduct->save();
                     } else {
@@ -590,5 +590,4 @@ class ShopController extends Controller
         }
     }
     // End Method
-
 }
