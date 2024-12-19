@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DailyStockinExport;
-use App\Exports\DailyTransferExport;
-use App\Exports\WarehouseStockExport;
-use App\Exports\WeeklyStockinExport;
-use App\Exports\WeeklyTransferExport;
-use App\Imports\StockTransferImport;
-use App\Imports\WarehouseStockImport;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Shop;
-use App\Models\ShopProduct;
-use App\Models\StockIn;
-use App\Models\TransferStock;
-use App\Models\Warehouse;
-use Carbon\Carbon;
 use Exception;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use App\Models\Sale;
+use App\Models\Shop;
+use App\Models\Product;
+use App\Models\StockIn;
+use App\Models\Category;
+use App\Models\Warehouse;
+use App\Models\OrderDetail;
+use App\Models\ShopProduct;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\TransferStock;
+use Illuminate\Support\Facades\DB;
+use App\Exports\DailyStockinExport;
+use Illuminate\Support\Facades\Log;
+use App\Exports\DailyTransferExport;
+use App\Exports\WeeklyStockinExport;
+use App\Imports\StockTransferImport;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\WarehouseStockExport;
+use App\Exports\WeeklyTransferExport;
+use App\Imports\WarehouseStockImport;
+use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Validator;
 
 class WarehouseInventory extends Controller
 {
@@ -257,7 +259,11 @@ class WarehouseInventory extends Controller
     {
 
         $shops = Shop::where('id', '!=', 1)->get();
-        $products = Product::latest()->paginate(200); // Change the number '10' to the desired number of products per page
+        $products = Product::orderBy('roll_no', 'asc')->paginate(200);
+        // $products = Product::where('expire_date', '>', Carbon::now())
+        //     ->whereColumn('product_store', '>=', 'product_track')
+        //     ->orderBy('roll_no', 'asc') // Sort by roll_no in ascending order
+        //     ->paginate(200);
         $categories = Category::latest()->get();
 
         return view('backend.warehouse.shop_stockin', compact('products', 'categories', 'shops',));
@@ -760,5 +766,158 @@ class WarehouseInventory extends Controller
     public function StockinWeekly()
     {
         return Excel::download(new WeeklyStockinExport, 'weekly_stockin.xlsx');
+    }
+
+    // Stock Ledger Page
+    public function StockLedger(Request $request)
+    {
+        // Fetch filters from the request
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        $shop_id = $request->input('shop_id');
+        $product_id = $request->input('product_id');
+
+        // Fetch Products and Shops for the filter dropdowns
+        $products = Product::latest()->get();
+        $shops = Shop::latest()->get();
+
+        // Initialize queries for transfers and sales data
+        $transfers = TransferStock::query();
+        $sales_data = OrderDetail::query();
+        $shop_product = null;
+
+        // Initialize combined_data as an empty collection to avoid undefined variable error
+        $combined_data = collect();  // <-- Initialize this variable here
+        $grouped_data = collect();  // <-- Initialize this variable here
+
+        // Initialize opening_balance with a default value
+        $opening_balance = 0;
+
+        // Initialize total_after_transfer with a default value
+        $total_after_transfer = 0;
+
+        // Apply filters if provided
+        if ($start_date || $end_date || $shop_id || $product_id) {
+            // Apply filters if any are provided
+            if ($start_date) {
+                $transfers->whereDate('created_at', '>=', $start_date);
+                $sales_data->whereDate('created_at', '>=', $start_date);
+            }
+
+            if ($end_date) {
+                $transfers->whereDate('created_at', '<=', $end_date);
+                $sales_data->whereDate('created_at', '<=', $end_date);
+            }
+
+            if ($shop_id) {
+                $transfers->where(function ($query) use ($shop_id) {
+                    $query->where('from_shop_id', $shop_id)
+                        ->orWhere('to_shop_id', $shop_id);
+                });
+
+                $sales_data->whereHas('sale', function ($query) use ($shop_id) {
+                    $query->where('shop_id', $shop_id);
+                });
+            }
+
+            if ($product_id) {
+                $transfers->where('product_id', $product_id);
+                $sales_data->where('product_id', $product_id);
+
+                // Fetch the initial quantity for the shop-product combination
+                $shop_product = ShopProduct::where('shop_id', $shop_id)
+                    ->where('product_id', $product_id)
+                    ->first();
+            }
+
+            // Fetch the opening balance before the start date
+            $opening_transfers_in = TransferStock::where('to_shop_id', $shop_id)
+                ->where('product_id', $product_id)
+                ->whereDate('created_at', '>', $start_date)
+                ->sum('quantity');
+
+            $opening_transfers_out = TransferStock::where('to_shop_id', $shop_id)
+                ->where('product_id', $product_id)
+                ->whereDate('created_at', '=', $start_date)
+                ->sum('quantity');
+
+            $opening_sales = OrderDetail::whereHas('sale', function ($query) use ($shop_id, $start_date) {
+                $query->where('shop_id', $shop_id)
+                    ->whereDate('created_at', '>=', $start_date);
+            })->where('product_id', $product_id)
+                ->sum('quantity');
+
+            // Calculate the opening balance (considering initial shop-product quantity)
+            $opening_balance = ($shop_product ? $shop_product->quantity : 0) + $opening_sales - $opening_transfers_in - $opening_transfers_out;
+
+            // Calculate the total quantity for the sales (add shop-product quantity)
+            $total_sales_qty = $sales_data->sum('quantity') + ($shop_product ? $shop_product->quantity : 0);
+
+            // Fetch filtered transfers and sales data
+            $transfers = $transfers->get();
+            $sales_data = $sales_data->get();
+
+            // Subtract transfer quantities, excluding the transfers that happened on or after the start date
+            $total_transfer_qty_in = TransferStock::where('to_shop_id', $shop_id)
+                ->where('product_id', $product_id)
+                ->whereDate('created_at', '<', $start_date)
+                ->sum('quantity');
+
+            $total_transfer_qty_out = TransferStock::where('from_shop_id', $shop_id)
+                ->where('product_id', $product_id)
+                ->whereDate('created_at', '<', $start_date)
+                ->sum('quantity');
+
+            // Calculate the total after transfer adjustments
+            $total_after_transfer = $total_sales_qty + $opening_balance - $total_transfer_qty_out + $total_transfer_qty_in;
+
+            // Combine transfers and sales into a single collection
+            foreach ($transfers as $transfer) {
+                $combined_data->push([
+                    'date' => $transfer->created_at->format('Y-m-d'),
+                    'type' => 'transfer',
+                    'quantity_in' => $transfer->to_shop_id == $shop_id ? $transfer->quantity : 0,
+                    'quantity_out' => $transfer->from_shop_id == $shop_id ? $transfer->quantity : 0,
+                    'shop_name' => $transfer->fromShop->name ?? 'N/A',
+                    'product_name' => $transfer->product->product_name ?? 'N/A',
+                    'product_code' => $transfer->product->product_code ?? 'N/A',
+                ]);
+            }
+
+            foreach ($sales_data as $sale) {
+                $combined_data->push([
+                    'date' => $sale->created_at->format('Y-m-d'),
+                    'type' => 'sale',
+                    'quantity_in' => 0,
+                    'quantity_out' => $sale->quantity,
+                    'shop_name' => $sale->sale->shop->name ?? 'N/A',
+                    'product_name' => $sale->product->product_name ?? 'N/A',
+                    'product_code' => $sale->product->product_code ?? 'N/A',
+                ]);
+            }
+
+            $grouped_data = $combined_data->groupBy('date')->map(function ($dayData) {
+                return [
+                    'date' => $dayData->first()['date'],
+                    'quantity_in' => floatval($dayData->sum('quantity_in')),
+                    'quantity_out' => floatval($dayData->sum('quantity_out')),
+                    'shop_name' => $dayData->first()['shop_name'],
+                    'product_name' => $dayData->first()['product_name'],
+                    'product_code' => $dayData->first()['product_code'],
+                ];
+            });
+
+            // Sort grouped data by date
+            $grouped_data = $grouped_data->sortBy('date');
+        }
+
+        // Return data to the view
+        return view('backend.stock.stock_ledger', compact(
+            'products',
+            'shops',
+            'grouped_data', // Use grouped_data here
+            'opening_balance',
+            'total_after_transfer'
+        ));
     }
 }

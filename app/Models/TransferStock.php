@@ -23,18 +23,20 @@ class TransferStock extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
-    }
-
+    // Relation to Shop (From Shop)
     public function fromShop()
     {
         return $this->belongsTo(Shop::class, 'from_shop_id');
     }
 
+    // Relation to Shop (To Shop)
     public function toShop()
     {
         return $this->belongsTo(Shop::class, 'to_shop_id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }

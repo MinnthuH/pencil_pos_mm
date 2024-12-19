@@ -406,6 +406,8 @@ Route::controller(WarehouseInventory::class)->group(function () {
 
     // Route::get('delete/transfer-record/{id}', 'DeleteTransferRecord')->name('delete.transfer.record'); // Delete transfer record
 
+    Route::get('/stock/ledger', 'StockLedger')->name('stock.ledger');
+    // Route::get('/stock/ledger/search', 'search_stock_ledger')->name('stock.search_stock_ledger');
 });
 
 // Transport All Route

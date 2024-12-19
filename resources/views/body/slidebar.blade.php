@@ -101,6 +101,8 @@
                 </li>
 
 
+
+
                 @if (Auth::user()->can('warehouse.menu'))
                     <li class="menu-title mt-2">Warehouse Manage</li>
                     <li class="my-1">
@@ -114,6 +116,11 @@
                                 @if (Auth::user()->can('warehouse.edit'))
                                     <li>
                                         <a href="{{ route('stock.inventory') }}">စတို လက်ကျန်စာရင်း</a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->can('warehouse.edit'))
+                                    <li>
+                                        <a href="{{ route('stock.ledger') }}">Stock Ledger</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->can('warehouse.edit'))

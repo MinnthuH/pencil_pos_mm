@@ -47,7 +47,7 @@
 
         $totalDue = Sale::sum('due');
 
-        $sales = Sale::orderBy('id', 'DESC')->get();
+        $sales = Sale::orderBy('id', 'DESC')->limit(50)->get();
     @endphp
 
     <div class="content">

@@ -18,6 +18,12 @@ class Sale extends Model
 
     protected $guarded = [];
 
+    // Relation to Products through OrderDetails
+    public function products()
+    {
+        return $this->hasManyThrough(Product::class, OrderDetail::class, 'sale_id', 'id', 'id', 'product_id');
+    }
+
     public function shop()
     {
         return $this->belongsTo(Shop::class, 'shop_id', 'id');
@@ -43,5 +49,10 @@ class Sale extends Model
     public function refurn()
     {
         return $this->hasMany(Refurn::class, 'sale_id', 'id');
+    }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'sale_id', 'id');
     }
 }

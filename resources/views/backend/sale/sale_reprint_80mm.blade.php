@@ -97,8 +97,8 @@
     <div id="wrapper">
         <div id="receipt-header">
             <div class="logo">
-                <img src="{{ asset($shop->logo ?: 'upload/no_image.jpg') }}"
-                    width="70px" height="70px" alt="">
+                <img src="{{ asset($shop->logo ?: 'upload/no_image.jpg') }}" width="70px" height="70px"
+                    alt="">
             </div>
             <h3 id="shop-name" class="text-center">{{ $shop->name }}</h3>
             <h4 class="text-center">Reprint</h4>
@@ -127,11 +127,12 @@
                         $sl = 1;
                     @endphp
                     @foreach ($saleItem as $key => $item)
+                        ှ
                         <tr>
                             <td width="30" class="text-start">{{ $sl++ }}</td>
                             <td width="180" class="text-start"> {{ $item['product']['product_name'] }}</td>
                             <td width="50">{{ $item->quantity }}</td>
-                            <td width="55" class="text-end">{{ number_format($item['product']['selling_price']) }}
+                            <td width="55" class="text-end">{{ number_format($item->unitcost) }}
                             </td>
                             <td width="65" class="text-end">
                                 {{ number_format($item['product']['selling_price'] * $item->quantity) }}&nbsp;Ks</td>

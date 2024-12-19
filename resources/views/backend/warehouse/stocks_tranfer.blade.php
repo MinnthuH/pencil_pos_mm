@@ -119,6 +119,7 @@
             </div> <!-- end card -->
         </div> <!-- end col-->
 
+
         <div class="col-lg-8 scrollable-col">
             <div class="card">
                 <div class="card-body pb-2">

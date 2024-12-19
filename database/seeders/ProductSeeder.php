@@ -26,12 +26,21 @@ class ProductSeeder extends Seeder
         $expireDate = $currentDate->copy()->addYears(2);
 
         $fakeProductNames = [
-            'Popcorn','Candy','Chocolate Bars','Ice Cream','Chicken Tenders','French Fries', 'Energy Drinks','Water','Fruit Juice'
+            'Popcorn',
+            'Candy',
+            'Chocolate Bars',
+            'Ice Cream',
+            'Chicken Tenders',
+            'French Fries',
+            'Energy Drinks',
+            'Water',
+            'Fruit Juice'
         ];
 
         foreach ($fakeProductNames as $index => $productName) {
             Product::create([
                 'id' => $index + 1,
+                'roll_no' => $index + 1,
                 'product_name' => $productName,
                 'category_id' => $faker->randomElement($categories),
                 'supplier_id' => $faker->randomElement($suppliers),

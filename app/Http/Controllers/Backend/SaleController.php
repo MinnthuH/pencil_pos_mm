@@ -38,53 +38,98 @@ class SaleController extends Controller
 
     //        return view('backend.sale.all_sale', compact('sales', 'id', 'dailyTotals', 'todayTotal','shopName'));
     //    } // End Method
+    // public function allSale(Request $request, $id)
+    // {
+    //     $startDate = $request->input('start_date');
+    //     $endDate = $request->input('end_date');
+
+    //     $salesQuery = Sale::where('shop_id', $id)->orderBy('id', 'DESC');
+
+    //     if ($startDate && $endDate) {
+    //         $salesQuery->whereBetween('created_at', [
+    //             Carbon::parse($startDate)->startOfDay(),
+    //             Carbon::parse($endDate)->endOfDay()
+    //         ]);
+    //     }
+
+    //     $sales = $salesQuery->get();
+
+    //     $dailyTotalsQuery = Sale::selectRaw('DATE(created_at) as date, SUM(total) as total')
+    //         ->where('shop_id', $id)
+    //         ->groupBy('date')
+    //         ->orderBy('date', 'DESC');
+
+    //     if ($startDate && $endDate) {
+    //         $dailyTotalsQuery->whereBetween('created_at', [
+    //             Carbon::parse($startDate)->startOfDay(),
+    //             Carbon::parse($endDate)->endOfDay()
+    //         ]);
+    //     }
+
+    //     $dailyTotals = $dailyTotalsQuery->get();
+
+    //     $todayTotal = Sale::where('shop_id', $id)
+    //         ->whereDate('created_at', Carbon::today())
+    //         ->sum('total');
+
+    //     if ($startDate && $endDate) {
+    //         $todayTotal = Sale::where('shop_id', $id)
+    //             ->whereBetween('created_at', [
+    //                 Carbon::parse($startDate)->startOfDay(),
+    //                 Carbon::parse($endDate)->endOfDay()
+    //             ])
+    //             ->sum('total');
+    //     }
+
+    //     $shopName = $sales->isNotEmpty() ? $sales->first()->shop->name : 'Shop Name Not Found';
+
+    //     return view('backend.sale.all_sale', compact('sales', 'id', 'dailyTotals', 'todayTotal', 'shopName', 'startDate', 'endDate', 'startDate', 'endDate'));
+    // }
+
     public function allSale(Request $request, $id)
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        $salesQuery = Sale::where('shop_id', $id)->orderBy('id', 'DESC');
+        // Default to today's date if no range is provided
+        if (!$startDate || !$endDate) {
+            $startDate = Carbon::today()->toDateString();
+            $endDate = Carbon::today()->toDateString();
+        }
 
-        if ($startDate && $endDate) {
-            $salesQuery->whereBetween('created_at', [
+        // Query sales for the shop
+        $salesQuery = Sale::where('shop_id', $id)
+            ->orderBy('id', 'DESC')
+            ->whereBetween('created_at', [
                 Carbon::parse($startDate)->startOfDay(),
                 Carbon::parse($endDate)->endOfDay()
             ]);
-        }
 
         $sales = $salesQuery->get();
 
+        // Calculate daily totals
         $dailyTotalsQuery = Sale::selectRaw('DATE(created_at) as date, SUM(total) as total')
             ->where('shop_id', $id)
             ->groupBy('date')
-            ->orderBy('date', 'DESC');
-
-        if ($startDate && $endDate) {
-            $dailyTotalsQuery->whereBetween('created_at', [
+            ->orderBy('date', 'DESC')
+            ->whereBetween('created_at', [
                 Carbon::parse($startDate)->startOfDay(),
                 Carbon::parse($endDate)->endOfDay()
             ]);
-        }
 
         $dailyTotals = $dailyTotalsQuery->get();
 
+        // Today's total
         $todayTotal = Sale::where('shop_id', $id)
             ->whereDate('created_at', Carbon::today())
             ->sum('total');
 
-        if ($startDate && $endDate) {
-            $todayTotal = Sale::where('shop_id', $id)
-                ->whereBetween('created_at', [
-                    Carbon::parse($startDate)->startOfDay(),
-                    Carbon::parse($endDate)->endOfDay()
-                ])
-                ->sum('total');
-        }
-
+        // Shop name or fallback if no sales exist
         $shopName = $sales->isNotEmpty() ? $sales->first()->shop->name : 'Shop Name Not Found';
 
-        return view('backend.sale.all_sale', compact('sales', 'id', 'dailyTotals', 'todayTotal', 'shopName', 'startDate', 'endDate', 'startDate', 'endDate'));
+        return view('backend.sale.all_sale', compact('sales', 'id', 'dailyTotals', 'todayTotal', 'shopName', 'startDate', 'endDate'));
     }
+
 
 
     // Delete Sale Method
